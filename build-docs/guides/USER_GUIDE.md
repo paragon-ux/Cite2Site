@@ -321,9 +321,27 @@ files are `citation-history.jsonl`, `handle-bindings.jsonl`, and `project.json`.
 
 ---
 
-## Limitations (v1.0)
+## Format Support (v1.0)
 
-- Only text and Markdown files are supported. PDF and DOCX support is planned.
+Cite2Site separates *how you get text out of an artifact* from *how
+citations, verification, and replay work.* The built-in text and Markdown
+adapters work today. For other formats, rather than writing a bespoke parser
+per file type, Cite2Site uses a **ConverterAdapter** that shells out to
+standard converters already on your system:
+
+| Format | Converter | Status |
+|---|---|---|
+| `.txt`, `.md` | Built-in | Shipped |
+| `.docx` | pandoc | Available when pandoc is on PATH |
+| `.pdf` | pdftotext | Available when pdftotext is on PATH |
+| `.xlsx` | (specified) | Converter-backed, same architecture |
+| Browser pages | Readability re-fetch (specified) | Honest `adapter_unavailable` when unverifiable |
+
+When a converter isn't installed or a page can't be safely re-fetched,
+Cite2Site reports **adapter_unavailable** — it won't guess.
+
+## Other Limitations
+
 - Right-click integration requires an external tool to call Cite2Site commands.
   An integration contract and editor mock are provided for tool builders.
 - Overlap ordering uses handle presence, not most-recent binding order.

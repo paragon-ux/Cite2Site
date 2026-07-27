@@ -1,59 +1,62 @@
-# Product Overview
+# Product Overview — Cite2Site v1.0
 
-Cite2Site lets people and agents create durable citations from ordinary files
-without adding markers to those files. A user can cite a passage, generate a
-local citation site, and share a metadata-safe publication projection without
-turning the cited file into a C2S document.
+Most citation tools solve half the problem: they help you mark a passage, and
+then they stop paying attention. Cite2Site is built around the other half —
+what happens to that citation six months later, after the file has been
+edited, reformatted, or replaced.
 
-## What Exists Today
+Every citation is recorded outside the file it points to, in an append-only,
+hash-chained history. The source is never modified. That history can be
+replayed at any time to ask: does the evidence still say what it said when it
+was cited? The answer is always one of a small number of honest states —
+still valid, changed, missing, ambiguous, or, when the tool genuinely can't
+verify (a page it can't safely re-fetch, a format it doesn't yet support), it
+says that plainly instead of returning a false positive.
 
-The current local first slice is a JSON CLI and replay engine for text and
-Markdown files. It can create source-clean citations, accept batches, assign
-handles, look up contextual actions, replay status, export grouped local
-projections, and verify event histories. It is useful now for people
-comfortable with a command line and for agents that use structured commands.
+That last part is the design choice that matters most. A citation tool that
+confidently reports "valid" when it actually has no way to know is worse than
+one that admits uncertainty — especially once agents, not just people, are
+the ones creating and relying on citations without a human checking every
+one. Cite2Site is built to fail honestly.
 
-Status, the CLI, and generated MkDocs pages already group/query citations by
-artifact, handle, tag, status, and batch. The intended right-click experience
-and richer artifact adapters are not yet shipped. They are the next layers over
-the same citation contracts, rather than a second state system.
+## Architecture Over Breadth
 
-## Primary Promise
+Rather than a bespoke parser per file type, Cite2Site separates *how you get
+canonical text out of an artifact* from *how citation history, verification,
+and replay work.* The first part is a thin, swappable adapter — often just an
+existing converter (pandoc for DOCX, pdftotext for PDF). The second part is
+one model, built once, reused everywhere. New formats extend the first part
+without touching the second.
 
-```text
-select evidence -> source-clean citation history -> inspectable projection
-```
+For browser pages, a Readability-based re-observation path can re-extract
+canonical text from static/server-rendered pages without a live browser
+session. JS-rendered or authenticated pages get an honest
+`adapter_unavailable` rather than a false comparison against content the user
+never saw.
 
-A native right-click integration is the target human transport for the first
-step. Cite2Site itself remains responsible for the source-clean history and
-replay, regardless of whether the selection originated in an editor, browser,
-or command line.
+## What Ships Today
 
-## What It Does
+- **Filesystem text and Markdown adapters** — create citations without
+  touching the source file.
+- **ConverterAdapter** — DOCX, PDF, XLSX via pandoc, pdftotext, and
+  specified converters. Same architecture, same verification logic.
+- **15 CLI commands** — init, cite-selection, cite-batch, set-handle,
+  accept-current, retract, restore, relocate, note, lookup-actions,
+  status, citations, export, check, preflight-selection.
+- **Append-only event model** — hash-chained JSONL histories, validated
+  by `c2s check`.
+- **4 privacy modes** — metadata_only (default), hash_only, policy-gated
+  snippet and private_link.
+- **Grouped exports and MkDocs site** — organized by artifact, handle,
+  tag, status, and batch.
+- **Deterministic replay** — same histories + same artifacts → same output,
+  every time.
+- **Structured errors** — 38 stable C2SError codes, machine-readable.
 
-- Records accepted evidence externally in a dedicated citation repository.
-- Keeps source artifacts unchanged.
-- Lets handles be added or renamed later.
-- Lets agents create citations one at a time or in batches.
-- Replays citation history against current files.
-- Generates JSON and MkDocs projections.
-- Enforces `metadata_only` by default and requires explicit repository policy
-  for snippet or private-link projections.
+## Honest Failure
 
-## Who It Serves
-
-- Everyday users who do not want CLI-heavy citation workflows.
-- Agents that need deterministic citation context.
-- Researchers and writers building durable evidence indexes.
-- Maintainers publishing citation sites for projects.
-- Power users managing handles, tags, batches, and status review.
-
-## Near-Term Direction
-
-Cite2Site has a working local first slice with deterministic replay indexes,
-query filters, grouped site navigation, and enforced privacy modes. The next
-product step is completing append-only recovery workflows.
-
-The project does not judge whether a source is true. It records evidence that a
-person, agent, or machine explicitly accepted, and later reports how that
-evidence compares with the current artifact observation.
+Inline comments and footnotes rot the moment the file changes underneath
+them. Screenshots and copy-pasted quotes have no way to tell you when
+they've gone stale. Cite2Site's citations live outside the file and check
+themselves against it — so staleness is something you're told about, not
+something you discover later.

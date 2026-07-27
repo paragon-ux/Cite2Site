@@ -321,9 +321,23 @@ contract and the editor plugin mock in `examples/integration/`.
 
 ---
 
-## Limitations (v1.0)
+## Format Support (v1.0)
 
-- Only text and Markdown adapters. PDF/DOCX are deferred.
+Cite2Site uses a **ConverterAdapter** architecture: rather than writing
+bespoke parsers per file type, a generic adapter shells out to standard
+converters already on your system. The built-in text and Markdown adapters
+work today; DOCX (pandoc), PDF (pdftotext), and XLSX (specified) are
+available through the same converter-backed path. For browser pages, a
+Readability-based re-observation path is specified: server-side
+`@mozilla/readability` + `jsdom` can re-extract canonical text from
+static/server-rendered pages without a live browser session.
+
+When a converter isn't on PATH or a page can't be safely re-fetched,
+Cite2Site reports **adapter_unavailable** — it won't return a false
+`resolved` against content it can't verify.
+
+## Other Limitations
+
 - Overlap ordering uses handle presence, not binding recency (documented as Partial).
 - No runtime schema validator. Migration fixture tests cover schema version
   validation.

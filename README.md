@@ -1,13 +1,17 @@
 # Cite2Site
 
-**v1.0** — a source-clean citation tool for humans and agents.
+**v1.0** — Citations that don't touch your files, and won't tell you
+they're valid when they can't check.
 
-Cite a passage from a supported text or Markdown file, and Cite2Site records
-it *outside* that file — nothing gets edited, marked up, or bookmarked in the
-source. From there, it replays that citation history into JSON and a
-publishable MkDocs site.
+Cite2Site lets you point at evidence — in code, in a doc, on a page —
+without leaving a mark on it. Every citation lives in a separate,
+append-only ledger, so the file you cited stays exactly as it was.
+When you ask later whether that evidence still holds, you get a real
+answer: still there, changed, gone, or — if Cite2Site genuinely can't
+check — it says so instead of guessing. It's built to be trusted by
+agents as much as people.
 
-## Why source-clean?
+## Why doesn't it touch my files?
 
 Most citation tools want to write something into the thing you're citing —
 a comment, a bookmark, a hidden ID. That falls apart the moment the source
@@ -52,16 +56,23 @@ A few things worth knowing as you use these:
 
 ## Where things stand
 
-Cite2Site v1.0 is complete: append-only citation history, batch citation,
-handle binding, contextual lookup, replay status with deterministic indexes,
-index-backed query filters, grouped JSON and MkDocs projections, enforced
-privacy modes, adapter protocol conformance, integration contracts, CI,
-release documentation, and a full test baseline (98 tests).
+Cite2Site v1.0 ships with filesystem text and Markdown adapters, plus a
+**ConverterAdapter** that turns DOCX, PDF, and XLSX into canonical text by
+shelling out to standard converters (pandoc, pdftotext). The architecture
+separates *how you get canonical text out of an artifact* from *how citation
+history, verification, and replay work* — new formats extend the first part
+without touching the second.
+
+For browser pages, a Readability-based re-observation path is specified:
+server-side `@mozilla/readability` + `jsdom` can re-extract canonical text
+from static/server-rendered pages without a live browser session. JS-rendered
+or authenticated pages get an honest `adapter_unavailable` rather than a
+false comparison against content the user never saw.
 
 The v1 stable contract is frozen: 15 CLI commands, 7 event types, 38 stable
 error codes, 4 privacy modes, and 6 schema identifiers. See
 [`build-docs/internal/CURRENT_STATUS_MATRIX.md`](build-docs/internal/CURRENT_STATUS_MATRIX.md)
-for the full capability inventory and known limitations.
+for the full capability inventory.
 
 ## Guides
 
