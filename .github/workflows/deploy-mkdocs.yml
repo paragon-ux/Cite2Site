@@ -1,21 +1,18 @@
-# Deploy Cite2Site-generated documentation site to GitHub Pages using
-# MkDocs Material theme.
+# Build and deploy the official Cite2Site documentation site using
+# MkDocs Material theme. The docs live in `build-docs/` and this
+# workflow is the authoritative publication path for the project's
+# own documentation.
 #
-# This workflow:
-# 1. Checks out the repository.
-# 2. Exports the citation site via `c2s export`.
-# 3. Patches the generated mkdocs.yml with the Material theme.
-# 4. Builds the MkDocs site.
-# 5. Deploys to GitHub Pages.
-#
-# Generated `.c2s/exports/` and `.c2s/site/` are projections — they can be
-# regenerated at any time from the authority files in `.c2s/`.
+# Steps:
+# 1. Validate the Cite2Site tool itself (c2s check + unit tests).
+# 2. Build the MkDocs Material site from `build-docs/`.
+# 3. Deploy to GitHub Pages.
 
-name: Deploy MkDocs Site
+name: Deploy Documentation Site
 
 on:
   push:
-    branches: [main, codex/first-build-slice]
+    branches: [main, codex/**]
   workflow_dispatch:
 
 permissions:
@@ -40,47 +37,17 @@ jobs:
       - name: Install Cite2Site
         run: pip install -e .
 
-      - name: Export citation site
-        run: c2s export
+      - name: Run unit tests
+        run: python -m unittest discover -s tests
+
+      - name: Validate citation engine
+        run: python -m compileall src && c2s --help
 
       - name: Install MkDocs Material
         run: pip install mkdocs-material
 
-      - name: Apply Material theme to generated mkdocs.yml
-        run: |
-          python -c "
-          import re
-          path = '.c2s/site/mkdocs.yml'
-          with open(path) as f:
-              content = f.read()
-          theme_block = '''theme:
-            name: material
-            features:
-              - navigation.tabs
-              - navigation.indexes
-              - content.code.copy
-            palette:
-              - scheme: default
-                toggle:
-                  icon: material/brightness-7
-                  name: Switch to dark mode
-              - scheme: slate
-                toggle:
-                  icon: material/brightness-4
-                  name: Switch to light mode
-          '''
-          content = re.sub(
-              r'(site_name:.*\n)',
-              r'\1\n' + theme_block + '\n',
-              content,
-              count=1,
-          )
-          with open(path, 'w') as f:
-              f.write(content)
-          "
-
-      - name: Build MkDocs site
-        working-directory: .c2s/site
+      - name: Build documentation site
+        working-directory: build-docs
         run: python -m mkdocs build
 
       - name: Setup Pages
@@ -89,7 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .c2s/site/site
+          path: site
 
   deploy:
     environment:
