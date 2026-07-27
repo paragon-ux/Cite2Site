@@ -323,18 +323,11 @@ contract and the editor plugin mock in `examples/integration/`.
 
 ## Format Support (v1.0)
 
-Cite2Site uses a **ConverterAdapter** architecture: rather than writing
-bespoke parsers per file type, a generic adapter shells out to standard
-converters already on your system. The built-in text and Markdown adapters
-work today; DOCX (pandoc), PDF (pdftotext), and XLSX (specified) are
-available through the same converter-backed path. For browser pages, a
-Readability-based re-observation path is specified: server-side
-`@mozilla/readability` + `jsdom` can re-extract canonical text from
-static/server-rendered pages without a live browser session.
-
-When a converter isn't on PATH or a page can't be safely re-fetched,
-Cite2Site reports **adapter_unavailable** — it won't return a false
-`resolved` against content it can't verify.
+Text and Markdown files work out of the box. For other formats, Cite2Site
+uses a **ConverterAdapter** that shells out to standard tools (pandoc for
+DOCX, pdftotext for PDF). The adapter layer is separate from the replay
+engine — new formats extend the adapter without touching verification logic.
+When a converter isn't available, Cite2Site reports the limitation.
 
 ## Other Limitations
 

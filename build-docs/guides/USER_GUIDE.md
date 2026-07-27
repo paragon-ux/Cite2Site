@@ -323,22 +323,19 @@ files are `citation-history.jsonl`, `handle-bindings.jsonl`, and `project.json`.
 
 ## Format Support (v1.0)
 
-Cite2Site separates *how you get text out of an artifact* from *how
-citations, verification, and replay work.* The built-in text and Markdown
-adapters work today. For other formats, rather than writing a bespoke parser
-per file type, Cite2Site uses a **ConverterAdapter** that shells out to
-standard converters already on your system:
+Text and Markdown files work out of the box. For other formats, Cite2Site
+uses a **ConverterAdapter** that shells out to standard tools already on your
+system:
 
 | Format | Converter | Status |
 |---|---|---|
-| `.txt`, `.md` | Built-in | Shipped |
-| `.docx` | pandoc | Available when pandoc is on PATH |
-| `.pdf` | pdftotext | Available when pdftotext is on PATH |
+| `.txt`, `.md` | Built-in | Works today |
+| `.docx` | pandoc | Works when pandoc is on PATH |
+| `.pdf` | pdftotext | Works when pdftotext is on PATH |
 | `.xlsx` | (specified) | Converter-backed, same architecture |
-| Browser pages | Readability re-fetch (specified) | Honest `adapter_unavailable` when unverifiable |
+| Browser pages | Readability re-fetch (specified) | Static/server-rendered pages |
 
-When a converter isn't installed or a page can't be safely re-fetched,
-Cite2Site reports **adapter_unavailable** — it won't guess.
+When a converter isn't installed, Cite2Site tells you — it doesn't guess.
 
 ## Other Limitations
 

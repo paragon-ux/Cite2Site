@@ -1,15 +1,12 @@
 # Cite2Site
 
-**v1.0** — Citations that don't touch your files, and won't tell you
-they're valid when they can't check.
+**v1.0** — Source-clean citations that don't touch your files.
 
 Cite2Site lets you point at evidence — in code, in a doc, on a page —
 without leaving a mark on it. Every citation lives in a separate,
-append-only ledger, so the file you cited stays exactly as it was.
-When you ask later whether that evidence still holds, you get a real
-answer: still there, changed, gone, or — if Cite2Site genuinely can't
-check — it says so instead of guessing. It's built to be trusted by
-agents as much as people.
+append-only ledger. Replay that history at any time and Cite2Site tells
+you whether the evidence still holds: still there, changed, gone, or —
+when it genuinely can't verify — it says so instead of guessing.
 
 ## Why doesn't it touch my files?
 
@@ -56,18 +53,18 @@ A few things worth knowing as you use these:
 
 ## Where things stand
 
-Cite2Site v1.0 ships with filesystem text and Markdown adapters, plus a
-**ConverterAdapter** that turns DOCX, PDF, and XLSX into canonical text by
-shelling out to standard converters (pandoc for DOCX, pdftotext for PDF). The architecture
-separates *how you get canonical text out of an artifact* from *how citation
-history, verification, and replay work* — new formats extend the first part
-without touching the second.
+Cite2Site v1.0 is a working CLI tool for text and Markdown files. It creates
+source-clean citations, validates hash chains, replays citation history
+against current files, and exports grouped JSON and MkDocs sites — all with
+metadata-only privacy by default. 98 tests cover the core engine.
 
-For browser pages, a Readability-based re-observation path is specified:
-server-side `@mozilla/readability` + `jsdom` can re-extract canonical text
-from static/server-rendered pages without a live browser session. JS-rendered
-or authenticated pages get an honest `adapter_unavailable` rather than a
-false comparison against content the user never saw.
+Beyond text and Markdown, a **ConverterAdapter** turns DOCX, PDF, and XLSX
+into canonical text by shelling out to standard converters (pandoc for DOCX,
+pdftotext for PDF). The architecture separates *how you get text out of an
+artifact* from *how citation history, verification, and replay work* — new
+formats extend the first part without touching the second. When a converter
+isn't available, Cite2Site reports the limitation honestly rather than
+returning a guess.
 
 The v1 stable contract is frozen: 15 CLI commands, 7 event types, 38 stable
 error codes, 4 privacy modes, and 6 schema identifiers. See
