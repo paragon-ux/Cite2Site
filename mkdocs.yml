@@ -34,30 +34,29 @@ nav:
     - Implementation Spec: architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md
     - Integration Contract: architecture/INTEGRATION_CONTRACT.md
     - Schema Index: architecture/SCHEMA_INDEX.md
-  - Internal:
+  - Project:
     - Status Matrix: internal/CURRENT_STATUS_MATRIX.md
     - Build Workflow: internal/BUILD_WORKFLOW_CURRENT.md
     - Project Plan: internal/PROJECT_PLAN.md
+    - Compatibility Corpus: internal/COMPATIBILITY_CORPUS.md
     - CI Validation: internal/CI_VALIDATION.md
     - Documentation Standard: internal/DOCUMENTATION_STANDARD.md
-    - Compatibility Corpus: internal/COMPATIBILITY_CORPUS.md
-  - Release:
     - Release Checklist: internal/release/RELEASE_CHECKLIST.md
     - Threat & Privacy: internal/release/THREAT_PRIVACY_CHECKLIST.md
     - Schema Migration: internal/release/SCHEMA_MIGRATION_POLICY.md
     - Support Policy: internal/release/SUPPORT_POLICY.md
-  - ADRs:
-    - 0001 Source-Clean: internal/adrs/0001-source-clean-citations.md
-    - 0002 Dedicated Repo: internal/adrs/0002-dedicated-citation-repository.md
-    - 0003 Append-Only Replay: internal/adrs/0003-append-only-replay.md
-    - 0004 Handles: internal/adrs/0004-handles-as-editable-refs.md
-    - 0005 Contextual Actions: internal/adrs/0005-contextual-actions-not-overlays.md
-    - 0006 MkDocs Projection: internal/adrs/0006-mkdocs-as-publication-projection.md
-    - 0007 Metadata-Only Default: internal/adrs/0007-metadata-only-default.md
-    - 0008 Session Gates: internal/adrs/0008-session-gates-define-rigor-not-a-hard-stop.md
-    - 0009 Artifact Index Cache: internal/adrs/0009-artifact-index-is-a-derived-cache.md
-    - 0010 Safe Projections: internal/adrs/0010-generated-projections-are-safe-and-replaceable.md
-    - 0011 Policy-Gated Evidence: internal/adrs/0011-policy-gated-evidence-projections.md
+    - ADRs:
+      - 0001 Source-Clean: internal/adrs/0001-source-clean-citations.md
+      - 0002 Dedicated Repo: internal/adrs/0002-dedicated-citation-repository.md
+      - 0003 Append-Only Replay: internal/adrs/0003-append-only-replay.md
+      - 0004 Handles: internal/adrs/0004-handles-as-editable-refs.md
+      - 0005 Contextual Actions: internal/adrs/0005-contextual-actions-not-overlays.md
+      - 0006 MkDocs Projection: internal/adrs/0006-mkdocs-as-publication-projection.md
+      - 0007 Metadata-Only Default: internal/adrs/0007-metadata-only-default.md
+      - 0008 Session Gates: internal/adrs/0008-session-gates-define-rigor-not-a-hard-stop.md
+      - 0009 Artifact Index Cache: internal/adrs/0009-artifact-index-is-a-derived-cache.md
+      - 0010 Safe Projections: internal/adrs/0010-generated-projections-are-safe-and-replaceable.md
+      - 0011 Policy-Gated Evidence: internal/adrs/0011-policy-gated-evidence-projections.md
 
 markdown_extensions:
   - pymdownx.highlight:

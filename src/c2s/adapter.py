@@ -267,7 +267,7 @@ class ConverterAdapter(FilesystemTextAdapter):
     """Generic adapter backed by an external format converter.
 
     Configured with a *name*, a list of *extensions* (e.g. ``[".docx"]``),
-    a *convert_cmd* list whose last element is replaced with the artifact
+    a *convert_cmd* list where ``{path}`` is replaced with the artifact
     path, and a *version_cmd* list that prints the converter version.
     """
 
@@ -327,10 +327,7 @@ class ConverterAdapter(FilesystemTextAdapter):
                 artifact=uri,
             )
         import subprocess
-        cmd = list(self.convert_cmd)  # copy
-        # Replace last element (placeholder path) with actual path
-        if cmd:
-            cmd[-1] = str(path)
+        cmd = [str(path) if arg == "{path}" else arg for arg in self.convert_cmd]
         try:
             r = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
         except FileNotFoundError as exc:
@@ -370,7 +367,7 @@ try:
     _CONVERTER_ADAPTERS["pandoc"] = ConverterAdapter(
         name="pandoc",
         extensions=(".docx",),
-        convert_cmd=["pandoc", "-f", "docx", "-t", "plain", "--wrap=none", "-"],
+        convert_cmd=["pandoc", "-f", "docx", "-t", "plain", "--wrap=none", "{path}"],
         version_cmd=["pandoc", "--version"],
     )
 except Exception:
@@ -381,19 +378,19 @@ try:
     _CONVERTER_ADAPTERS["pdftotext"] = ConverterAdapter(
         name="pdftotext",
         extensions=(".pdf",),
-        convert_cmd=["pdftotext", "-layout", "PLACEHOLDER", "-"],
+        convert_cmd=["pdftotext", "-layout", "{path}", "-"],
         version_cmd=["pdftotext", "-v"],
     )
 except Exception:
     pass
 
 # Register passthrough text-converter for testing (uses OS cat/type equivalent)
-_cat_cmd = ["python", "-c", "import sys; sys.stdout.write(open(sys.argv[1]).read())", "-"]
+_cat_cmd = ["python", "-c", "import sys; sys.stdout.write(open(sys.argv[1]).read())"]
 _cat_ver = ["python", "--version"]
 _CONVERTER_ADAPTERS["text-converter"] = ConverterAdapter(
     name="text-converter",
     extensions=(".txt", ".csv"),
-    convert_cmd=_cat_cmd,
+    convert_cmd=_cat_cmd + ["{path}"],
     version_cmd=_cat_ver,
 )
 
