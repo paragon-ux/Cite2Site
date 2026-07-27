@@ -5,6 +5,15 @@
 CI is the automated enforcement layer for session gates. It must stay aligned
 with `BUILD_WORKFLOW_CURRENT.md` and `AGENTS.md`.
 
+## Current Integrity Caveat
+
+The workflow definition is present, but this checkout currently deletes several
+external documents and ADRs that `AGENTS.md` expects agents to consult when
+relevant. The local link check verifies present Markdown targets; it cannot
+prove that the complete planned documentation set is present. Do not call the
+documentation release-complete while this owner-controlled availability gap
+remains.
+
 ## Workflow File
 
 Authoritative CI implementation:
@@ -29,6 +38,10 @@ Every CI run must verify:
    `status`, `export`, and `check`;
 9. source-clean behavior during the smoke flow;
 10. expected flat export files are generated.
+
+The check list is evidence, not ceremony. A changed public behavior must add a
+test at the layer where it can regress: core/replay, CLI envelope, generated
+projection, or integration fixture.
 
 ## Python Matrix
 
@@ -70,6 +83,11 @@ python -m c2s --help
 Also run docs validation and command-specific smoke checks for changed
 surfaces. The exact local command may differ from CI shell syntax, but the
 validated behavior must be the same.
+
+For a documentation-only gate, validate local links, parse JSON schemas and
+examples, search for unresolved placeholders and obsolete project references,
+and confirm the current/target boundary remains coherent across the status
+matrix, requirements, workflow, and specifications.
 
 ## Remote Status
 

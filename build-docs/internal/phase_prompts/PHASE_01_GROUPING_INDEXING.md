@@ -5,10 +5,22 @@
 This prompt is written for an implementation agent. Complete the phase end to
 end before moving to adapters, privacy expansion, or integrations.
 
+Before editing, read `AGENTS.md`, `CURRENT_STATUS_MATRIX.md`,
+`BUILD_WORKFLOW_CURRENT.md`, `DOCUMENTATION_STANDARD.md`, and the two v0.3
+architecture specifications. This phase turns approved Target behavior into
+Implemented behavior only when its evidence is complete.
+
 ## Goal
 
 Turn flat citation replay/export into navigable grouped citation indexes by
 artifact, handle, tag, status, and batch.
+
+## Boundary Of This Phase
+
+This phase must not silently implement lifecycle commands, native right-click
+interfaces, semantic matching, or non-text adapters. It may make their future
+contracts easier to consume, but its acceptance evidence is limited to indexes,
+querying, deterministic export, grouped pages, and metadata-only safety.
 
 ## Non-Negotiable Constraints
 
@@ -172,3 +184,9 @@ Tests must assert the original selected text does not appear in grouped pages.
   queries by handle/tag/status.
 - `build-docs/internal/CURRENT_STATUS_MATRIX.md` marks grouping/indexing rows
   as implemented only after tests prove them.
+- `build-docs/internal/requirements/BRD.md`, `DRD.md`, and `TRD.md` retain
+  their current/target distinctions and link the delivered behavior to this
+  gate.
+- Re-run documentation validation after updating generated-output contracts;
+  record the separate deleted-document completeness blocker without treating it
+  as a failure of present-document link validation.

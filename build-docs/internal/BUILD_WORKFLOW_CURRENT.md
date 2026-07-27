@@ -5,12 +5,21 @@ the practical flows implementation must support from local use through
 published citation sites. Workflows are implementation contracts, not marketing
 journeys.
 
+## Maturity Boundary
+
+The current first slice is CLI/core-first. It implements the source-clean event
+and replay substrate; it does not provide a native right-click integration.
+Human context-menu journeys below are Target integration workflows whose client
+must call the same explicit contracts. Do not represent them as current product
+interaction until an integration gate supplies code and fixtures.
+
 ## Workflow Principles
 
 - The cited artifact remains unchanged.
 - All mutating actions append events.
 - Replay computes projected state.
-- Human users should start from right-click interactions.
+- A future human integration should begin with a contextual action, while the
+  current human-accessible surface is the CLI.
 - Agents and automation should use deterministic JSON CLI commands.
 - Publication is generated from the citation repository, not from hidden UI
   state.
@@ -36,6 +45,8 @@ Gate rules:
   JSON shape changes;
 - update external docs only when implemented behavior is stable enough to
   describe publicly;
+- apply `DOCUMENTATION_STANDARD.md` whenever requirements, workflow, or
+  architecture language changes;
 - reject the gate if any required validation fails or cannot run.
 
 ## Gate Validation Stack
@@ -64,6 +75,8 @@ Required when docs change:
 2. Check local Markdown links under `build-docs/`.
 3. Confirm `AGENTS.md` reading order still points to existing files.
 4. Search for stale internal project references before reporting.
+5. Confirm every changed behavior is labelled Implemented, Partial, Target, or
+   Open in the status matrix or document scope statement.
 
 Required in CI:
 
@@ -97,6 +110,9 @@ with a next action.
 
 ## Human Local Citation Workflow
 
+**Maturity:** Target integration workflow. The implemented equivalent is an
+explicit `cite-selection` CLI invocation with the same artifact/range contract.
+
 Actors:
 
 - everyday user;
@@ -122,6 +138,9 @@ Exit criteria:
 - failure returns structured JSON error.
 
 ## Contextual Cited-Region Workflow
+
+**Maturity:** Target integration workflow. `lookup-actions` is implemented;
+the right-click transport, picker UI, and recovery actions are not.
 
 Actors:
 
@@ -157,6 +176,11 @@ Actions:
 - `accept_current`;
 - `relocate`;
 - `retire`.
+
+Only `open`-style lookup information and handle operations supported by the
+current CLI may be exposed as implemented. `undo`, `redo`, `accept_current`,
+`relocate`, and `retire` are target action vocabulary until their append-only
+commands and tests are delivered.
 
 Exit criteria:
 
@@ -253,6 +277,9 @@ Exit criteria:
 
 ## Grouping And Indexing Workflow
 
+**Maturity:** Target, authorized as the next build phase. Current replay/export
+is flat and must not be described as grouped navigation.
+
 Actors:
 
 - user;
@@ -289,6 +316,10 @@ Exit criteria:
 - links between citation pages and group pages are stable.
 
 ## Publication Workflow
+
+**Maturity:** Partial. Flat MkDocs output exists; grouped pages and substantive
+privacy transforms are target work. A generated page does not establish that the
+privacy policy has been enforced.
 
 Actors:
 
@@ -344,6 +375,9 @@ Exit criteria:
 - no source artifact mutation occurs in tests.
 
 ## Recovery Workflow
+
+**Maturity:** Target. Current append-only histories provide auditability but do
+not yet expose the complete recovery command set described in this section.
 
 Recovery must preserve append-only history.
 

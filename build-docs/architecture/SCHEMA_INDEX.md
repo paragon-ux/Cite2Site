@@ -6,6 +6,19 @@ Schemas are implementation contracts for command payloads, event records, and
 projection output. They intentionally cover the stable shape without requiring a
 runtime JSON Schema dependency in the Python core.
 
+## Scope And Limits
+
+The schemas describe the target v0.3 contract, including shapes for grouped
+indexes and commands not yet delivered in the first slice. A valid JSON file is
+not proof that an implementation is semantically valid: schema alone cannot
+establish hash-chain continuity, citation existence, source cleanliness,
+deterministic ordering, privacy behavior, or whether a named command is
+implemented.
+
+Treat a schema/example pair as a reviewable contract fixture. When runtime
+validation is introduced, it must preserve the stdlib-only core unless a
+dependency decision is explicitly approved.
+
 ## Schema Inventory
 
 | Path | Purpose |
@@ -34,6 +47,12 @@ runtime JSON Schema dependency in the Python core.
 ## Rules
 
 - Schema files use JSON Schema draft 2020-12.
-- Example files must validate conceptually against their paired schema.
+- Example files must validate against their paired schema when schema tooling is
+  available; CI currently guarantees JSON parsing and manual contract review,
+  not full JSON Schema evaluation.
 - Schema changes require updates to implementation spec, protocol spec, tests,
   and current status matrix.
+- A schema addition must state its maturity: Implemented, Partial, Target, or
+  Open. Do not represent a target-only schema as an available CLI response.
+- Examples use fabricated hashes and paths. They are explanatory fixtures, not
+  cryptographically valid event histories.

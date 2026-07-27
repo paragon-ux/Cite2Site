@@ -8,9 +8,10 @@ the authority for what is already complete.
 ## Objective
 
 Build Cite2Site into a source-clean universal citation system that lets humans
-cite evidence with a right-click, lets agents cite and query evidence through
-deterministic JSON, and publishes a durable citation site through MkDocs and
-ordinary static hosting.
+eventually cite evidence through a right-click integration, lets agents cite and
+query evidence through deterministic JSON, and publishes a durable citation
+site through MkDocs and ordinary static hosting. The current first slice is the
+CLI/core substrate for that experience, not the completed experience itself.
 
 ## Product Thesis
 
@@ -34,6 +35,10 @@ Cite2Site is successful when:
 8. privacy defaults prevent accidental evidence leakage;
 9. every command has structured errors;
 10. the project has tests, CI, release docs, and migration rules.
+
+Success is evidence-based: each statement above requires a corresponding status
+row, acceptance test, and authority document. A planning milestone cannot make
+a capability available by declaration.
 
 ## Scope
 
@@ -88,6 +93,9 @@ Acceptance:
 - CLI smoke test covers `init`, `cite-selection`, `lookup-actions`, `status`,
   `export`, and `check`.
 
+Residual limitations: export remains flat, privacy modes beyond the default are
+not yet behavioral transforms, and right-click interaction is not shipped.
+
 ### M1: Grouping And Indexing
 
 Gate: G1 through G3.
@@ -138,7 +146,8 @@ Acceptance:
 
 Gate: G5.
 
-Goal: make local and agent workflows complete.
+Goal: make local and agent workflows complete without converting replay or UI
+state into authority.
 
 Deliverables:
 
@@ -155,7 +164,7 @@ Deliverables:
 Acceptance:
 
 - all user-facing actions are append-only;
-- every workflow in `workflows.md` maps to commands;
+- every implemented workflow in `BUILD_WORKFLOW_CURRENT.md` maps to commands;
 - all commands support structured JSON errors;
 - no command rewrites cited artifacts.
 
@@ -283,6 +292,7 @@ Acceptance:
 | Hash chain corruption blocks work | Repository unusable until repaired. | Stop mutation, report code, recover from Git/backup. |
 | MkDocs grows into authority | Architectural drift. | Treat site output as projection only. |
 | Integration owns hidden state | Cross-tool inconsistency. | Integrations call `lookup-actions`; C2S remains authority. |
+| Target language is read as availability | Incorrect adoption or unsafe automation. | Require status evidence and the documentation standard in every release gate. |
 
 ## Acceptance Gates
 
@@ -297,6 +307,8 @@ Every session gate must pass:
 - JSON schema/example parse checks when architecture files change;
 - Markdown link checks when docs change;
 - documentation update for new user/agent behavior.
+- truth-label and cross-reference review for every architecture or workflow
+  change.
 
 The gate list and exact validation stack live in
 `BUILD_WORKFLOW_CURRENT.md`. The project plan defines sequencing; the workflow

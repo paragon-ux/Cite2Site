@@ -14,6 +14,8 @@
 | Citation ID | Immutable content-addressed identity for a citation. Handles do not replace it. |
 | Citation repository | Dedicated `.c2s` repository storing C2S authority and generated projections. |
 | Contextual action | Action returned by `lookup-actions` for a cursor, selection, or range. |
+| Current observation | Evidence read from an artifact during replay. It may differ from accepted evidence without changing the citation history. |
+| Documentation authority | The role a document plays: explanation, decision, requirement, current-state report, or architecture contract. |
 | Evidence hash | SHA-256 hash of canonical accepted evidence. |
 | Handle | Editable human/agent alias over a citation ID. |
 | Handle binding history | Append-only JSONL event file containing handle bind, rename, alias, and retire events. |
@@ -22,6 +24,8 @@
 | Projection | Generated status, JSON index, or MkDocs page derived from history and observations. Not authority. |
 | Replay | Deterministic reduction of citation history, handle bindings, artifact observations, and policy into projected citation state. |
 | Source-clean | C2S does not modify cited artifacts to store citation state. |
+| Target contract | Approved behavior that is specified and testable in principle but is not necessarily present in the current runtime. |
+| Truth label | A maturity label: Implemented, Partial, Target, or Open. See `DOCUMENTATION_STANDARD.md`. |
 
 ## Forbidden Terminology
 
@@ -30,3 +34,5 @@
 - Do not call overlays authority.
 - Do not describe handles as citation identity.
 - Do not describe generated pages as source of truth.
+- Do not describe an intended editor integration as currently available without
+  identifying it as a target contract.

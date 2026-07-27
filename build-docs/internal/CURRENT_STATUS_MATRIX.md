@@ -1,11 +1,19 @@
 # Current Status Matrix
 
+This is the sole authority for whether a capability is available in the current
+checkout. Target specifications define intended behavior; they do not override
+this evidence-based report.
+
 Status meanings:
 
 - **Done**: implemented and covered by tests or smoke checks.
 - **Partial**: implemented in a limited form, with clear gaps.
 - **Planned**: accepted design direction, not implemented.
 - **Deferred**: intentionally out of the current release path.
+
+Evidence is required for every Done or Partial row. A function name, schema, or
+future-phase prompt is not sufficient evidence by itself. See
+`DOCUMENTATION_STANDARD.md` for the wider truth-label rule.
 
 ## Practical Status Statement
 
@@ -37,19 +45,19 @@ flat citation ledger rather than a useful citation memory surface.
 | Handles | Create handle during citation | Done | `--handle` on `cite-selection` and batch item `handle`. | No first-line handle mode yet. | Add first-line mode after grouping/indexing. |
 | Handles | Rename, alias, retire | Partial | `set-handle` supports actions and replay aliases. | Retire behavior is basic; no CLI query for alias history. | Add handle history export and tests. |
 | Context menu | `lookup-actions` | Done | Returns matches, actions, and `requires_picker`. | No plugin package for editor/browser UI. | Add integration examples after action schema hardens. |
-| Context menu | Overlap ordering | Done | Exact match, range size, handle presence, citation ID. | Does not yet use most recent binding timestamp in sorting. | Replace handle presence sort with binding order. |
+| Context menu | Overlap ordering | Partial | Exact match, range size, handle presence, citation ID. | Target ordering requires most recent binding order, not merely handle presence. | Replace handle-presence sort with binding order and add fixture tests. |
 | Replay | Status projection | Done | `resolved`, `changed`, `missing`, `unsupported`, `retracted` paths exist. | `ambiguous`, `private`, and `adapter_unavailable` need stronger paths. | Add tests and explicit projection logic. |
 | Replay | Citation grouping | Planned | Tags, handles, artifact URI are present in records. | No grouped projections. | Implement grouping indexes. |
 | Export | Flat JSON status | Done | `.c2s/exports/c2s-status.json`. | No grouped indexes. | Add artifact/tag/handle/batch indexes. |
 | Export | Flat JSONL citations | Done | `.c2s/exports/c2s-citations.jsonl`. | No query-specific JSONL outputs. | Add deterministic grouped JSON files. |
 | Export | MkDocs scaffold | Done | `.c2s/site/mkdocs.yml`, `index.md`, `citations.md`. | No artifact/tag/handle pages. | Add grouped MkDocs pages and navigation. |
-| Privacy | Metadata-only default | Done | Project policy and export default are `metadata_only`. | Snippet/private-link modes only validate name, not behavior. | Implement privacy transforms and tests. |
+| Privacy | Metadata-only default | Partial | Project policy and export default are `metadata_only`. | The current privacy transform is a no-op; no test yet proves default export suppresses evidence text. | Implement explicit transforms and no-leak tests before publication claims. |
 | Errors | Structured JSON errors | Done | `C2SError`; JSON argparse usage errors; tests. | No public error-code catalog. | Add error catalog to spec. |
 | Testing | First-slice unit tests | Done | `tests/test_first_slice.py`, 10 tests. | No committed subprocess integration test module yet. | Add subprocess smoke tests as formal tests when CLI surface grows. |
 | Testing | Session gate model | Done | `BUILD_WORKFLOW_CURRENT.md` defines one-session gates G0 through G8 and validation requirements. | Gates are documentation-enforced until CI expands per phase. | Keep each phase prompt aligned with gate acceptance. |
 | Testing | CI validation workflow | Partial | `.github/workflows/ci.yml` and `build-docs/internal/CI_VALIDATION.md` validate docs, unit tests, compile checks, CLI help, and smoke behavior from a clean checkout. | Remote GitHub Actions run has not been observed in this branch. | Confirm first remote CI run after push and fix any platform issue. |
 | Packaging | Editable install | Done | `pyproject.toml`; `python -m pip install -e .` passed locally. | No CI or release build artifact. | Add CI matrix and release workflow. |
-| Docs | Build contract | Done | `build-docs/`; `docs/build-readiness.md` is only a pointer. | No gap for planning baseline. | Keep docs synchronized as implementation changes. |
+| Docs | Build contract | Partial | Current internal requirements, workflow, plan, specs, schemas, and documentation standard are present; live Markdown links validate. | External narratives and ADRs are deleted from this checkout while `AGENTS.md` still expects relevant ADR context. | Restore owner-controlled files in a dedicated documentation-completeness gate, then validate their links and authority chain. |
 
 ## Release Readiness By Version
 
@@ -74,6 +82,9 @@ flat citation ledger rather than a useful citation memory surface.
    runtime schema validation is not implemented.
 9. No migration command exists because there is only one implementation schema.
 10. No editor/browser/document integration package exists yet.
+11. The worktree omits external narratives and ADRs named by the historical
+    map; do not claim a complete documentation set until the owner restores or
+    intentionally replaces them.
 
 ## Immediate Next Build: Grouping And Indexing
 

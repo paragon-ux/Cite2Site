@@ -2,6 +2,13 @@
 
 **Status:** internal technical requirements authority.
 
+## Requirement Interpretation
+
+This document uses **must** for binding technical requirements. It describes the
+v0.3 target architecture while the status matrix reports current delivery.
+Where a requirement names a future command or projection, its acceptance column
+is a gate obligation, not evidence that the runtime already supplies it.
+
 ## Runtime Requirements
 
 | ID | Requirement | Priority |
@@ -33,7 +40,7 @@
 | `cite-batch` | Validate and append multiple citation events. |
 | `set-handle` | Append handle-binding event. |
 | `lookup-actions` | Return contextual matches and actions. |
-| `citations` | Query projected citations by filters. |
+| `citations` | Target command: query projected citations by filters after grouping/indexing. |
 | `status` | Replay projected citation state. |
 | `export` | Write JSON and MkDocs projections. |
 | `check` | Validate repository integrity. |
@@ -50,6 +57,10 @@ Replay must:
 6. build grouping indexes;
 7. apply privacy policy;
 8. return deterministic JSON.
+
+Current maturity: flat replay, hash-chain validation, text observation, and
+status calculation are implemented. Index construction and meaningful privacy
+transforms remain Target requirements until their acceptance suites pass.
 
 ## Indexing Requirements
 
@@ -107,6 +118,10 @@ Adapter failure requirements:
 
 ## Export Requirements
 
+Current maturity: flat status JSON, JSONL citations, and minimal MkDocs pages
+are implemented. The grouped files and pages below are Target outputs for the
+grouping/publication gates.
+
 JSON export files:
 
 - `exports/c2s-status.json`;
@@ -137,6 +152,9 @@ Modes:
 - `snippet`: snippets allowed only by explicit policy;
 - `private_link`: local/private links allowed only by explicit policy.
 
+Mode names alone do not meet this requirement. Each mode must have an explicit
+input-to-output rule and a negative test proving forbidden evidence is absent.
+
 ## Error Requirements
 
 Every CLI error must emit:
@@ -164,6 +182,10 @@ Every feature requires:
 - deterministic ordering tests for indexes and exports;
 - privacy tests for publication output;
 - CLI smoke coverage for public commands.
+
+For a safety-critical invariant, include at least one counterexample test that
+would fail if the invariant regressed: for example, source bytes changed,
+ambiguous mutation accepted, or evidence text emitted in metadata-only output.
 
 ## CI Requirements
 

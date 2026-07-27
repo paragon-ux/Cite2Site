@@ -2,6 +2,15 @@
 
 **Status:** internal design requirements authority.
 
+## Scope And Maturity
+
+The design describes the intended human and agent experience. The current
+runtime supplies the CLI/core contracts for citation, handle binding, contextual
+lookup, status, export, and checks. Native right-click integrations, recovery
+commands, grouped site navigation, and full privacy behavior are Target work.
+This distinction matters: a menu design is not a claim that the menu is already
+available.
+
 ## Design Objective
 
 Cite2Site should make citation management feel native in the user's current
@@ -11,7 +20,8 @@ simple for everyday users, explicit for agents, and safe for publication.
 ## Design Principles
 
 1. **Source-clean by default**: never require markers in the cited artifact.
-2. **One gesture for humans**: right-click creates and manages citations.
+2. **One gesture for humans**: a supported integration should let a user cite
+   or manage a citation through one deliberate context action.
 3. **Deterministic for agents**: every agent-facing surface returns JSON.
 4. **Projection, not authority**: UI, sites, and exports are generated views.
 5. **Fail closed**: ambiguity requires user or agent selection.
@@ -23,16 +33,20 @@ simple for everyday users, explicit for agents, and safe for publication.
 
 | ID | Requirement | Acceptance |
 |---|---|---|
-| DR-001 | Uncited selection menu shows `Cite with C2S`. | `lookup-actions` returns create action when no matches exist. |
-| DR-002 | Cited-region menu shows citation actions. | `lookup-actions` returns actions for matching citations. |
+| DR-001 | A supported integration presents `Cite with C2S` for an uncited selection. | `lookup-actions` returns a create action and an integration fixture maps it to one user gesture. |
+| DR-002 | A supported integration presents cited-region actions. | `lookup-actions` returns actions for matches; the integration names a concrete target for mutations. |
 | DR-003 | Multiple overlapping citations show a picker first. | Response includes multiple ordered matches and `requires_picker`. |
 | DR-004 | Mutating cited-region actions target a concrete citation. | Commands reject ambiguous mutations. |
 | DR-005 | Handles can be edited without opening raw JSON. | UI contract and `set-handle` support bind, rename, alias, retire. |
-| DR-006 | Users can recover mistakes. | Undo/redo/retract/restore workflows are append-only. |
-| DR-007 | Site navigation supports browsing and scanning. | MkDocs output includes grouped pages and stable links. |
-| DR-008 | Users can publish safely. | Metadata-only is the default site/export mode. |
+| DR-006 | Users can recover mistakes. | Append-only recovery commands and their inverse relationships have success and error tests. |
+| DR-007 | Site navigation supports browsing and scanning. | Grouped MkDocs pages have stable links and deterministic order. |
+| DR-008 | Users can publish safely. | Metadata-only default is backed by a no-evidence-leak export test. |
 
 ## Contextual Menu Model
+
+**Target integration model:** the following menus are integration behavior. The
+current implementation exposes `lookup-actions` as the substrate; it does not
+ship a right-click plugin.
 
 Uncited selection:
 
@@ -66,6 +80,10 @@ Picker ordering:
 4. citation ID lexical order.
 
 ## Site Design Requirements
+
+**Target publication model:** the current site is intentionally flat. Grouped
+pages become an implementation claim only after the grouping/export gates and
+link/privacy tests pass.
 
 The MkDocs site must provide:
 
@@ -103,6 +121,10 @@ Agents need:
 - no prose scraping requirement;
 - clear refusal on ambiguous evidence.
 
+Agent surfaces must expose their current maturity in machine-readable fields or
+command availability; agents must never be asked to scrape prose to distinguish
+implemented capability from design intent.
+
 ## Accessibility Requirements
 
 Generated MkDocs pages should:
@@ -134,3 +156,5 @@ A design change is acceptable only if:
 3. it has a JSON behavior for agents where applicable;
 4. it has privacy behavior;
 5. it does not create hidden authority outside `.c2s`.
+6. it names the current implementation state and the test or gate that proves
+   the claim.

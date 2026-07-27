@@ -11,12 +11,17 @@ Fresh agents must start with `AGENTS.md`. This file is the build-doc map after
 that orientation step, not a replacement for the session gate and reading-order
 rules in `AGENTS.md`.
 
+The documentation standard is part of the authority chain. It explains how to
+separate implemented behavior from approved target design without diluting
+either the technical argument or the reader's experience.
+
 ## Current Execution Authority
 
 - [internal/BUILD_WORKFLOW_CURRENT.md](internal/BUILD_WORKFLOW_CURRENT.md)
 - [internal/CI_VALIDATION.md](internal/CI_VALIDATION.md)
 - [internal/CURRENT_STATUS_MATRIX.md](internal/CURRENT_STATUS_MATRIX.md)
 - [internal/PROJECT_PLAN.md](internal/PROJECT_PLAN.md)
+- [internal/DOCUMENTATION_STANDARD.md](internal/DOCUMENTATION_STANDARD.md)
 - [internal/requirements/BRD.md](internal/requirements/BRD.md)
 - [internal/requirements/DRD.md](internal/requirements/DRD.md)
 - [internal/requirements/TRD.md](internal/requirements/TRD.md)
@@ -34,26 +39,15 @@ Architecture files are implementation contracts. When command behavior,
 event shape, replay output, export shape, or adapter semantics change, update
 the architecture package first or in the same patch.
 
-## External Product Narrative
+## Availability Notice
 
-- [external/overviews/PRODUCT_OVERVIEW.md](external/overviews/PRODUCT_OVERVIEW.md)
-- [external/overviews/ENGINEERING_OVERVIEW.md](external/overviews/ENGINEERING_OVERVIEW.md)
-- [external/overviews/WHITEPAPER.md](external/overviews/WHITEPAPER.md)
-- [external/narratives/END_TO_END_NARRATIVE.md](external/narratives/END_TO_END_NARRATIVE.md)
-- [external/narratives/PUBLISHING_AND_ADOPTION_PLAN.md](external/narratives/PUBLISHING_AND_ADOPTION_PLAN.md)
-
-External docs explain the product without exposing unfinished internal
-implementation mechanics as promises.
-
-## ADRs
-
-- [internal/adrs/0001-source-clean-citations.md](internal/adrs/0001-source-clean-citations.md)
-- [internal/adrs/0002-dedicated-citation-repository.md](internal/adrs/0002-dedicated-citation-repository.md)
-- [internal/adrs/0003-append-only-replay.md](internal/adrs/0003-append-only-replay.md)
-- [internal/adrs/0004-handles-as-editable-refs.md](internal/adrs/0004-handles-as-editable-refs.md)
-- [internal/adrs/0005-contextual-actions-not-overlays.md](internal/adrs/0005-contextual-actions-not-overlays.md)
-- [internal/adrs/0006-mkdocs-as-publication-projection.md](internal/adrs/0006-mkdocs-as-publication-projection.md)
-- [internal/adrs/0007-metadata-only-default.md](internal/adrs/0007-metadata-only-default.md)
+This checkout currently omits the external product-narrative files and ADRs
+named by the historical documentation map. They are not recreated or edited by
+this pass because they are owner-controlled deletions in the worktree. Their
+absence is a documentation-completeness blocker: `AGENTS.md` still directs
+agents to consult relevant ADRs. Restore them deliberately in a dedicated gate,
+then apply this standard before treating the documentation set as release-
+complete. The local link check only verifies documents that are present.
 
 ## Change Control Rule
 
@@ -66,4 +60,6 @@ Every implementation change must map to:
 5. a milestone in the project plan.
 
 If a proposed change does not map to those sources, revise the docs first or
-treat the change as out of scope.
+treat the change as out of scope. A concise document is not sufficient evidence
+that the change is ready; the authority chain and validation evidence must also
+be complete.

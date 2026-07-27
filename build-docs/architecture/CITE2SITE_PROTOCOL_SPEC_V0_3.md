@@ -6,6 +6,35 @@ This document defines command-level inputs, outputs, state transitions, and
 failure behavior. It is written so an implementation agent can map each section
 directly to code and tests.
 
+## Intent, Scope, And Maturity
+
+This is the normative target protocol for v0.3. It deliberately describes the
+full contract required for a portable citation repository, including commands
+and projections that are not in the first runtime slice. It is not a release
+note.
+
+The current runtime implements `init`, `cite-selection`, `cite-batch`,
+`set-handle`, `lookup-actions`, `status`, `export`, and `check`. It does not
+yet implement `citations`, grouped indexes, grouped publication, lifecycle
+commands, or actual right-click integrations. The precise state is maintained
+in `../internal/CURRENT_STATUS_MATRIX.md`; a caller must not infer availability
+from a target contract alone.
+
+## Authority And Verification
+
+The protocol governs CLI/API behavior. JSON schemas describe stable shapes, but
+they do not replace semantic checks such as hash-chain validation, deterministic
+ordering, source cleanliness, or collision policy. Every protocol claim must be
+backed by a command test, a contract fixture, or a documented future acceptance
+gate.
+
+| Concern | Primary authority | Verification |
+|---|---|---|
+| Current availability | Status matrix | Unit tests and CLI help |
+| Command semantics | This protocol | Command success and error tests |
+| Record and response shape | Schema index and JSON files | JSON parse and schema-fixture review |
+| Architectural rationale | ADRs when available | Decision-record review |
+
 ## Protocol Invariants
 
 1. Every command returns JSON.
@@ -15,6 +44,10 @@ directly to code and tests.
 5. Cited artifacts are never modified by C2S.
 6. Ambiguous mutations require a concrete `citation_id`.
 7. Public export defaults to `metadata_only`.
+
+An integration may present these operations through a menu, a script, or an
+agent tool. That transport does not acquire authority: it must call the same
+explicit command contract and preserve the cited artifact.
 
 ## Common Success Envelope
 
@@ -228,6 +261,10 @@ Tests:
 Purpose: support contextual right-click menus without making overlays
 authoritative.
 
+**Current implementation:** the CLI computes contextual matches and actions.
+An editor, browser, or document right-click transport is a Target integration,
+not a shipped capability.
+
 Inputs:
 
 - `--artifact`;
@@ -254,7 +291,8 @@ Tests:
 
 ## Command: `citations`
 
-Status: planned.
+**Maturity:** Target. Authorized by the grouping/indexing phase; not present in
+the current CLI.
 
 Purpose: query projected citations and indexes.
 
@@ -283,7 +321,8 @@ Rules:
 
 - validates event chains before projection;
 - computes statuses from current artifact observations;
-- includes flat citations and, after indexing milestone, grouped indexes;
+- includes flat citations in the current slice and grouped indexes after the
+  indexing milestone;
 - read-only.
 
 ## Command: `export`
@@ -292,10 +331,9 @@ Purpose: write JSON and MkDocs projections.
 
 Writes:
 
-- flat JSON status;
-- flat JSONL citations;
-- grouped JSON indexes;
-- MkDocs home, flat citations, and grouped pages.
+- flat JSON status and flat JSONL citations in the current slice;
+- grouped JSON indexes and grouped pages after the indexing milestone;
+- MkDocs home and flat citations page in the current slice.
 
 Rules:
 
@@ -328,3 +366,16 @@ For every new command or command change:
 5. add source-clean test when artifacts are involved;
 6. update current status matrix;
 7. update workflow docs when user/agent flow changes.
+
+## Falsification Rules
+
+A protocol statement is not satisfied merely because a command name exists.
+Reject the implementation claim when any of the following is true:
+
+1. a mutating command changes the cited artifact;
+2. an error path emits only prose rather than the common error envelope;
+3. the same history and artifact state produce different projection ordering;
+4. an ambiguous contextual mutation proceeds without a concrete
+   `citation_id`;
+5. metadata-only output exposes accepted or observed evidence text;
+6. a Target capability is described as available in a current-state document.

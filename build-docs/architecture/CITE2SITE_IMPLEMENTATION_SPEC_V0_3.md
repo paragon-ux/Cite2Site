@@ -8,6 +8,44 @@ This specification defines the target behavior for the Cite2Site local CLI and
 projection engine. It covers authority files, event schemas, adapters, commands,
 replay, indexing, publication, errors, and validation.
 
+## Reading This Specification Correctly
+
+This specification records the v0.3 target architecture. It contains both the
+implemented first slice and approved subsequent work so that an implementation
+agent can build without reopening foundational decisions. It must therefore be
+read with the current status matrix, not as a claim that every listed surface is
+already available.
+
+**Implemented first slice:** source-clean text and Markdown selection capture,
+append-only citation and handle histories, hash-chain validation, a JSON CLI,
+contextual lookup, flat replay/status, flat export, and minimal MkDocs output.
+
+**Target work:** grouped indexes and `citations`, full privacy transforms,
+lifecycle-adjacent commands, richer adapters, grouped publication, and native
+right-click transports. Each target item needs a gate, tests, and status update
+before it becomes an implementation claim.
+
+## Design Argument
+
+Cite2Site separates identity, evidence, presentation, and interaction because
+these concerns have different failure modes. Immutable citation IDs protect
+auditability; editable handles preserve usability; replay makes changes in an
+artifact observable without rewriting history; and projections keep sites and
+interfaces from becoming hidden authority. The alternative, storing state in
+markers or editor overlays, would make portability dependent on a particular
+artifact format or integration.
+
+## Requirement Traceability
+
+| Architectural concern | Requirement authority | Primary acceptance evidence |
+|---|---|---|
+| Source-clean citation capture | BRD BR-001; TR-107 | Source-byte preservation test |
+| Append-only evidence and handles | BRD BR-002; TR-102 to TR-106 | Hash-chain and replay tests |
+| Contextual action contract | BRD BR-004; DR-001 to DR-004 | Lookup fixture and overlap tests |
+| Agent batch behavior | BRD BR-005; TR command requirements | Batch success/error tests |
+| Privacy-safe publication | BRD BR-007; TR privacy requirements | Export privacy tests |
+| Grouped navigation | DR-007; TR indexing/export requirements | Grouping phase acceptance suite |
+
 ## Invariants
 
 1. Cited artifacts are not modified by C2S.
@@ -20,6 +58,10 @@ replay, indexing, publication, errors, and validation.
 7. Generated exports and MkDocs pages are projections, not authority.
 8. Unsupported or ambiguous evidence fails closed.
 9. Public export defaults to metadata-only.
+
+These are falsifiable constraints. A feature that violates one is not a partial
+implementation of Cite2Site; it is outside the architecture until the decision
+record and requirements are consciously revised.
 
 ## Repository Layout
 
@@ -261,7 +303,7 @@ Mutating follow-up actions must name a concrete `citation_id`.
 
 ### `citations`
 
-Planned query command.
+**Maturity:** Target query command. It is not present in the current CLI.
 
 Filters:
 
@@ -299,6 +341,9 @@ Validates repository integrity.
 
 ## Grouping And Indexing
 
+**Maturity:** Target. Current replay emits a flat citation list; this section
+defines the deterministic index contract for the authorized next phase.
+
 Replay must produce flat citations plus indexes:
 
 ```json
@@ -326,6 +371,9 @@ Index rules:
 
 ## Publication
 
+**Maturity:** Partial. The current slice writes flat status, JSONL citations,
+and minimal MkDocs pages. The grouped outputs below are target work.
+
 Export must write:
 
 - flat status JSON;
@@ -345,6 +393,10 @@ Static-site publication defaults to `metadata_only`.
 | `hash_only` | Evidence hashes allowed, no evidence text. |
 | `snippet` | Short snippets allowed by explicit policy. |
 | `private_link` | Local/private links allowed for trusted environments. |
+
+The current CLI accepts these mode names but does not yet apply distinct output
+transforms. Treat the modes other than the metadata-only default as Target until
+their behavior is independently tested.
 
 ## Error Codes
 
@@ -391,3 +443,7 @@ Each new command also needs:
 - structured error test;
 - source-clean test when artifacts are involved;
 - deterministic output test when projection is generated.
+
+For any architecture extension, add a counterexample test: show the forbidden
+behavior (source mutation, nondeterministic order, ambiguous mutation, or
+privacy leakage) and assert that the implementation rejects or prevents it.

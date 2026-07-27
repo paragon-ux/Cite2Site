@@ -2,6 +2,13 @@
 
 **Status:** internal orientation for humans and agents.
 
+## What This Document Can Tell You
+
+This is a map of the current technical direction, not proof that every target
+workflow is implemented. Read the status matrix before relying on a command or
+integration, and use the documentation standard when deciding how a claim
+should be written or verified.
+
 ## Read This First
 
 Cite2Site is a source-clean citation system. It records citations outside the
@@ -31,13 +38,19 @@ Not authority:
 
 ## Current Repository State
 
-The Cite2Site repo currently contains:
+**Implemented first slice:**
 
 - Python package under `src/c2s`;
 - CLI entrypoint `python -m c2s`;
 - first-slice tests under `tests`;
-- build contract under `docs`;
-- planning/specification set under `build-docs`.
+- source-clean text and Markdown citation creation;
+- batch creation, handle binding, contextual lookup, status, export, and
+  integrity checks.
+
+**Target, not current user interface:** editor, browser, and document-tool
+right-click integrations; grouped indexes and query command; richer privacy
+transforms; lifecycle-adjacent recovery commands; and adapter conformance
+coverage. The status matrix names the exact limitations and next gates.
 
 ## Build Order
 
@@ -56,6 +69,8 @@ The Cite2Site repo currently contains:
 - Use `build-docs/internal/CURRENT_STATUS_MATRIX.md` to choose next work.
 - Use `build-docs/architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md` for behavior.
 - Use `build-docs/internal/requirements/TRD.md` for implementation requirements.
+- Use `build-docs/internal/DOCUMENTATION_STANDARD.md` when changing any
+  documentation or contract language.
 - Use `build-docs/internal/phase_prompts/` for authorized phase-level build
   instructions.
 - Do not modify cited artifacts in tests except when deliberately simulating
@@ -78,10 +93,14 @@ python -m c2s export
 
 | ADR | Decision |
 |---|---|
-| [0001-source-clean-citations.md](../adrs/0001-source-clean-citations.md) | C2S does not write markers into cited artifacts. |
-| [0002-dedicated-citation-repository.md](../adrs/0002-dedicated-citation-repository.md) | Citation history lives in a dedicated `.c2s` repository. |
-| [0003-append-only-replay.md](../adrs/0003-append-only-replay.md) | Projected state is replay output, not mutable authority. |
-| [0004-handles-as-editable-refs.md](../adrs/0004-handles-as-editable-refs.md) | Handles are editable aliases over immutable citation IDs. |
-| [0005-contextual-actions-not-overlays.md](../adrs/0005-contextual-actions-not-overlays.md) | UI integrations call `lookup-actions`; overlays are not authority. |
-| [0006-mkdocs-as-publication-projection.md](../adrs/0006-mkdocs-as-publication-projection.md) | MkDocs is the first publication projection. |
-| [0007-metadata-only-default.md](../adrs/0007-metadata-only-default.md) | Public export defaults to metadata-only. |
+| 0001 source-clean citations | C2S does not write markers into cited artifacts. |
+| 0002 dedicated citation repository | Citation history lives in a dedicated `.c2s` repository. |
+| 0003 append-only replay | Projected state is replay output, not mutable authority. |
+| 0004 handles as editable refs | Handles are editable aliases over immutable citation IDs. |
+| 0005 contextual actions, not overlays | UI integrations call `lookup-actions`; overlays are not authority. |
+| 0006 MkDocs as publication projection | MkDocs is the first publication projection. |
+| 0007 metadata-only default | Public export defaults to metadata-only. |
+
+The ADR files are currently absent from this checkout. Do not infer their
+contents from this index; restore or locate the owner-controlled records before
+changing an architectural invariant.
