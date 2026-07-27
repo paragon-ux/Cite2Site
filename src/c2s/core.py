@@ -805,7 +805,7 @@ def observe_status(repo: Repo, citation: dict[str, Any]) -> str:
     try:
         observed = ad.observe(repo, citation["artifact"], citation["locator"])
     except C2SError as exc:
-        if exc.code in ("E_ADAPTER_MISSING", "E_ARTIFACT_MISSING", "E_ADAPTER_RANGE_INVALID", "E_RANGE_INVALID"):
+        if exc.code in ("E_ADAPTER_MISSING", "E_ARTIFACT_MISSING", "E_ADAPTER_RANGE_INVALID", "E_RANGE_INVALID", "E_ARTIFACT_OUTSIDE_WORKSPACE"):
             return "missing"
         return "adapter_unavailable"
     except Exception:
