@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/0.3/project.schema.json",
+  "title": "Cite2Site Project",
+  "type": "object",
+  "required": ["schema_version", "repository_id", "workspace_root", "publication", "created_at", "tool"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "c2s.project.v0.3"},
+    "repository_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "workspace_root": {"type": "string", "minLength": 1},
+    "publication": {
+      "type": "object",
+      "required": ["privacy_mode"],
+      "additionalProperties": true,
+      "properties": {
+        "privacy_mode": {"enum": ["metadata_only", "hash_only", "snippet", "private_link"]}
+      }
+    },
+    "created_at": {"type": "string"},
+    "tool": {"$ref": "#/$defs/tool"}
+  },
+  "$defs": {
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"}
+      }
+    }
+  }
+}

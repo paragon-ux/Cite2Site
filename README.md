@@ -25,3 +25,8 @@ immutable citation IDs. Static-site export defaults to metadata-only.
 ```bash
 python -m unittest discover -s tests
 ```
+
+## Build Documentation
+
+The end-to-end build plan, requirements, workflows, whitepaper, specification,
+current status matrix, and ADRs live under [build-docs/](build-docs/README.md).

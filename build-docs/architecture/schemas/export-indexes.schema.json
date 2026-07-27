@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/0.3/export-indexes.schema.json",
+  "title": "Export Indexes",
+  "type": "object",
+  "required": ["by_artifact", "by_handle", "by_tag", "by_status", "by_batch"],
+  "additionalProperties": false,
+  "properties": {
+    "by_artifact": {"$ref": "#/$defs/index_map"},
+    "by_handle": {"$ref": "#/$defs/index_map"},
+    "by_tag": {"$ref": "#/$defs/index_map"},
+    "by_status": {"$ref": "#/$defs/index_map"},
+    "by_batch": {"$ref": "#/$defs/index_map"}
+  },
+  "$defs": {
+    "index_map": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["key", "count", "citation_ids"],
+        "additionalProperties": true,
+        "properties": {
+          "key": {"type": "string"},
+          "display": {"type": "string"},
+          "count": {"type": "integer", "minimum": 0},
+          "citation_ids": {
+            "type": "array",
+            "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+          }
+        }
+      }
+    }
+  }
+}

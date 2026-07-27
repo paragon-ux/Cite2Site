@@ -1,0 +1,69 @@
+# Cite2Site Build Docs
+
+**Status:** active build documentation navigation.
+
+Cite2Site separates external product-facing documents from internal execution
+authority and architecture-source contracts. Public narrative is readable,
+while internal docs are precise enough for an agent to implement from without
+reopening core decisions.
+
+Fresh agents must start with `AGENTS.md`. This file is the build-doc map after
+that orientation step, not a replacement for the session gate and reading-order
+rules in `AGENTS.md`.
+
+## Current Execution Authority
+
+- [internal/BUILD_WORKFLOW_CURRENT.md](internal/BUILD_WORKFLOW_CURRENT.md)
+- [internal/CI_VALIDATION.md](internal/CI_VALIDATION.md)
+- [internal/CURRENT_STATUS_MATRIX.md](internal/CURRENT_STATUS_MATRIX.md)
+- [internal/PROJECT_PLAN.md](internal/PROJECT_PLAN.md)
+- [internal/requirements/BRD.md](internal/requirements/BRD.md)
+- [internal/requirements/DRD.md](internal/requirements/DRD.md)
+- [internal/requirements/TRD.md](internal/requirements/TRD.md)
+- [internal/orientation/README.md](internal/orientation/README.md)
+
+## Architecture Source Package
+
+- [architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md](architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md)
+- [architecture/CITE2SITE_PROTOCOL_SPEC_V0_3.md](architecture/CITE2SITE_PROTOCOL_SPEC_V0_3.md)
+- [architecture/SCHEMA_INDEX.md](architecture/SCHEMA_INDEX.md)
+- [architecture/schemas/](architecture/schemas/)
+- [architecture/examples/](architecture/examples/)
+
+Architecture files are implementation contracts. When command behavior,
+event shape, replay output, export shape, or adapter semantics change, update
+the architecture package first or in the same patch.
+
+## External Product Narrative
+
+- [external/overviews/PRODUCT_OVERVIEW.md](external/overviews/PRODUCT_OVERVIEW.md)
+- [external/overviews/ENGINEERING_OVERVIEW.md](external/overviews/ENGINEERING_OVERVIEW.md)
+- [external/overviews/WHITEPAPER.md](external/overviews/WHITEPAPER.md)
+- [external/narratives/END_TO_END_NARRATIVE.md](external/narratives/END_TO_END_NARRATIVE.md)
+- [external/narratives/PUBLISHING_AND_ADOPTION_PLAN.md](external/narratives/PUBLISHING_AND_ADOPTION_PLAN.md)
+
+External docs explain the product without exposing unfinished internal
+implementation mechanics as promises.
+
+## ADRs
+
+- [internal/adrs/0001-source-clean-citations.md](internal/adrs/0001-source-clean-citations.md)
+- [internal/adrs/0002-dedicated-citation-repository.md](internal/adrs/0002-dedicated-citation-repository.md)
+- [internal/adrs/0003-append-only-replay.md](internal/adrs/0003-append-only-replay.md)
+- [internal/adrs/0004-handles-as-editable-refs.md](internal/adrs/0004-handles-as-editable-refs.md)
+- [internal/adrs/0005-contextual-actions-not-overlays.md](internal/adrs/0005-contextual-actions-not-overlays.md)
+- [internal/adrs/0006-mkdocs-as-publication-projection.md](internal/adrs/0006-mkdocs-as-publication-projection.md)
+- [internal/adrs/0007-metadata-only-default.md](internal/adrs/0007-metadata-only-default.md)
+
+## Change Control Rule
+
+Every implementation change must map to:
+
+1. a capability row in the current status matrix;
+2. a workflow section;
+3. a requirement in BRD, DRD, or TRD;
+4. a contract in the architecture specs or JSON schemas;
+5. a milestone in the project plan.
+
+If a proposed change does not map to those sources, revise the docs first or
+treat the change as out of scope.

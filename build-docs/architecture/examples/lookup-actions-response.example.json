@@ -1,0 +1,20 @@
+{
+  "matches": [
+    {
+      "actions": [
+        "open",
+        "set_handle",
+        "add_alias",
+        "undo",
+        "redo"
+      ],
+      "citation_id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "match_kind": "exact",
+      "preferred_handle": "OPENING-CLAIM",
+      "range_summary": "lines 1-1",
+      "status": "resolved"
+    }
+  ],
+  "ok": true,
+  "requires_picker": false
+}

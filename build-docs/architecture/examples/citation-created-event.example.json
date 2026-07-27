@@ -1,0 +1,48 @@
+{
+  "accepted_evidence": {
+    "byte_count": 42,
+    "canonicalization": "text-utf8-lf-v1",
+    "content_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+    "kind": "text",
+    "line_count": 1,
+    "line_hashes": [
+      "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+    ]
+  },
+  "actor": {
+    "id": "agent-1",
+    "kind": "agent"
+  },
+  "artifact": {
+    "adapter": "markdown",
+    "artifact_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "uri": "notes.md"
+  },
+  "batch_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "citation_id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+  "created_at": "2026-07-27T00:00:00Z",
+  "event_id": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+  "event_type": "citation.created",
+  "locator": {
+    "encoding": "unicode-scalar",
+    "end": 42,
+    "end_line": 1,
+    "kind": "text-range",
+    "start": 0,
+    "start_line": 1
+  },
+  "metadata": {
+    "label": "Opening claim",
+    "note": "Initial source citation.",
+    "tags": [
+      "overview"
+    ]
+  },
+  "previous_event_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "repository_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "schema_version": "c2s.event.v0.3",
+  "tool": {
+    "name": "c2s",
+    "version": "0.3.0"
+  }
+}

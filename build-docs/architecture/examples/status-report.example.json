@@ -1,0 +1,46 @@
+{
+  "citations": [
+    {
+      "aliases": [
+        "CLAIM-1",
+        "OPENING-CLAIM"
+      ],
+      "artifact": {
+        "adapter": "markdown",
+        "artifact_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "uri": "notes.md"
+      },
+      "citation_id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "locator": {
+        "encoding": "unicode-scalar",
+        "end": 42,
+        "end_line": 1,
+        "kind": "text-range",
+        "start": 0,
+        "start_line": 1
+      },
+      "metadata": {
+        "label": "Opening claim",
+        "tags": [
+          "overview"
+        ]
+      },
+      "preferred_handle": "OPENING-CLAIM",
+      "status": "resolved"
+    }
+  ],
+  "ok": true,
+  "privacy_mode": "metadata_only",
+  "repository_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "schema_version": "c2s.status.v0.3",
+  "summary": {
+    "adapter_unavailable": 0,
+    "ambiguous": 0,
+    "changed": 0,
+    "missing": 0,
+    "private": 0,
+    "resolved": 1,
+    "retracted": 0,
+    "unsupported": 0
+  }
+}

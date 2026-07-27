@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/0.3/event-envelope.schema.json",
+  "title": "Cite2Site Event Envelope",
+  "type": "object",
+  "required": ["schema_version", "event_type", "event_id", "previous_event_hash", "repository_id", "created_at", "actor", "tool"],
+  "properties": {
+    "schema_version": {"const": "c2s.event.v0.3"},
+    "event_type": {"type": "string", "minLength": 1},
+    "event_id": {"$ref": "#/$defs/hash"},
+    "previous_event_hash": {"$ref": "#/$defs/hash"},
+    "repository_id": {"$ref": "#/$defs/hash"},
+    "batch_id": {"$ref": "#/$defs/hash"},
+    "idempotency_key": {"type": "string"},
+    "created_at": {"type": "string"},
+    "actor": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": {"enum": ["user", "agent", "machine"]},
+        "id": {"type": "string"}
+      }
+    },
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"}
+      }
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/0.3/cite-batch-request.schema.json",
+  "title": "Cite Batch Request",
+  "type": "object",
+  "required": ["items"],
+  "additionalProperties": false,
+  "properties": {
+    "mode": {"enum": ["all_or_nothing", "partial"], "default": "all_or_nothing"},
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["client_item_id", "artifact", "locator"],
+        "additionalProperties": false,
+        "properties": {
+          "client_item_id": {"type": "string", "minLength": 1},
+          "artifact": {
+            "type": "object",
+            "required": ["adapter", "uri"],
+            "additionalProperties": false,
+            "properties": {
+              "adapter": {"enum": ["filesystem-text", "markdown"]},
+              "uri": {"type": "string", "minLength": 1}
+            }
+          },
+          "locator": {
+            "type": "object",
+            "required": ["start", "end"],
+            "additionalProperties": true,
+            "properties": {
+              "kind": {"type": "string"},
+              "start": {"type": "integer", "minimum": 0},
+              "end": {"type": "integer", "minimum": 0}
+            }
+          },
+          "expected_content_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "handle": {"type": "string", "pattern": "^[A-Za-z0-9_.:/-]{1,128}$"},
+          "label": {"type": "string"},
+          "tags": {"type": "array", "items": {"type": "string"}},
+          "note": {"type": "string"}
+        }
+      }
+    }
+  }
+}

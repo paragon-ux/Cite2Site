@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "codex/**"
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Validate build docs
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          repo = Path(".").resolve()
+          missing = []
+          for md in (repo / "build-docs").rglob("*.md"):
+              text = md.read_text(encoding="utf-8")
+              for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", text):
+                  if "://" in target or target.startswith("#"):
+                      continue
+                  clean = target.split("#", 1)[0]
+                  if not clean:
+                      continue
+                  path = (md.parent / clean).resolve()
+                  if not path.exists():
+                      missing.append(f"{md}: {target}")
+          if missing:
+              raise SystemExit("Missing Markdown links:\n" + "\n".join(missing))
+
+          required = [
+              "AGENTS.md",
+              "build-docs/README.md",
+              "build-docs/internal/CURRENT_STATUS_MATRIX.md",
+              "build-docs/internal/BUILD_WORKFLOW_CURRENT.md",
+              "build-docs/internal/CI_VALIDATION.md",
+              "build-docs/internal/PROJECT_PLAN.md",
+              "build-docs/architecture/CITE2SITE_PROTOCOL_SPEC_V0_3.md",
+              "build-docs/architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md",
+              "build-docs/architecture/SCHEMA_INDEX.md",
+          ]
+          for target in required:
+              if not (repo / target).exists():
+                  raise SystemExit(f"AGENTS reading-order target missing: {target}")
+
+          for item in (repo / "build-docs").rglob("*.json"):
+              json.loads(item.read_text(encoding="utf-8"))
+          PY
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests
+
+      - name: Compile package
+        run: python -m compileall src
+
+      - name: Check CLI help
+        run: python -m c2s --help
+
+      - name: Run CLI smoke workflow
+        run: |
+          tmp="$(mktemp -d)"
+          cd "$tmp"
+          printf 'Alpha claim\nBeta claim\n' > notes.md
+          before_hash="$(sha256sum notes.md | cut -d ' ' -f 1)"
+          c2s --repo .c2s init
+          c2s --repo .c2s cite-selection --artifact notes.md --start 0 --end 11 --handle ALPHA --tag demo
+          c2s --repo .c2s lookup-actions --artifact notes.md --start 0 --end 11
+          c2s --repo .c2s status
+          c2s --repo .c2s export
+          c2s --repo .c2s check
+          after_hash="$(sha256sum notes.md | cut -d ' ' -f 1)"
+          test "$before_hash" = "$after_hash"
+          test -f .c2s/exports/c2s-status.json
+          test -f .c2s/exports/c2s-citations.jsonl
+          test -f .c2s/site/docs/index.md
+          test -f .c2s/site/docs/citations.md
