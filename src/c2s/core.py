@@ -219,7 +219,7 @@ def init_repo(repo: Repo, force: bool = False) -> dict[str, Any]:
         path.touch(exist_ok=True)
     write_default_mkdocs(repo)
     write_site_docs(repo, {"citations": [], "summary": summarize_status([])})
-    return {"ok": True, "repo": str(repo.root), "repository_id": repository_id}
+    return {"ok": True, "repo": repo.root.name, "repository_id": repository_id}
 
 
 @contextlib.contextmanager
@@ -719,7 +719,7 @@ def refresh_artifact_index(repo: Repo) -> dict[str, Any]:
             "error": {
                 "code": "E_ARTIFACT_INDEX_CACHE",
                 "message": "derived artifact index could not be refreshed",
-                "details": {"path": str(repo.artifact_index), "reason": str(exc)},
+                "details": {"path": repo.artifact_index.name, "reason": type(exc).__name__},
             },
         }
 
@@ -1154,7 +1154,7 @@ def export(args: argparse.Namespace) -> dict[str, Any]:
         write_site_docs(repo, projection)
         return {"ok": True, "privacy_mode": projection["privacy_mode"], "status_path": str(status_path), "citations_path": str(citations_path), "grouped_index_paths": grouped_paths, "grouped_site_paths": site_groups, "artifact_index": refresh_artifact_index(repo), "site_dir": str(repo.site_dir)}
     except OSError as exc:
-        raise C2SError("E_PROJECTION_WRITE", "could not write generated projection", reason=str(exc)) from exc
+        raise C2SError("E_PROJECTION_WRITE", "could not write generated projection", reason=type(exc).__name__) from exc
 
 
 def write_default_mkdocs(repo: Repo, site_groups: dict[str, list[str]] | None = None) -> None:
