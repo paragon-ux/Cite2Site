@@ -17,7 +17,7 @@ future-phase prompt is not sufficient evidence by itself. See
 
 ## Practical Status Statement
 
-Cite2Site has a complete local v0.3.0 first slice. The implemented substrate
+Cite2Site has a complete local v1.0 implementation (G0-G8 clear). The implemented substrate
 proves the append-only event model,
 source-clean citation creation, batch citation, handle binding, contextual
 lookup, replay status, metadata-only export, structured JSON errors, and unit
@@ -25,9 +25,12 @@ test baseline.
 
 G1 supplies deterministic replay indexes and a populated derived artifact
 cache; G2 supplies index-backed query filters; G3 supplies grouped JSON
-exports and MkDocs navigation; and G4 supplies enforced, policy-gated privacy
-transforms for replay and export projections. Recovery workflows, richer
-adapters, and native integrations remain separate work.
+exports and MkDocs navigation; G4 supplies enforced, policy-gated privacy
+transforms for replay and export projections; G5 supplies recovery and
+lifecycle commands; G6 supplies adapter protocol conformance; G7 supplies
+integration contracts and examples; G8 supplies migration fixtures, release
+checklists, and CI hardening. Richer adapters (block-aware Markdown, PDF,
+DOCX) and native editor/browser integrations remain deferred to post-v1 gates.
 
 ## Capability Matrix
 
@@ -72,11 +75,7 @@ adapters, and native integrations remain separate work.
 
 | Version | Release Goal | Readiness | Exit Criteria |
 |---|---|---:|---|
-| v0.3.0 | Local first slice | Done | Grouping/indexing, privacy transforms, CLI query filters, workflow commands, adapter protocol conformance, integration contract and examples, migration fixture tests, and docs complete. Remote CI run not yet observed. |
-| v0.4.0 | Publishable citation site | Planned | Static-host deployment guide, publication review, and remote CI validation. |
-| v0.5.0 | Integration-ready C2S | Partial | Integration contract, editor mock, thin-client reference, and fixtures delivered; overlap ordering still partial. |
-| v0.6.0 | Agent-first automation | Planned | Batch policies, idempotency, full JSON schemas, CI checks, and recovery workflows. |
-| v1.0.0 | Public stable release | Planned | Schema freeze, migration rules, threat model, docs, examples, CI, and release artifacts. |
+| v1.0.0 | G0-G8 complete (protocol v0.3) | Done | Grouping, indexing, privacy transforms, CLI query filters, workflow commands, adapter protocol conformance, integration contracts and examples, migration fixture tests, CI workflow, release checklist. Remote CI run and publication review remain open. Phase 7 (v1 stabilization) is the next gate. |
 
 ## Known Current Gaps
 
@@ -93,8 +92,9 @@ adapters, and native integrations remain separate work.
 
 ## Immediate Next Build: Remote CI And Publication
 
-The local implementation is feature-complete for v0.3.0. Remaining work:
+The local implementation is feature-complete for v1.0 (G0-G8 clear). Remaining work:
 
 1. push the active branch and confirm the first remote CI run;
 2. review generated MkDocs output for publication readiness;
-3. prepare v0.3.0 release tag and notes.
+3. prepare v1.0 release tag and notes;
+4. enter Phase 7 (v1 stabilization): schema freeze, migration rules, threat model.

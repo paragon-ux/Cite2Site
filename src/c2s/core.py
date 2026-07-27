@@ -179,7 +179,7 @@ class Repo:
     @property
     def project(self) -> dict[str, Any]:
         if not self.project_file.exists():
-            raise C2SError("E_REPO_NOT_INITIALIZED", "Cite2Site repository is not initialized", repo=str(self.root))
+            raise C2SError("E_REPO_NOT_INITIALIZED", "Cite2Site repository is not initialized", repo=repo.root.name)
         project = load_json(self.project_file)
         validate_schema_version(project.get("schema_version") if isinstance(project, dict) else None, "c2s.project.v0.3", path=self.project_file.name)
         return project
@@ -199,7 +199,7 @@ def repo_from_arg(repo: str | Path = ".c2s") -> Repo:
 
 def init_repo(repo: Repo, force: bool = False) -> dict[str, Any]:
     if repo.project_file.exists() and not force:
-        raise C2SError("E_REPO_EXISTS", "Cite2Site repository already exists", repo=str(repo.root))
+        raise C2SError("E_REPO_EXISTS", "Cite2Site repository already exists", repo=repo.root.name)
     repo.root.mkdir(parents=True, exist_ok=True)
     repo.exports_dir.mkdir(parents=True, exist_ok=True)
     (repo.site_dir / "docs").mkdir(parents=True, exist_ok=True)
@@ -233,7 +233,7 @@ def repo_lock(repo: Repo):
         except FileExistsError:
             time.sleep(0.05)
     if fd is None:
-        raise C2SError("E_REPO_LOCKED", "could not acquire citation repository lock", repo=str(repo.root))
+        raise C2SError("E_REPO_LOCKED", "could not acquire citation repository lock", repo=repo.root.name)
     try:
         yield
     finally:
