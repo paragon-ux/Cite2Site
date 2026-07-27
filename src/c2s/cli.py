@@ -136,6 +136,23 @@ def main(argv: list[str] | None = None) -> int:
     p_check = sub.add_parser("check")
     p_check.set_defaults(func=core.check)
 
+    # -- context-menu integration --
+    def _install_context_menu(_args: argparse.Namespace) -> dict[str, Any]:
+        from ._context_menu import install
+        install()
+        return {"ok": True}
+
+    def _uninstall_context_menu(_args: argparse.Namespace) -> dict[str, Any]:
+        from ._context_menu import uninstall
+        uninstall()
+        return {"ok": True}
+
+    p_cm_install = sub.add_parser("install-context-menu")
+    p_cm_install.set_defaults(func=_install_context_menu)
+
+    p_cm_uninstall = sub.add_parser("uninstall-context-menu")
+    p_cm_uninstall.set_defaults(func=_uninstall_context_menu)
+
     try:
         args = parser.parse_args(argv)
         func: Callable[[argparse.Namespace], dict[str, Any]] = args.func

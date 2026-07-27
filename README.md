@@ -38,7 +38,7 @@ echo "Alpha claim" > notes.md
 c2s cite-selection --artifact notes.md --start 0 --end 11 --handle ALPHA
 
 # Install the right-click context menu
-python tools/install_context_menu.py
+c2s install-context-menu
 ```
 
 Right-click any file in Explorer → **Cite2Site → Look up citations here** to
@@ -50,7 +50,7 @@ plugins and browser extensions call. See the **[Integration Contract](build-docs
 for the API, and the **[User Guide](build-docs/guides/USER_GUIDE.md)** for
 everyday workflows.
 
-To uninstall: `python tools/install_context_menu.py --remove`.
+To uninstall: `c2s uninstall-context-menu`.
 
 ## Quick Start — Agent Path (CLI)
 
