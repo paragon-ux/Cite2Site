@@ -1,12 +1,15 @@
-# Cite2Site Thin-Client Integration Example
+# Cite2Site Integration Examples
 
-**Maturity:** minimal reproducible G7 integration fixture.
+**Maturity:** implemented G7 integration fixtures.
 
 This directory demonstrates the intended right-click integration shape without
-creating overlay authority. The example shells out to implemented C2S CLI
+creating overlay authority. Every example shells out to implemented C2S CLI
 commands and stores no citation state outside `.c2s`.
 
 ## Contract
+
+The authoritative integration contract is documented in
+`build-docs/architecture/INTEGRATION_CONTRACT.md`.  Key rules:
 
 - Range encoding is `unicode_scalar_offset`, matching `cite-selection` and
   `lookup-actions` `--start` and `--end`.
@@ -19,20 +22,38 @@ commands and stores no citation state outside `.c2s`.
   actions such as undo and redo are rendered as unavailable, not enabled.
 - Picker cancellation performs no mutation.
 
-## Reference Client
+## Examples
 
-Run from this repository root after initializing the citation repository with
-the local source tree:
+### Thin Client (`thin_client.py`)
+
+A transport-neutral Python library that wraps the C2S CLI. Suitable for
+automation, scripting, and as a reference for editor/browser integrators.
 
 ```powershell
-$env:PYTHONPATH='src'
-python -m c2s --repo .c2s init
 python examples/integration/thin_client.py --repo .c2s lookup --artifact notes.md --start 0 --end 11
 ```
 
-The example is intentionally transport-neutral. Editors, browsers, and document
-tools can render the same contract as native menus, but C2S remains the
-authority.
+### Editor Plugin Mock (`editor_plugin_mock.py`)
+
+A minimal interaction loop simulating an editor plugin: open file, select text,
+lookup actions, display picker, execute note action.
+
+```powershell
+python examples/integration/editor_plugin_mock.py --repo .c2s --artifact notes.md --start 0 --end 11
+```
+
+### Fixtures
+
+`fixtures/` contains JSON request/response contract examples for:
+
+- `lookup-uncited-response.json` — no citation at the query range;
+- `lookup-overlap-picker.json` — multiple overlapping citations;
+- `selection-citation-request.json` — a prepared citation request;
+- `picker-cancelled.json` — cancellation without mutation;
+- `unavailable-actions.json` — actions that are deferred or not implemented.
+
+These fixtures are used by `tests/test_integration_thin_client.py` as
+contract compatibility checks.
 
 ## Accessibility Expectations
 

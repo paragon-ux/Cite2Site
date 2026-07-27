@@ -1,25 +1,37 @@
 {
+  "schema_version": "c2s.integration.thin-client.v0.1",
+  "fixture": "unavailable-actions",
+  "description": "Deferred or target-only actions that are not available in the current runtime. These actions must be rendered with their unavailable reason, not silently hidden. The action IDs and labels here match thin_client.py's UNAVAILABLE_ACTIONS dict and INTEGRATION_CONTRACT.md § Action Labels And Availability.",
   "actions": [
     {
+      "id": "retire",
+      "label": "Retire citation",
       "available": false,
-      "citation_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
-      "command": null,
-      "id": "accept_current",
-      "label": "Accept Current",
-      "requires_citation_id": true,
       "transport": null,
-      "unavailable_reason": "Recovery command is not implemented in this runtime."
+      "command": null,
+      "requires_citation_id": true,
+      "citation_id": "<citation_id>",
+      "unavailable_reason": "Citation retirement is not implemented in this runtime."
     },
     {
+      "id": "undo",
+      "label": "Undo",
       "available": false,
-      "citation_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
-      "command": null,
-      "id": "relocate",
-      "label": "Relocate",
-      "requires_citation_id": true,
       "transport": null,
-      "unavailable_reason": "Recovery command is not implemented in this runtime."
+      "command": null,
+      "requires_citation_id": true,
+      "citation_id": "<citation_id>",
+      "unavailable_reason": "Undo is not implemented in this runtime."
+    },
+    {
+      "id": "redo",
+      "label": "Redo",
+      "available": false,
+      "transport": null,
+      "command": null,
+      "requires_citation_id": true,
+      "citation_id": "<citation_id>",
+      "unavailable_reason": "Redo is not implemented in this runtime."
     }
-  ],
-  "schema_version": "c2s.integration.thin-client.v0.1"
+  ]
 }

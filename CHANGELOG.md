@@ -8,6 +8,21 @@ still determined by `build-docs/internal/CURRENT_STATUS_MATRIX.md`.
 
 ### Added
 
+- G6 adapter hardening:
+  - adapter protocol (`src/c2s/adapter.py`): `BaseAdapter` ABC, `FilesystemTextAdapter`,
+    `MarkdownAdapter`, registry, diagnostics;
+  - adapter conformance harness (`tests/test_adapter_conformance.py`): 59 tests
+    covering all 8 contract methods across both adapters;
+  - workspace boundary enforcement (`E_ARTIFACT_OUTSIDE_WORKSPACE`).
+- G7 integration examples:
+  - integration contract documentation
+    (`build-docs/architecture/INTEGRATION_CONTRACT.md`);
+  - editor plugin mock (`examples/integration/editor_plugin_mock.py`);
+  - updated integration fixtures and README.
+- G8 release hardening:
+  - migration fixture tests (`tests/test_migration_fixtures.py`): 9 tests
+    covering schema version validation, corrupt-file rejection, hash-chain integrity,
+    and source preservation.
 - Added the G8 release-documentation slice:
   - release checklist:
     `build-docs/internal/release/RELEASE_CHECKLIST.md`;

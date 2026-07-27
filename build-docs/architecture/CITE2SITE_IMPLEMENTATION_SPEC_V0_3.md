@@ -19,10 +19,13 @@ already available.
 **Implemented first slice:** source-clean text and Markdown selection capture,
 append-only citation and handle histories, hash-chain validation, a JSON CLI,
 contextual lookup, replay/status with deterministic in-memory indexes,
-policy-enforced privacy transforms, grouped JSON export, and MkDocs output
-with grouped navigation.
+policy-enforced privacy transforms, grouped JSON export, MkDocs output
+with grouped navigation, adapter protocol with conformance harness
+(`src/c2s/adapter.py`, `tests/test_adapter_conformance.py`),
+integration contract (`build-docs/architecture/INTEGRATION_CONTRACT.md`),
+and reference integration examples (`examples/integration/`).
 
-**Target work:** lifecycle-adjacent commands, richer adapters, and native right-click
+**Target work:** richer adapters and native right-click
 transports. Each target item needs a gate, tests, and status update
 before it becomes an implementation claim.
 
@@ -226,17 +229,23 @@ The artifact index should maintain:
 
 ## Adapter Contract
 
+**Status:** The adapter protocol is implemented in `src/c2s/adapter.py`.
+`FilesystemTextAdapter` and `MarkdownAdapter` pass the full conformance suite
+(`tests/test_adapter_conformance.py`). The Markdown adapter intentionally
+inherits text-line semantics; block-aware locators are deferred to a later gate.
+
 Adapters must implement:
 
 | Method | Behavior |
 |---|---|
-| `identify(input)` | Return artifact identity and URI. |
-| `canonicalize(selection)` | Return canonical evidence and hashes. |
-| `locate(selection)` | Return locator. |
-| `observe(locator)` | Read current artifact content at locator. |
-| `compare(accepted, observed)` | Return replay status and deltas. |
+| `identify(repo, uri)` | Return stable `AdapterArtifact` (adapter, uri, artifact_id). |
+| `canonicalize(repo, uri)` | Read artifact and return canonical text. |
+| `evidence(selected_text)` | Return canonical evidence dict with content_hash, text, line_hashes, etc. |
+| `locate(source_text, start, end)` | Return unambiguous locator with start/end/line coordinates. |
+| `observe(repo, artifact, locator)` | Read current artifact content at locator without mutation. |
+| `compare(accepted, observed)` | Return `"resolved"` or `"changed"`; `missing`/`unsupported` determined externally. |
 | `summarize(locator)` | Return metadata-safe range summary. |
-| `privacy(policy)` | Redact or suppress evidence for export mode. |
+| `privacy(citation, mode, policy)` | Apply publication privacy transform to citation in-place. |
 
 First supported adapters:
 
@@ -437,6 +446,7 @@ Required stable errors:
 - `E_ARTIFACT_MISSING`;
 - `E_ARTIFACT_TEXT_DECODE`;
 - `E_ADAPTER_UNSUPPORTED`;
+- `E_ARTIFACT_OUTSIDE_WORKSPACE`;
 - `E_RANGE_INVALID`;
 - `E_SELECTION_EMPTY`;
 - `E_CONTENT_HASH_MISMATCH`;

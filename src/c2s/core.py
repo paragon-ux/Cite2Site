@@ -260,11 +260,10 @@ def append_event(repo: Repo, path: Path, event: dict[str, Any]) -> dict[str, Any
 
 
 def adapter_for_uri(uri: str, requested: str | None = None) -> str:
-    if requested:
-        if requested not in {"filesystem-text", "markdown"}:
-            raise C2SError("E_ADAPTER_UNSUPPORTED", "adapter is unsupported", adapter=requested)
-        return requested
-    return "markdown" if uri.lower().endswith((".md", ".markdown")) else "filesystem-text"
+    # Late import to avoid circular dependency: adapter.py imports from core.
+    from . import adapter as _adapter
+
+    return _adapter.adapter_for_uri(uri, requested)
 
 
 def normalize_uri(uri: str) -> str:
@@ -273,7 +272,19 @@ def normalize_uri(uri: str) -> str:
 
 def resolve_artifact_path(repo: Repo, uri: str) -> Path:
     path = Path(uri)
-    return path if path.is_absolute() else (repo.workspace_root / path).resolve()
+    workspace = repo.workspace_root.resolve()
+    resolved = path if path.is_absolute() else (workspace / path)
+    resolved = resolved.resolve()
+    try:
+        resolved.relative_to(workspace)
+    except ValueError:
+        raise C2SError(
+            "E_ARTIFACT_OUTSIDE_WORKSPACE",
+            "artifact path is outside the citation workspace",
+            artifact=uri,
+            workspace=str(workspace),
+        )
+    return resolved
 
 
 def read_text_artifact(repo: Repo, uri: str) -> str:
@@ -783,18 +794,23 @@ def write_grouped_site_pages(repo: Repo, projection: dict[str, Any], indexes: di
 def observe_status(repo: Repo, citation: dict[str, Any]) -> str:
     if citation.get("state") == "retracted":
         return "retracted"
-    if citation["artifact"].get("adapter") not in {"filesystem-text", "markdown"}:
+    adapter_name = citation["artifact"].get("adapter", "")
+    # Late import to avoid circular dependency: adapter.py imports from core.
+    from . import adapter as _adapter
+
+    try:
+        ad = _adapter.get_adapter(adapter_name)
+    except C2SError:
         return "unsupported"
     try:
-        text = canonical_text(read_text_artifact(repo, citation["artifact"]["uri"]))
+        observed = ad.observe(repo, citation["artifact"], citation["locator"])
     except C2SError as exc:
-        return "missing" if exc.code == "E_ARTIFACT_MISSING" else "adapter_unavailable"
-    locator = citation["locator"]
-    start, end = int(locator["start"]), int(locator["end"])
-    if end > len(text):
-        return "missing"
-    observed = evidence_for_text(text[start:end])
-    return "resolved" if observed["content_hash"] == citation["accepted_evidence"]["content_hash"] else "changed"
+        if exc.code in ("E_ADAPTER_MISSING", "E_ARTIFACT_MISSING", "E_ADAPTER_RANGE_INVALID", "E_RANGE_INVALID"):
+            return "missing"
+        return "adapter_unavailable"
+    except Exception:
+        return "adapter_unavailable"
+    return ad.compare(citation["accepted_evidence"], observed)
 
 
 def apply_privacy(citation: dict[str, Any], privacy_mode: str, policy: dict[str, Any]) -> None:
