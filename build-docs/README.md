@@ -27,6 +27,19 @@ either the technical argument or the reader's experience.
 - [internal/requirements/TRD.md](internal/requirements/TRD.md)
 - [internal/orientation/README.md](internal/orientation/README.md)
 
+## Phase Prompts
+
+Each prompt is a session-gate implementation contract. Start only the prompt
+authorized by the status matrix and its stated prerequisites.
+
+- [Phase 01: Grouping And Indexing](internal/phase_prompts/PHASE_01_GROUPING_INDEXING.md)
+- [Phase 02: Privacy And Publication](internal/phase_prompts/PHASE_02_PRIVACY_AND_PUBLICATION.md)
+- [Phase 03: Workflow Completeness](internal/phase_prompts/PHASE_03_WORKFLOW_COMPLETENESS.md)
+- [Phase 04: Adapter Hardening](internal/phase_prompts/PHASE_04_ADAPTER_HARDENING.md)
+- [Phase 05: Integration Examples](internal/phase_prompts/PHASE_05_INTEGRATION_EXAMPLES.md)
+- [Phase 06: CI, Release, And Migration](internal/phase_prompts/PHASE_06_CI_RELEASE_AND_MIGRATION.md)
+- [Phase 07: v1 Stabilization](internal/phase_prompts/PHASE_07_V1_STABILIZATION.md)
+
 ## Architecture Source Package
 
 - [architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md](architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md)
