@@ -58,7 +58,7 @@ A few things worth knowing as you use these:
 
 Cite2Site v1.0 ships with filesystem text and Markdown adapters, plus a
 **ConverterAdapter** that turns DOCX, PDF, and XLSX into canonical text by
-shelling out to standard converters (pandoc, pdftotext). The architecture
+shelling out to standard converters (pandoc for DOCX, pdftotext for PDF). The architecture
 separates *how you get canonical text out of an artifact* from *how citation
 history, verification, and replay work* — new formats extend the first part
 without touching the second.

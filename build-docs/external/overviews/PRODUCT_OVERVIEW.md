@@ -38,8 +38,8 @@ never saw.
 
 - **Filesystem text and Markdown adapters** — create citations without
   touching the source file.
-- **ConverterAdapter** — DOCX, PDF, XLSX via pandoc, pdftotext, and
-  specified converters. Same architecture, same verification logic.
+- **ConverterAdapter** — DOCX via pandoc, PDF via pdftotext, XLSX via
+  a specified converter. Same architecture, same verification logic.
 - **15 CLI commands** — init, cite-selection, cite-batch, set-handle,
   accept-current, retract, restore, relocate, note, lookup-actions,
   status, citations, export, check, preflight-selection.
