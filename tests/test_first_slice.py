@@ -30,6 +30,24 @@ class FirstSliceTests(unittest.TestCase):
         self.assertTrue((self.root / ".c2s" / "handle-bindings.jsonl").exists())
         self.assertTrue((self.root / ".c2s" / "site" / "mkdocs.yml").exists())
 
+    def test_uninitialized_repo_project_access_raises(self):
+        """Accessing .project on an uninitialized repo raises E_REPO_NOT_INITIALIZED
+        with a stable code and no absolute path leak."""
+        uninit = core.Repo(self.root / ".absent_c2s")
+        with self.assertRaises(core.C2SError) as ctx:
+            _ = uninit.project
+        self.assertEqual("E_REPO_NOT_INITIALIZED", ctx.exception.code)
+        details_str = str(ctx.exception.details)
+        self.assertNotIn(str(self.root.resolve()), details_str)
+
+    def test_init_repo_exists_refuses_without_force(self):
+        """Calling init_repo on an existing repo raises E_REPO_EXISTS."""
+        with self.assertRaises(core.C2SError) as ctx:
+            core.init_repo(self.repo)
+        self.assertEqual("E_REPO_EXISTS", ctx.exception.code)
+        # force=True should succeed
+        core.init_repo(self.repo, force=True)
+
     def test_cite_selection_does_not_rewrite_source_and_status_resolves(self):
         before = self.note.read_text(encoding="utf-8")
         result = core.cite_selection(args(self.repo, artifact="notes.md", start=0, end=11, handle="ALPHA"))

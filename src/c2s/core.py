@@ -18,7 +18,7 @@ from typing import Any
 from urllib.parse import quote, urlsplit, urlunsplit
 
 SCHEMA_VERSION = "c2s.event.v0.3"
-TOOL = {"name": "c2s", "version": "0.3.0"}
+TOOL = {"name": "c2s", "version": "1.0.0"}
 EMPTY_HASH = "sha256:" + ("0" * 64)
 TEXT_CANON = "text-utf8-lf-v1"
 VALID_STATUSES = {
@@ -179,7 +179,7 @@ class Repo:
     @property
     def project(self) -> dict[str, Any]:
         if not self.project_file.exists():
-            raise C2SError("E_REPO_NOT_INITIALIZED", "Cite2Site repository is not initialized", repo=repo.root.name)
+            raise C2SError("E_REPO_NOT_INITIALIZED", "Cite2Site repository is not initialized", repo=self.root.name)
         project = load_json(self.project_file)
         validate_schema_version(project.get("schema_version") if isinstance(project, dict) else None, "c2s.project.v0.3", path=self.project_file.name)
         return project
@@ -282,7 +282,7 @@ def resolve_artifact_path(repo: Repo, uri: str) -> Path:
             "E_ARTIFACT_OUTSIDE_WORKSPACE",
             "artifact path is outside the citation workspace",
             artifact=uri,
-            workspace=str(workspace),
+            workspace=workspace.name,
         )
     return resolved
 
