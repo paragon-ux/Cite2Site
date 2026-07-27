@@ -47,7 +47,6 @@ jobs:
         run: pip install mkdocs-material
 
       - name: Build documentation site
-        working-directory: build-docs
         run: python -m mkdocs build
 
       - name: Setup Pages

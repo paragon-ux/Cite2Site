@@ -1,7 +1,10 @@
 site_name: Cite2Site
 site_description: Source-clean citation tool for humans and agents — v1.0
 repo_url: https://github.com/diriene/Cite2Site
-edit_uri: edit/main/build-docs/
+edit_uri: edit/main/
+
+docs_dir: build-docs
+site_dir: site
 
 theme:
   name: material
@@ -20,10 +23,6 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
-
-docs_dir: .
-
-site_dir: ../site
 
 nav:
   - Home: README.md
