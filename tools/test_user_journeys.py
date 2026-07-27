@@ -10,7 +10,7 @@ Covers the full loop:
 6. Status transitions are correct.
 7. Source artifacts are never modified.
 """
-import json, os, subprocess, sys, tempfile
+import json, subprocess, sys, tempfile
 from pathlib import Path
 
 def c2s(repo, *args):
@@ -131,7 +131,11 @@ try:
 
     # -- 8. note --
     c2s(repo, "note", "--citation-id", cid_alpha, "--note", "Verified against source")
-    print("  PASS: note appended successfully")
+    status_note = c2s(repo, "status")
+    alpha = next(c for c in status_note["citations"] if c["citation_id"] == cid_alpha)
+    assert len(alpha.get("metadata", {}).get("notes", [])) > 0, "note appended"
+    assert_eq(alpha["metadata"]["notes"][-1]["text"], "Verified against source")
+    print("  PASS: note appended and persisted in notes list")
 
     # -- 9. relocate (changes status until accepted) --
     c2s(repo, "relocate", "--citation-id", cid_alpha,
@@ -158,8 +162,11 @@ try:
 
     # -- 12. export determinism --
     c2s(repo, "export")
-    c2s(repo, "export")  # second run — no crash, same output
-    print("  PASS: export runs deterministically after full workflow")
+    first = (source / ".c2s" / "exports" / "index-by-artifact.json").read_text()
+    c2s(repo, "export")  # second run
+    second = (source / ".c2s" / "exports" / "index-by-artifact.json").read_text()
+    assert_eq(first, second, "export is deterministic (two runs produce identical output)")
+    print("  PASS: export is deterministic — two runs produce identical grouped indexes")
 
     # -- 13. Retire the last active handle → preferred_handle becomes None --
     c2s(repo, "set-handle", "--citation-id", cid_overlap,
