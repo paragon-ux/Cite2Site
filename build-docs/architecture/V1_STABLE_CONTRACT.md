@@ -291,7 +291,7 @@ changed without a protocol version bump.
 | User-defined grouping dimensions | Deferred | Five standard dimensions provided |
 | Field-level projection profiles | Deferred | Privacy modes cover the available levels |
 
-## Adapter Tiers
+### 9a. Adapter Tiers
 
 Adapters implement up to 8 contract methods. These split into two tiers with
 different implementation complexity and deployment risk:
