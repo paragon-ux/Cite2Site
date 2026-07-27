@@ -8,14 +8,15 @@ version = "1.0.0"
 description = "Source-clean citations that don't touch your files. Record evidence outside the file, replay it to check if it still holds."
 requires-python = ">=3.11"
 dependencies = ["context-menu"]
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
+readme = "README.md"
 authors = [{name = "Cite2Site contributors"}]
 keywords = ["citations", "evidence", "verification", "source-clean", "append-only", "cli"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
