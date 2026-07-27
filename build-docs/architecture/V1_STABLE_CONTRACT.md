@@ -291,6 +291,55 @@ changed without a protocol version bump.
 | User-defined grouping dimensions | Deferred | Five standard dimensions provided |
 | Field-level projection profiles | Deferred | Privacy modes cover the available levels |
 
+## Adapter Tiers
+
+Adapters implement up to 8 contract methods. These split into two tiers with
+different implementation complexity and deployment risk:
+
+### Tier 1 — Creation (identify, canonicalize, evidence, locate)
+
+Required for `cite-selection` and `cite-batch`. The adapter must independently
+verify the caller's claimed selection against the actual artifact (the
+mechanism behind `E_CONTENT_HASH_MISMATCH`). For local files (Markdown, DOCX,
+PDF, XLSX), this means reading and canonicalizing the file directly. For
+browser documents, this can use a thin adapter: the browser extension supplies
+the selected text and content hash, and `canonicalize`/`evidence` structure
+and hash what was handed to them without independently re-fetching the live
+page.
+
+**Tier 1 adapters unblock creation.** They are smaller, self-contained builds
+and can ship independently of Tier 2.
+
+### Tier 2 — Replay/Relocation (observe, compare, summarize, privacy)
+
+Required for `status`, `lookup-actions`, `citations`, and `export` to report
+current state. The adapter must re-read the artifact later and reconcile drift
+(what changed, what moved, what disappeared). This is harder for non-file
+artifacts:
+
+- **Browser/DOM:** requires a re-observation mechanism (extension or
+  headless browser) and a locator model less stable than byte offsets.
+- **DOCX/PDF/XLSX:** structural changes across revisions can make "same
+  paragraph/cell" ambiguous; `ambiguous` is the correct status when structure
+  shifts can't be resolved.
+
+**Tier 2 adapters can be deferred** without blocking creation. A citation
+created with a Tier-1-only adapter reports `adapter_unavailable` until the
+Tier 2 methods are implemented.
+
+### Adapter Development Priority
+
+Per the external user journey review, the recommended build order is:
+
+1. **Browser Tier 1** (smallest scope — the extension supplies evidence directly)
+2. **DOCX Tier 1** (local file, similar to filesystem-text)
+3. **PDF Tier 1** (local file, text extraction + hashing)
+4. **XLSX Tier 1** (local file, cell range canonicalization)
+5. **Tier 2 for each** (replay/relocation — defer until Tier 1 is stable)
+
+Each new adapter must pass the Tier 1 subset of the adapter conformance
+harness (`tests/test_adapter_conformance.py`) before creation is accepted.
+
 **Isolation rule:** experimental/deferred surfaces must not be referenced as
 available in status rows, guides, or release notes without explicit
 qualification.

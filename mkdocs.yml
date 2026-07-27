@@ -1,6 +1,6 @@
 site_name: Cite2Site
 site_description: Source-clean citation tool for humans and agents — v1.0
-repo_url: https://github.com/diriene/Cite2Site
+repo_url: https://github.com/paragon-ux/Cite2Site
 edit_uri: edit/main/build-docs/
 
 docs_dir: build-docs
