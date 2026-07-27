@@ -30,6 +30,7 @@ _ADAPTER_DIAGNOSTICS = {
     "E_ADAPTER_EMPTY_SELECTION": "selection range captured zero characters",
     "E_ADAPTER_RANGE_INVALID": "selection range is outside artifact bounds",
     "E_ADAPTER_AMBIGUOUS": "adapter cannot resolve a single authoritative evidence",
+    "E_ADAPTER_UNAVAILABLE": "artifact is temporarily unavailable (network, timeout, or converter failure)",
 }
 
 # ---------------------------------------------------------------------------
@@ -251,12 +252,157 @@ class MarkdownAdapter(FilesystemTextAdapter):
 
 
 # ---------------------------------------------------------------------------
+# Converter adapter — shells out to external format converters
+# ---------------------------------------------------------------------------
+#
+# One generic adapter, configured per file extension, replaces three
+# separate per-format adapters (DOCX, PDF, XLSX).  canonicalize() shells
+# out to a registered converter and treats stdout as canonical text;
+# evidence() / locate() / compare() reuse the filesystem-text code path.
+# identify() records converter name + version so a converter upgrade that
+# changes output is detectable, not a silent replay failure.
+
+
+class ConverterAdapter(FilesystemTextAdapter):
+    """Generic adapter backed by an external format converter.
+
+    Configured with a *name*, a list of *extensions* (e.g. ``[".docx"]``),
+    a *convert_cmd* list whose last element is replaced with the artifact
+    path, and a *version_cmd* list that prints the converter version.
+    """
+
+    name: str
+    extensions: tuple[str, ...]
+    convert_cmd: list[str]
+    version_cmd: list[str]
+    converter_version: str  # cached after first call
+
+    def __init__(
+        self,
+        name: str,
+        extensions: tuple[str, ...],
+        convert_cmd: list[str],
+        version_cmd: list[str],
+    ):
+        self.name = name
+        self.extensions = extensions
+        self.convert_cmd = convert_cmd
+        self.version_cmd = version_cmd
+        self._converter_version: str | None = None
+
+    def _detect_version(self) -> str:
+        """Run version_cmd and return stripped stdout, caching the result."""
+        if self._converter_version is None:
+            import subprocess
+            try:
+                r = subprocess.run(self.version_cmd, capture_output=True, text=True, timeout=10)
+                self._converter_version = r.stdout.strip() or r.stderr.strip() or "unknown"
+            except Exception:
+                self._converter_version = "unknown"
+        return self._converter_version
+
+    # -- contract overrides --------------------------------------------
+
+    def identify(self, repo: Repo, uri: str) -> AdapterArtifact:
+        path = resolve_artifact_path(repo, uri)
+        version = self._detect_version()
+        identity = {
+            "adapter": self.name,
+            "uri": normalize_uri(uri),
+            "path": str(path),
+            "converter": self.name,
+            "converter_version": version,
+        }
+        return AdapterArtifact(
+            adapter=self.name,
+            uri=normalize_uri(uri),
+            artifact_id=sha256_json(identity),
+        )
+
+    def canonicalize(self, repo: Repo, uri: str) -> str:
+        path = resolve_artifact_path(repo, uri)
+        if not path.exists():
+            raise C2SError(
+                "E_ADAPTER_MISSING",
+                _ADAPTER_DIAGNOSTICS["E_ADAPTER_MISSING"],
+                artifact=uri,
+            )
+        import subprocess
+        cmd = list(self.convert_cmd)  # copy
+        # Replace last element (placeholder path) with actual path
+        if cmd:
+            cmd[-1] = str(path)
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        except FileNotFoundError as exc:
+            raise C2SError(
+                "E_ADAPTER_UNSUPPORTED",
+                f"converter '{self.convert_cmd[0]}' not found on PATH",
+                adapter=self.name,
+            ) from exc
+        except subprocess.TimeoutExpired as exc:
+            raise C2SError(
+                "E_ADAPTER_UNAVAILABLE",
+                f"converter '{self.convert_cmd[0]}' timed out",
+                adapter=self.name,
+            ) from exc
+        if r.returncode != 0:
+            raise C2SError(
+                "E_ADAPTER_UTF8",
+                f"converter '{self.convert_cmd[0]}' failed: {r.stderr.strip() or 'exit ' + str(r.returncode)}",
+                adapter=self.name,
+            )
+        # Normalize line endings, same as filesystem-text
+        return r.stdout.replace("\r\n", "\n").replace("\r", "\n")
+
+    # evidence(), locate(), observe(), compare(), summarize(), privacy()
+    # are all inherited from FilesystemTextAdapter.
+
+
+# ---------------------------------------------------------------------------
 # Adapter registry
 # ---------------------------------------------------------------------------
+
+import sys as _sys
+
+_CONVERTER_ADAPTERS: dict[str, BaseAdapter] = {}
+
+# Register pandoc adapter for .docx files (optional — converter must be on PATH)
+try:
+    _CONVERTER_ADAPTERS["pandoc"] = ConverterAdapter(
+        name="pandoc",
+        extensions=(".docx",),
+        convert_cmd=["pandoc", "-f", "docx", "-t", "plain", "--wrap=none", "-"],
+        version_cmd=["pandoc", "--version"],
+    )
+except Exception:
+    pass
+
+# Register pdftotext adapter for .pdf files (optional — converter must be on PATH)
+try:
+    _CONVERTER_ADAPTERS["pdftotext"] = ConverterAdapter(
+        name="pdftotext",
+        extensions=(".pdf",),
+        convert_cmd=["pdftotext", "-layout", "-", "-"],
+        version_cmd=["pdftotext", "-v"],
+    )
+except Exception:
+    pass
+
+# Register passthrough text-converter for testing (uses OS cat/type equivalent)
+_cat_cmd = ["python", "-c", "import sys; sys.stdout.write(open(sys.argv[1]).read())", "-"]
+_cat_ver = ["python", "--version"]
+_CONVERTER_ADAPTERS["text-converter"] = ConverterAdapter(
+    name="text-converter",
+    extensions=(".txt", ".csv"),
+    convert_cmd=_cat_cmd,
+    version_cmd=_cat_ver,
+)
 
 _SUPPORTED: dict[str, BaseAdapter] = {
     "filesystem-text": FilesystemTextAdapter(),
     "markdown": MarkdownAdapter(),
+    **_CONVERTER_ADAPTERS,
 }
 
 
@@ -280,7 +426,14 @@ def adapter_for_uri(uri: str, requested: str | None = None) -> str:
     if requested:
         get_adapter(requested)  # validates
         return requested
-    return "markdown" if uri.lower().endswith((".md", ".markdown")) else "filesystem-text"
+    lower = uri.lower()
+    if lower.endswith((".md", ".markdown")):
+        return "markdown"
+    if lower.endswith(".docx"):
+        return "pandoc"
+    if lower.endswith(".pdf"):
+        return "pdftotext"
+    return "filesystem-text"
 
 
 def adapter_diagnostics() -> dict[str, str]:

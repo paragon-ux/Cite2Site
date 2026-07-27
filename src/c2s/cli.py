@@ -6,6 +6,9 @@ import sys
 from typing import Any, Callable
 
 from . import core
+from .adapter import _SUPPORTED as _ADAPTER_CHOICES  # noqa: F811 — registry
+
+_ADAPTER_NAMES = sorted(_ADAPTER_CHOICES.keys())
 
 
 class JsonArgumentParser(argparse.ArgumentParser):
@@ -39,7 +42,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_cite = sub.add_parser("cite-selection")
     p_cite.add_argument("--artifact", required=True)
-    p_cite.add_argument("--adapter", choices=["filesystem-text", "markdown"])
+    p_cite.add_argument("--adapter", choices=_ADAPTER_NAMES)
     p_cite.add_argument("--start", required=True, type=int)
     p_cite.add_argument("--end", required=True, type=int)
     p_cite.add_argument("--expected-content-hash")
@@ -53,7 +56,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_preflight = sub.add_parser("preflight-selection")
     p_preflight.add_argument("--artifact", required=True)
-    p_preflight.add_argument("--adapter", choices=["filesystem-text", "markdown"])
+    p_preflight.add_argument("--adapter", choices=_ADAPTER_NAMES)
     p_preflight.add_argument("--start", required=True, type=int)
     p_preflight.add_argument("--end", required=True, type=int)
     p_preflight.add_argument("--expected-content-hash")
@@ -92,7 +95,7 @@ def main(argv: list[str] | None = None) -> int:
     p_relocate = sub.add_parser("relocate")
     p_relocate.add_argument("--citation-id", required=True)
     p_relocate.add_argument("--artifact")
-    p_relocate.add_argument("--adapter", choices=["filesystem-text", "markdown"])
+    p_relocate.add_argument("--adapter", choices=_ADAPTER_NAMES)
     p_relocate.add_argument("--start", required=True, type=int)
     p_relocate.add_argument("--end", required=True, type=int)
     p_relocate.add_argument("--expected-content-hash")
