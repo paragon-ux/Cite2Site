@@ -17,10 +17,10 @@ gate report, the compatibility test corpus, and the user and agent guides.
 | `c2s.citations.v0.3` | `c2s citations` response schema_version | Yes |
 | `c2s.status.v0.3` | `c2s status` response schema_version | Yes |
 | `c2s.lookup-actions.v0.3` | `c2s lookup-actions` response schema_version (defined in schema; not yet emitted at runtime) | Yes |
-
 | `c2s.artifact-index.v0.3` | Derived artifact-index cache schema_version (internal) | Yes |
 
 Note: the v0.3 in the schema identifier is the protocol version, not the
+Cite2Site release version. v1.0.0 of Cite2Site implements protocol v0.3.
 Future protocol versions must maintain a migration path from v0.3.
 
 ---

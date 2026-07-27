@@ -76,7 +76,7 @@ DOCX) and native editor/browser integrations remain deferred to post-v1 gates.
 
 | Version | Release Goal | Readiness | Exit Criteria |
 |---|---|---:|---|
-| v1.0.0 | G0-G8 complete (protocol v0.3) | Done | Grouping, indexing, privacy transforms, CLI query filters, workflow commands, adapter protocol conformance, integration contracts and examples, migration fixture tests, CI workflow, release checklist. Remote CI run observed and passing. Phase 7 (v1 stabilization) is now authorized. |
+| v1.0.0 | G0-G8 complete (protocol v0.3) | Done | Grouping, indexing, privacy transforms, CLI query filters, workflow commands, adapter protocol conformance, integration contracts and examples, migration fixture tests, CI workflow, release checklist. Remote CI run observed and passing. Phase 7 (v1 stabilization) is complete: stable contract, user/agent guides, compatibility corpus, support policy, threat/privacy sign-off delivered. |
 
 ## Known Current Gaps
 

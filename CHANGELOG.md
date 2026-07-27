@@ -39,7 +39,7 @@ still determined by `build-docs/internal/CURRENT_STATUS_MATRIX.md`.
 
 - Enabled Phase 7 v1 stabilization:
   - v1 stable contract (`build-docs/architecture/V1_STABLE_CONTRACT.md`)
-    identifying 15 stable CLI commands, 7 event types, 39 error codes,
+    identifying 15 stable CLI commands, 7 event types, 38 C2SError codes,
     4 privacy modes, 6 schema identifiers, and all frozen projection fields;
   - compatibility corpus definition
     (`build-docs/internal/COMPATIBILITY_CORPUS.md`) with 40+ fixtures
