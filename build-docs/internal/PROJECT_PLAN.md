@@ -187,7 +187,7 @@ Goal: make adapter growth safe.
 
 Current delivery: G6 delivers the adapter protocol (`src/c2s/adapter.py`) with
 `BaseAdapter` ABC and `FilesystemTextAdapter`/`MarkdownAdapter` implementations;
-a 59-test conformance harness (`tests/test_adapter_conformance.py`); workspace
+a 35-test conformance harness (`tests/test_adapter_conformance.py`); workspace
 boundary enforcement (`E_ARTIFACT_OUTSIDE_WORKSPACE`); and six stable adapter
 diagnostic codes. Markdown block summaries, a conversation export adapter, and
 a PDF text adapter are deferred.

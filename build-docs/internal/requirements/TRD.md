@@ -67,8 +67,8 @@ Replay must:
 Current maturity: flat replay, hash-chain validation, text observation, status
 calculation, deterministic in-memory index construction, derived artifact
 cache population, index-backed querying, grouped export, and policy-enforced
-privacy transforms are implemented. Lifecycle commands and richer adapters
-remain later-gate requirements.
+privacy transforms are implemented. Richer adapters (block-aware Markdown,
+PDF, DOCX) remain later-gate requirements.
 
 ## Indexing Requirements
 
