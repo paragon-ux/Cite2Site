@@ -333,7 +333,7 @@ system:
 | `.docx` | pandoc | Works when pandoc is on PATH |
 | `.pdf` | pdftotext | Works when pdftotext is on PATH |
 | `.xlsx` | (specified) | Converter-backed, same architecture |
-| Browser pages | Readability re-fetch (specified) | Static/server-rendered pages |
+| Browser pages | Readability re-fetch | Specified — static pages only |
 
 When a converter isn't installed, Cite2Site tells you — it doesn't guess.
 
