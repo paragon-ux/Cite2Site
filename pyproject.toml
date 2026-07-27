@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cite2site"
+version = "0.3.0"
+description = "Source-clean universal citations with append-only history and static-site projections."
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+c2s = "c2s.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
