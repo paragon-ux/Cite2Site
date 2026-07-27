@@ -72,6 +72,17 @@ and browser extensions call. See the **[Integration Contract](build-docs/archite
 for the API, and the **[User Guide](build-docs/guides/USER_GUIDE.md)** for
 everyday workflows.
 
+**Windows users:** install the right-click context menu to trigger the demo
+directly from Explorer:
+
+```bash
+pip install context-menu          # optional — core c2s stays stdlib-only
+python tools/install_context_menu.py
+```
+
+Then right-click any file → **Cite2Site → Look up citations here**.
+Run with `--remove` to uninstall.
+
 A few things worth knowing:
 
 - **Handles are aliases, not identity.** Rename one anytime — the
