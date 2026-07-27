@@ -1,9 +1,11 @@
 # Cite2Site
 
-Cite2Site (C2S) is a source-clean citation tool for humans and agents. Cite
-a passage from a supported text or Markdown file, and Cite2Site records it *outside* that file —
-nothing gets edited, marked up, or bookmarked in the source. From there, it
-replays that citation history into JSON and a publishable MkDocs site.
+**v1.0** — a source-clean citation tool for humans and agents.
+
+Cite a passage from a supported text or Markdown file, and Cite2Site records
+it *outside* that file — nothing gets edited, marked up, or bookmarked in the
+source. From there, it replays that citation history into JSON and a
+publishable MkDocs site.
 
 ## Why source-clean?
 
@@ -17,8 +19,9 @@ entirely:
 select evidence -> source-clean citation -> inspectable citation projection
 ```
 
-The current first slice uses the CLI for that selection. Native right-click
-integrations are planned clients of the same citation contract.
+The current implementation uses the CLI. Integration contracts and reference
+examples for editor, browser, and document-tool builders are delivered;
+native right-click plugins are deferred.
 
 The source file never changes. Citations live in a dedicated `.c2s`
 repository as an append-only history, and everything you see — status,
@@ -28,13 +31,13 @@ against the current state of your files.
 ## Quick start
 
 ```bash
-python -m pip install -e .
+pip install cite2site
 python -c "from pathlib import Path; Path('notes.md').write_text('Alpha claim\nBeta claim\n', encoding='utf-8')"
-python -m c2s init
-python -m c2s cite-selection --artifact notes.md --start 0 --end 11 --handle NOTE-1
-python -m c2s lookup-actions --artifact notes.md --start 10 --end 10
-python -m c2s status
-python -m c2s export
+c2s init
+c2s cite-selection --artifact notes.md --start 0 --end 11 --handle NOTE-1
+c2s lookup-actions --artifact notes.md --start 10 --end 10
+c2s status
+c2s export
 ```
 
 A few things worth knowing as you use these:
@@ -49,13 +52,27 @@ A few things worth knowing as you use these:
 
 ## Where things stand
 
-Cite2Site has a working local first slice: append-only citation history,
-batch citation, handle binding, contextual lookup, replay status with
-deterministic in-memory indexes, index-backed query filters, grouped JSON and
-MkDocs projections, enforced privacy modes, and a unit test baseline. The next
-piece is append-only workflow completion. See
+Cite2Site v1.0 is complete: append-only citation history, batch citation,
+handle binding, contextual lookup, replay status with deterministic indexes,
+index-backed query filters, grouped JSON and MkDocs projections, enforced
+privacy modes, adapter protocol conformance, integration contracts, CI,
+release documentation, and a full test baseline (98 tests).
+
+The v1 stable contract is frozen: 15 CLI commands, 7 event types, 38 stable
+error codes, 4 privacy modes, and 6 schema identifiers. See
 [`build-docs/internal/CURRENT_STATUS_MATRIX.md`](build-docs/internal/CURRENT_STATUS_MATRIX.md)
-for the full breakdown.
+for the full capability inventory and known limitations.
+
+## Guides
+
+- **[User Guide](build-docs/guides/USER_GUIDE.md)** — everyday commands,
+  fixing mistakes, handles, publishing, batch citations, error codes.
+- **[Agent Guide](build-docs/guides/AGENT_GUIDE.md)** — deterministic JSON CLI,
+  agent workflows, batch schema, privacy modes, integration contract.
+- **[Integration Contract](build-docs/architecture/INTEGRATION_CONTRACT.md)** —
+  for editor, browser, and document-tool builders.
+- **[v1 Stable Contract](build-docs/architecture/V1_STABLE_CONTRACT.md)** —
+  every frozen command, event field, error code, projection field, and URL shape.
 
 ## Running the tests
 
