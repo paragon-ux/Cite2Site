@@ -1,0 +1,79 @@
+{
+  "actions": [],
+  "artifact": {
+    "uri": "notes.md"
+  },
+  "authoritative_state": "c2s_cli",
+  "matches": [
+    {
+      "actions": [
+        {
+          "available": true,
+          "citation_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "command": null,
+          "id": "open",
+          "label": "Open citation",
+          "requires_citation_id": true,
+          "transport": "host"
+        },
+        {
+          "available": true,
+          "citation_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "command": "set-handle",
+          "command_template": [
+            "set-handle",
+            "--citation-id",
+            "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "--handle",
+            "<handle>",
+            "--action",
+            "rename",
+            "--previous-handle",
+            "NARROW"
+          ],
+          "handle_action": "rename",
+          "id": "set_handle",
+          "label": "Rename handle",
+          "required_inputs": [
+            "handle",
+            "previous_handle"
+          ],
+          "requires_citation_id": true,
+          "transport": "cli"
+        }
+      ],
+      "citation_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "match_kind": "exact",
+      "preferred_handle": "NARROW",
+      "range_summary": "0-11",
+      "status": "resolved"
+    },
+    {
+      "actions": [
+        {
+          "available": true,
+          "citation_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "command": null,
+          "id": "open",
+          "label": "Open citation",
+          "requires_citation_id": true,
+          "transport": "host"
+        }
+      ],
+      "citation_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "match_kind": "contains",
+      "preferred_handle": "BROAD",
+      "range_summary": "0-22",
+      "status": "resolved"
+    }
+  ],
+  "ok": true,
+  "overlay_state_persisted": false,
+  "requires_picker": true,
+  "schema_version": "c2s.integration.thin-client.v0.1",
+  "selection": {
+    "encoding": "unicode_scalar_offset",
+    "end": 11,
+    "start": 0
+  }
+}

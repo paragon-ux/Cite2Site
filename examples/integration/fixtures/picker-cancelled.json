@@ -1,0 +1,8 @@
+{
+  "cancelled": true,
+  "matches_count": 2,
+  "mutation_performed": false,
+  "ok": true,
+  "operation": "picker_cancelled",
+  "schema_version": "c2s.integration.thin-client.v0.1"
+}

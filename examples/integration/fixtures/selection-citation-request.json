@@ -1,0 +1,27 @@
+{
+  "artifact": {
+    "adapter": "markdown",
+    "uri": "notes.md"
+  },
+  "command": [
+    "cite-selection",
+    "--artifact",
+    "notes.md",
+    "--adapter",
+    "markdown",
+    "--start",
+    "0",
+    "--end",
+    "11",
+    "--handle",
+    "OPENING-CLAIM"
+  ],
+  "operation": "cite_selection",
+  "schema_version": "c2s.integration.thin-client.v0.1",
+  "selection": {
+    "encoding": "unicode_scalar_offset",
+    "end": 11,
+    "start": 0
+  },
+  "transport": "cli"
+}

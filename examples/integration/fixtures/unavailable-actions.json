@@ -1,0 +1,25 @@
+{
+  "actions": [
+    {
+      "available": false,
+      "citation_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "command": null,
+      "id": "accept_current",
+      "label": "Accept Current",
+      "requires_citation_id": true,
+      "transport": null,
+      "unavailable_reason": "Recovery command is not implemented in this runtime."
+    },
+    {
+      "available": false,
+      "citation_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "command": null,
+      "id": "relocate",
+      "label": "Relocate",
+      "requires_citation_id": true,
+      "transport": null,
+      "unavailable_reason": "Recovery command is not implemented in this runtime."
+    }
+  ],
+  "schema_version": "c2s.integration.thin-client.v0.1"
+}
