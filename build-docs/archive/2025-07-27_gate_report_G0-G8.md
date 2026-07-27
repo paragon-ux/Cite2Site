@@ -2,14 +2,14 @@
 
 **Date:** 2025-07-27
 **Branch:** `codex/first-build-slice`
-**Commit:** `eb0c25d`
-**Status:** All gates G0-G8 locally accepted; G0 and G8 Partial pending remote CI.
+**Commit:** `1711635`
+**Status:** All gates G0-G8 accepted; remote CI observed passing; Phase 7 authorized.
 
 ## Gate Status
 
 | Gate | Scope | Status | Notes |
 |---|---|---|---|
-| G0 | Baseline CI | Partial | CI workflow exists locally; remote GitHub Actions run not yet observed |
+| G0 | Baseline CI | PASS | CI workflow validated locally and remotely; first GitHub Actions run observed passing |
 | G1 | Replay indexes | PASS | Deterministic in-memory indexes, derived artifact cache |
 | G2 | Query CLI | PASS | `c2s citations` with 5 filter dimensions, JSON/JSONL output |
 | G3 | Grouped export + MkDocs | PASS | 5 grouped JSON indexes, MkDocs navigation, deterministic |
@@ -17,7 +17,7 @@
 | G5 | Workflow completeness | PASS | 6 recovery commands, append-only, idempotent |
 | G6 | Adapter hardening | PASS | Adapter protocol, conformance harness (35 tests), diagnostics |
 | G7 | Integration examples | PASS | Integration contract, editor mock, thin-client, fixtures |
-| G8 | Release/migration | Partial | Checklists, migration policy, fixtures, changelog; remote CI pending |
+| G8 | Release/migration | PASS | Checklists, migration policy, fixtures, changelog; remote CI observed passing |
 | v1.0 | Milestone alignment | Done (local) | Version strings, status matrix, project plan all aligned |
 
 ## Verification
@@ -62,16 +62,16 @@ Not applicable — no PR exists yet.
 
 ## Remote CI
 
-Not observed. `.github/workflows/ci.yml` covers unit tests, compile, CLI help,
-docs validation, and smoke flow from clean checkout. First push will trigger it.
+**Observed passing.** The GitHub Actions workflow (`.github/workflows/ci.yml`)
+ran on `codex/first-build-slice` and passed: unit tests, compile checks, CLI
+help, smoke flow, docs validation, and source-clean checks all green.
 
 ## Remaining Limitations
 
-- Remote CI run not observed → G0/G8 remain Partial
 - Overlap ordering uses handle presence, not most-recent binding order → Partial
 - Block-aware Markdown, PDF, DOCX adapters → Deferred
 - Editor/browser integration packages → Deferred (contracts + examples delivered)
-- Phase 7 (v1.0 stabilization) not started → prerequisite: remote CI green
+- Phase 7 (v1.0 stabilization) is now authorized
 
 ## Deliverables
 

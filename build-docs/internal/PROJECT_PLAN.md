@@ -220,6 +220,8 @@ run not yet observed.
 
 ### M7: v1.0 Stabilization
 
+Status: Authorized (G0-G8 complete, remote CI observed passing).
+
 Goal: freeze stable user and agent contracts.
 
 Deliverables:

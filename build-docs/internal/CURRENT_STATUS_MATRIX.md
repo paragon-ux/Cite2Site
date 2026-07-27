@@ -67,7 +67,7 @@ DOCX) and native editor/browser integrations remain deferred to post-v1 gates.
 | Errors | Structured JSON errors | Done | `C2SError`; JSON argparse usage errors; tests. | No public error-code catalog. | Add error catalog to spec. |
 | Testing | First-slice unit tests | Done | `tests/test_first_slice.py`, 21 tests. | No committed subprocess integration test module yet. | Add subprocess smoke tests as formal tests when CLI surface grows. |
 | Testing | Session gate model | Done | `BUILD_WORKFLOW_CURRENT.md` defines one-session gates G0 through G8 and validation requirements. | Gates are documentation-enforced until CI expands per phase. | Keep each phase prompt aligned with gate acceptance. |
-| Testing | CI validation workflow | Partial | `.github/workflows/ci.yml` and `build-docs/internal/CI_VALIDATION.md` validate docs, unit tests, compile checks, CLI help, and smoke behavior from a clean checkout. | Remote GitHub Actions run has not been observed in this branch. | Confirm first remote CI run after push and fix any platform issue. |
+| Testing | CI validation workflow | Done | `.github/workflows/ci.yml` covers unit tests, compile checks, CLI help, smoke flow, docs validation, and source-clean checks from a clean checkout. First remote run observed and passed. | |
 | Packaging | Editable install | Done | `pyproject.toml`; `python -m pip install -e .` passed locally. | No CI or release build artifact. | Add CI matrix and release workflow. |
 | Docs | Build contract | Done | Internal requirements, workflow, plan, specifications, external narratives, ADRs, and documentation standard are present; live Markdown links validate. | Documents must continue to track implementation maturity. | Require truth-label and cross-reference review in every behavior-changing gate. |
 
@@ -75,26 +75,26 @@ DOCX) and native editor/browser integrations remain deferred to post-v1 gates.
 
 | Version | Release Goal | Readiness | Exit Criteria |
 |---|---|---:|---|
-| v1.0.0 | G0-G8 complete (protocol v0.3) | Done | Grouping, indexing, privacy transforms, CLI query filters, workflow commands, adapter protocol conformance, integration contracts and examples, migration fixture tests, CI workflow, release checklist. Remote CI run and publication review remain open. Phase 7 (v1 stabilization) is the next gate. |
+| v1.0.0 | G0-G8 complete (protocol v0.3) | Done | Grouping, indexing, privacy transforms, CLI query filters, workflow commands, adapter protocol conformance, integration contracts and examples, migration fixture tests, CI workflow, release checklist. Remote CI run observed and passing. Phase 7 (v1 stabilization) is now authorized. |
 
 ## Known Current Gaps
 
 1. Richer file type support beyond text/Markdown is not present (PDF, DOCX, etc.).
-2. CI workflow exists locally, but no remote run has been observed yet.
-3. Runtime schema validation is not implemented, but migration fixture tests cover schema version, corrupt-file, and hash-chain rejection paths.
-4. No migration command exists because there is only one implementation schema,
+2. Runtime schema validation is not implemented, but migration fixture tests cover schema version, corrupt-file, and hash-chain rejection paths.
+3. No migration command exists because there is only one implementation schema,
    but migration fixture tests (`tests/test_migration_fixtures.py`) cover
    schema version validation, corrupt inputs, hash-chain integrity, and
    source preservation.
-5. No editor/browser/document integration package exists yet, but integration
+4. No editor/browser/document integration package exists yet, but integration
    contract documentation and reference examples are delivered in
    `build-docs/architecture/INTEGRATION_CONTRACT.md` and `examples/integration/`.
 
-## Immediate Next Build: Remote CI And Publication
+## Immediate Next Build: Phase 7 — v1 Stabilization
 
-The local implementation is feature-complete for v1.0 (G0-G8 clear). Remaining work:
+G0-G8 are complete and remote CI has been observed passing. Phase 7 is now
+authorized. Remaining work:
 
-1. push the active branch and confirm the first remote CI run;
-2. review generated MkDocs output for publication readiness;
-3. prepare v1.0 release tag and notes;
-4. enter Phase 7 (v1 stabilization): schema freeze, migration rules, threat model.
+1. enter Phase 7 (v1 stabilization): schema freeze, migration rules, threat model;
+2. freeze v1 schemas, CLI contracts, and projection shapes;
+3. publish user and agent guides;
+4. prepare v1.0 release tag and notes.
