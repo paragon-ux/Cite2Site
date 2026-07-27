@@ -275,7 +275,6 @@ class ConverterAdapter(FilesystemTextAdapter):
     extensions: tuple[str, ...]
     convert_cmd: list[str]
     version_cmd: list[str]
-    converter_version: str  # cached after first call
 
     def __init__(
         self,
@@ -363,7 +362,6 @@ class ConverterAdapter(FilesystemTextAdapter):
 # Adapter registry
 # ---------------------------------------------------------------------------
 
-import sys as _sys
 
 _CONVERTER_ADAPTERS: dict[str, BaseAdapter] = {}
 
@@ -383,7 +381,7 @@ try:
     _CONVERTER_ADAPTERS["pdftotext"] = ConverterAdapter(
         name="pdftotext",
         extensions=(".pdf",),
-        convert_cmd=["pdftotext", "-layout", "-", "-"],
+        convert_cmd=["pdftotext", "-layout", "PLACEHOLDER", "-"],
         version_cmd=["pdftotext", "-v"],
     )
 except Exception:
@@ -429,9 +427,9 @@ def adapter_for_uri(uri: str, requested: str | None = None) -> str:
     lower = uri.lower()
     if lower.endswith((".md", ".markdown")):
         return "markdown"
-    if lower.endswith(".docx"):
+    if lower.endswith(".docx") and "pandoc" in _SUPPORTED:
         return "pandoc"
-    if lower.endswith(".pdf"):
+    if lower.endswith(".pdf") and "pdftotext" in _SUPPORTED:
         return "pdftotext"
     return "filesystem-text"
 

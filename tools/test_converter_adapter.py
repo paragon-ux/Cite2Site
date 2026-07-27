@@ -102,11 +102,11 @@ try:
     # 5. adapter_for_uri auto-selects converter for known extensions
     # ================================================================
     from c2s import adapter
-    # .docx → pandoc (if pandoc on PATH)
+    # .docx → pandoc (if on PATH) or filesystem-text (fallback)
     docx_adapter = adapter.adapter_for_uri("test.docx")
     assert docx_adapter in ("pandoc", "filesystem-text"), \
         f"expected pandoc or filesystem-text for .docx, got {docx_adapter}"
-    # .pdf → pdftotext (if on PATH)
+    # .pdf → pdftotext (if on PATH) or filesystem-text (fallback)
     pdf_adapter = adapter.adapter_for_uri("test.pdf")
     assert pdf_adapter in ("pdftotext", "filesystem-text"), \
         f"expected pdftotext or filesystem-text for .pdf, got {pdf_adapter}"
