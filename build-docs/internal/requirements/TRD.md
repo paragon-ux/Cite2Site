@@ -44,6 +44,12 @@ is a gate obligation, not evidence that the runtime already supplies it.
 | `status` | Replay projected citation state. |
 | `export` | Write JSON and MkDocs projections. |
 | `check` | Validate repository integrity. |
+| `accept-current` | Append accepted-evidence event after review. |
+| `retract` | Mark citation as retracted. |
+| `restore` | Restore a retracted citation to active state. |
+| `relocate` | Update citation locator and artifact after evidence moves. |
+| `note` | Append a note to a citation. |
+| `preflight-selection` | Return the citation contract without appending history. |
 
 ## Replay Requirements
 

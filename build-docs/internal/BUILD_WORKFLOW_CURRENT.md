@@ -139,8 +139,11 @@ Exit criteria:
 
 ## Contextual Cited-Region Workflow
 
-**Maturity:** Target integration workflow. `lookup-actions` is implemented;
-the right-click transport, picker UI, and recovery actions are not.
+**Maturity:** Implemented integration contract and reference examples.
+`lookup-actions` is implemented; the integration contract
+(`build-docs/architecture/INTEGRATION_CONTRACT.md`) and editor plugin mock
+(`examples/integration/editor_plugin_mock.py`) demonstrate the picker and
+action model.  Native right-click plugins are deferred.
 
 Actors:
 
@@ -170,17 +173,13 @@ Actions:
 
 - `open`;
 - `set_handle`;
-- `add_alias`;
-- `undo`;
-- `redo`;
+- `note`;
 - `accept_current`;
 - `relocate`;
-- `retire`.
+- `retract`;
+- `restore`.
 
-Only `open`-style lookup information and handle operations supported by the
-current CLI may be exposed as implemented. `undo`, `redo`, `accept_current`,
-`relocate`, and `retire` are target action vocabulary until their append-only
-commands and tests are delivered.
+`undo`, `redo`, and `retire` are deferred to a later gate.
 
 Exit criteria:
 
@@ -387,10 +386,27 @@ Exit criteria:
 - generated docs are deterministic;
 - no source artifact mutation occurs in tests.
 
+## Adapter Hardening Workflow
+
+**Maturity:** Implemented in G6. The adapter protocol (`src/c2s/adapter.py`)
+defines `BaseAdapter` with eight contract methods. `FilesystemTextAdapter` and
+`MarkdownAdapter` pass the conformance harness (`tests/test_adapter_conformance.py`).
+Workspace boundary enforcement (`E_ARTIFACT_OUTSIDE_WORKSPACE`) prevents
+artifact-path escapes.
+
+## Integration Contract Workflow
+
+**Maturity:** Implemented in G7. The integration contract
+(`build-docs/architecture/INTEGRATION_CONTRACT.md`) and reference examples
+(`examples/integration/`) document the interaction model for editor, browser,
+and document-tool implementers. A thin-client library and editor plugin mock
+demonstrate the lookup → picker → action loop without storing overlay state.
+
 ## Recovery Workflow
 
-**Maturity:** Target. Current append-only histories provide auditability but do
-not yet expose the complete recovery command set described in this section.
+**Maturity:** Implemented in G5. `accept-current`, `retract`, `restore`,
+`relocate`, and `note` are delivered with append-only events and idempotency
+guards. `undo` and `redo` command aliases are deferred to a later gate.
 
 Recovery must preserve append-only history.
 

@@ -6,8 +6,9 @@
 
 The design describes the intended human and agent experience. The current
 runtime supplies the CLI/core contracts for citation, handle binding, contextual
-lookup, status, policy-enforced privacy projection, grouped export, and checks.
-Native right-click integrations and recovery commands are Target work.
+lookup, status, policy-enforced privacy projection, grouped export, adapter
+conformance, workflow recovery, and checks.
+Native right-click integrations are Target work.
 This distinction matters: a menu design is not a claim that the menu is already
 available.
 

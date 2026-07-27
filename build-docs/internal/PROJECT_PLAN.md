@@ -181,66 +181,42 @@ Acceptance:
 
 Gate: G6.
 
+Status: Done.
+
 Goal: make adapter growth safe.
 
-Deliverables:
-
-- adapter conformance test harness;
-- adapter contract fixtures;
-- improved filesystem text diagnostics;
-- Markdown block summaries;
-- conversation export adapter;
-- optional PDF text adapter if privacy behavior is proven.
-
-Acceptance:
-
-- unsupported adapters fail closed;
-- adapters prove identity, canonicalization, locator, observation, comparison,
-  summary, and privacy behavior;
-- no adapter uses semantic guessing as authority.
+Current delivery: G6 delivers the adapter protocol (`src/c2s/adapter.py`) with
+`BaseAdapter` ABC and `FilesystemTextAdapter`/`MarkdownAdapter` implementations;
+a 59-test conformance harness (`tests/test_adapter_conformance.py`); workspace
+boundary enforcement (`E_ARTIFACT_OUTSIDE_WORKSPACE`); and six stable adapter
+diagnostic codes. Markdown block summaries, a conversation export adapter, and
+a PDF text adapter are deferred.
 
 ### M5: Integration Examples
 
 Gate: G7.
 
+Status: Done.
+
 Goal: prove right-click interaction without making UI authority.
 
-Deliverables:
-
-- simple editor context-menu integration example;
-- browser-extension contract example;
-- document-tool adapter notes;
-- `lookup-actions` integration examples;
-- overlap picker behavior docs.
-
-Acceptance:
-
-- integrations call C2S for state and actions;
-- integrations do not persist authoritative overlay state;
-- ambiguous mutation requires citation ID selection.
+Current delivery: G7 delivers the integration contract
+(`build-docs/architecture/INTEGRATION_CONTRACT.md`) and editor plugin mock
+(`examples/integration/editor_plugin_mock.py`); updated fixtures and thin-client
+reference. Browser-extension and document-tool examples are deferred.
 
 ### M6: CI, Release, And Migration
 
 Gate: G0 and G8.
 
+Status: Done (local); remote CI pending.
+
 Goal: make the project maintainable.
 
-Deliverables:
-
-- CI workflow;
-- package build check;
-- command smoke tests;
-- release checklist;
-- schema migration policy;
-- changelog;
-- security and privacy review checklist.
-
-Acceptance:
-
-- CI runs tests and smoke checks;
-- release artifact can be built from a clean checkout;
-- schema changes include migration tests;
-- public docs match implemented behavior.
+Current delivery: CI workflow (`.github/workflows/ci.yml`), package build check,
+release checklist, schema migration policy, changelog, security checklist,
+and migration fixture tests (`tests/test_migration_fixtures.py`). Remote CI
+run not yet observed.
 
 ### M7: v1.0 Stabilization
 
