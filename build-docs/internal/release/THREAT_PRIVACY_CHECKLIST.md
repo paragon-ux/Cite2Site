@@ -90,8 +90,8 @@ ambiguous mutation can modify citation history.
 
 | Reviewer | Area | Result | Notes |
 |---|---|---|---|
-| | Source-clean | | |
-| | Privacy | | |
-| | Migration | | |
-| | Packaging | | |
-| | Errors | | |
+| | Source-clean | PASS | 98 tests; artifact hash unchanged after smoke |
+| | Privacy | PASS | metadata_only default; snippet/link policy-gated; grouped indexes metadata-safe |
+| | Migration | PASS | 9 migration fixture tests; schema version validation; tamper/hash-chain rejection |
+| | Packaging | PASS | check_package_artifact.py: wheel builds, installs, smoke flows, export deterministic |
+| | Errors | PASS | 39 stable codes cataloged; structured JSON envelope; no path leaks in messages/details |
