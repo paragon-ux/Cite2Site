@@ -14,7 +14,16 @@
       "required": ["privacy_mode"],
       "additionalProperties": true,
       "properties": {
-        "privacy_mode": {"enum": ["metadata_only", "hash_only", "snippet", "private_link"]}
+        "privacy_mode": {"enum": ["metadata_only", "hash_only", "snippet", "private_link"]},
+        "allow_snippet": {"type": "boolean"},
+        "snippet_max_chars": {"type": "integer", "minimum": 1},
+        "allow_private_link": {"type": "boolean"},
+        "private_link_base": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://[^?#]+$",
+          "minLength": 9
+        }
       }
     },
     "created_at": {"type": "string"},

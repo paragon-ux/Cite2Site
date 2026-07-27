@@ -93,14 +93,20 @@ Acceptance:
 - CLI smoke test covers `init`, `cite-selection`, `lookup-actions`, `status`,
   `export`, and `check`.
 
-Residual limitations: export remains flat, privacy modes beyond the default are
-not yet behavioral transforms, and right-click interaction is not shipped.
+Residual limitations at the initial slice: export was flat, privacy modes beyond
+the default were not behavioral transforms, and right-click interaction was not
+shipped. Grouping and privacy delivery below supersede the first two limits.
 
 ### M1: Grouping And Indexing
 
 Gate: G1 through G3.
 
 Goal: make citation collections navigable instead of flat.
+
+Current delivery: G1 provides deterministic in-memory indexes and derived
+artifact-cache population; G2 makes the collection queryable through the CLI;
+and G3 writes the grouped JSON and MkDocs navigation projections. G4 completes
+the privacy boundary for flat publication projections.
 
 Deliverables:
 
@@ -125,13 +131,16 @@ Gate: G4.
 
 Goal: make static publication safe and useful.
 
+Current delivery: G4 implements deterministic `metadata_only` and `hash_only`
+transforms, policy-gated snippet and private-link projections, and no-leak
+refusal coverage. Grouped MkDocs pages remain metadata-safe by design.
+
 Deliverables:
 
 - privacy transform implementation for `metadata_only`, `hash_only`,
   `snippet`, and `private_link`;
 - repository policy for allowed publication mode;
-- MkDocs navigation generation;
-- GitHub Pages guide;
+- static-host publication guidance for generated navigation;
 - local preview instructions;
 - export determinism tests.
 
@@ -139,7 +148,7 @@ Acceptance:
 
 - default export is metadata-only;
 - snippets require explicit policy;
-- generated site builds locally;
+- local preview instructions are reproducible;
 - generated files are stable across repeated exports with unchanged inputs.
 
 ### M3: Workflow Completeness

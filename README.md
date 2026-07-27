@@ -31,9 +31,7 @@ against the current state of your files.
 python -m pip install -e .
 python -c "from pathlib import Path; Path('notes.md').write_text('Alpha claim\nBeta claim\n', encoding='utf-8')"
 python -m c2s init
-python -m c2s cite-selection --artifact notes.md --start 0 --end 42 --handle NOTE-1
-python -m c2s cite-batch --request batch.json
-python -m c2s set-handle --citation-id sha256:... --handle FRIENDLY-HANDLE
+python -m c2s cite-selection --artifact notes.md --start 0 --end 11 --handle NOTE-1
 python -m c2s lookup-actions --artifact notes.md --start 10 --end 10
 python -m c2s status
 python -m c2s export
@@ -43,18 +41,19 @@ A few things worth knowing as you use these:
 
 - **Handles are aliases, not identity.** Rename one anytime — the
   underlying citation ID never changes.
-- **Publication policy defaults to metadata-only.** The policy is in place;
-  Phase 02 adds the export transforms and no-leak tests that enforce it.
+- **Publication policy defaults to metadata-only.** Default exports omit
+  accepted evidence text; richer snippet and private-link modes require
+  explicit repository authorization.
 - **The source artifact is never rewritten**, no matter which command you
   run.
 
 ## Where things stand
 
 Cite2Site has a working local first slice: append-only citation history,
-batch citation, handle binding, contextual lookup, replay status, flat export,
-and a unit test baseline. The next big piece is grouped indexing, so the
-generated site is browsable by artifact, handle, tag, status, and batch instead
-of one flat list. See
+batch citation, handle binding, contextual lookup, replay status with
+deterministic in-memory indexes, index-backed query filters, grouped JSON and
+MkDocs projections, enforced privacy modes, and a unit test baseline. The next
+piece is append-only workflow completion. See
 [`build-docs/internal/CURRENT_STATUS_MATRIX.md`](build-docs/internal/CURRENT_STATUS_MATRIX.md)
 for the full breakdown.
 

@@ -67,7 +67,7 @@ class ThinClientIntegrationTests(unittest.TestCase):
         self.assertTrue(context["actions"][0]["available"])
         self.assertFalse(context["overlay_state_persisted"])
 
-    def test_single_match_maps_only_currently_implemented_actions_as_available(self):
+    def test_single_match_maps_currently_implemented_actions_as_available(self):
         citation_id = self.client.cite_selection("notes.md", 0, 11, handle="OPENING-CLAIM")["citation_id"]
         context = self.client.lookup_context("notes.md", 0, 11)
         self.assertFalse(context["requires_picker"])
@@ -77,8 +77,9 @@ class ThinClientIntegrationTests(unittest.TestCase):
         self.assertEqual("set-handle", actions["set_handle"]["command"])
         self.assertEqual("rename", actions["set_handle"]["handle_action"])
         self.assertIn("--previous-handle", actions["set_handle"]["command_template"])
-        self.assertEqual("alias", actions["add_alias"]["handle_action"])
-        self.assertNotIn("--previous-handle", actions["add_alias"]["command_template"])
+        self.assertTrue(actions["note"]["available"])
+        self.assertEqual("note", actions["note"]["command"])
+        self.assertTrue(actions["retract"]["available"])
         for recovery_action in ["undo", "redo"]:
             if recovery_action in actions:
                 self.assertFalse(actions[recovery_action]["available"])
@@ -104,19 +105,19 @@ class ThinClientIntegrationTests(unittest.TestCase):
         self.assertEqual(handle_history_before, self.repo.handle_bindings.read_bytes())
         self.assertEqual(source_before, self.note.read_bytes())
 
-    def test_changed_or_missing_recovery_actions_are_unavailable(self):
+    def test_changed_or_missing_recovery_actions_map_to_concrete_commands(self):
         citation_id = self.client.cite_selection("notes.md", 0, 11, handle="OPENING-CLAIM")["citation_id"]
         self.note.write_text("Changed claim\nBeta claim\nGamma claim\n", encoding="utf-8")
         context = self.client.lookup_context("notes.md", 0, 11)
         actions = {action["id"]: action for action in context["matches"][0]["actions"]}
         self.assertEqual(citation_id, context["matches"][0]["citation_id"])
-        self.assertFalse(actions["accept_current"]["available"])
-        self.assertFalse(actions["relocate"]["available"])
-        if "retire" in actions:
-            self.assertFalse(actions["retire"]["available"])
+        self.assertTrue(actions["accept_current"]["available"])
+        self.assertEqual("accept-current", actions["accept_current"]["command"])
+        self.assertTrue(actions["relocate"]["available"])
+        self.assertEqual("relocate", actions["relocate"]["command"])
         selected = self.client.select_action(context, citation_id, "accept_current")
-        self.assertFalse(selected["ok"])
-        self.assertEqual("E_INTEGRATION_ACTION_UNAVAILABLE", selected["error"]["code"])
+        self.assertTrue(selected["ok"])
+        self.assertEqual(citation_id, selected["selected_citation_id"])
 
     def test_cli_example_smoke_lookup_uses_json_contract(self):
         self.client.cite_selection("notes.md", 0, 11, handle="OPENING-CLAIM")

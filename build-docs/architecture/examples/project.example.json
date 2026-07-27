@@ -1,6 +1,8 @@
 {
   "created_at": "2026-07-27T00:00:00Z",
   "publication": {
+    "allow_private_link": false,
+    "allow_snippet": false,
     "privacy_mode": "metadata_only"
   },
   "repository_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",

@@ -13,7 +13,11 @@ from typing import Any, Sequence
 IMPLEMENTED_C2S_ACTIONS = {
     "cite": {"command": "cite-selection", "label": "Cite with C2S", "action": None},
     "set_handle": {"command": "set-handle", "label": "Rename handle", "action": "rename"},
-    "add_alias": {"command": "set-handle", "label": "Add alias", "action": "alias"},
+    "note": {"command": "note", "label": "Add note", "action": None},
+    "accept_current": {"command": "accept-current", "label": "Accept current evidence", "action": None},
+    "relocate": {"command": "relocate", "label": "Relocate citation", "action": None},
+    "retract": {"command": "retract", "label": "Retract citation", "action": None},
+    "restore": {"command": "restore", "label": "Restore citation", "action": None},
 }
 
 HOST_ACTIONS = {
@@ -21,8 +25,6 @@ HOST_ACTIONS = {
 }
 
 UNAVAILABLE_ACTIONS = {
-    "accept_current": "Recovery command is not implemented in this runtime.",
-    "relocate": "Recovery command is not implemented in this runtime.",
     "retire": "Citation retirement is not implemented in this runtime.",
     "undo": "Undo is not implemented in this runtime.",
     "redo": "Redo is not implemented in this runtime.",
@@ -154,6 +156,16 @@ class C2SThinClient:
                 action["command_template"] = command_template
                 action["handle_action"] = meta["action"]
                 action["required_inputs"] = required_inputs
+            elif meta["command"] == "note":
+                action["command_template"] = ["note", "--citation-id", citation_id or "<citation_id>", "--note", "<note>"]
+                action["required_inputs"] = ["note"]
+            elif meta["command"] == "accept-current":
+                action["command_template"] = ["accept-current", "--citation-id", citation_id or "<citation_id>"]
+            elif meta["command"] == "relocate":
+                action["command_template"] = ["relocate", "--citation-id", citation_id or "<citation_id>", "--start", "<start>", "--end", "<end>"]
+                action["required_inputs"] = ["start", "end"]
+            elif meta["command"] in {"retract", "restore"}:
+                action["command_template"] = [meta["command"], "--citation-id", citation_id or "<citation_id>"]
             return action
         if action_id in HOST_ACTIONS:
             meta = HOST_ACTIONS[action_id]

@@ -9,7 +9,7 @@
    binding in `.c2s`.
 4. The source artifact remains unchanged.
 5. `status` replays citation history against the current artifact observation.
-6. `export` generates flat JSON and minimal MkDocs projection files.
+6. `export` generates flat and grouped JSON plus MkDocs projection files.
 7. A future agent can consume the structured projection rather than receiving a
    copied conversational log.
 
@@ -24,8 +24,9 @@
    overlap, it presents an ordered picker before any mutation.
 5. Once recovery commands exist, accepted evidence, relocation, retraction, and
    restoration will append compensating events rather than rewrite history.
-6. Grouped projections will make a published site navigable by artifact,
-   handle, tag, status, and batch.
+6. Grouped projections make the generated site navigable by artifact, handle,
+   tag, status, and batch. Default projections are metadata-only; richer flat
+   projections require the explicit repository policy described in the protocol.
 
 The key design choice is that neither the original artifact nor the generated
 site is the citation authority. Authority remains in append-only history.

@@ -3,7 +3,7 @@
   "$id": "https://cite2site.local/schemas/0.3/status-report.schema.json",
   "title": "Status Report",
   "type": "object",
-  "required": ["ok", "schema_version", "repository_id", "privacy_mode", "citations", "summary"],
+  "required": ["ok", "schema_version", "repository_id", "privacy_mode", "citations", "indexes", "summary"],
   "additionalProperties": true,
   "properties": {
     "ok": {"const": true},

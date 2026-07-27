@@ -6,8 +6,8 @@
 
 The design describes the intended human and agent experience. The current
 runtime supplies the CLI/core contracts for citation, handle binding, contextual
-lookup, status, export, and checks. Native right-click integrations, recovery
-commands, grouped site navigation, and full privacy behavior are Target work.
+lookup, status, policy-enforced privacy projection, grouped export, and checks.
+Native right-click integrations and recovery commands are Target work.
 This distinction matters: a menu design is not a claim that the menu is already
 available.
 
@@ -81,9 +81,11 @@ Picker ordering:
 
 ## Site Design Requirements
 
-**Target publication model:** the current site is intentionally flat. Grouped
-pages become an implementation claim only after the grouping/export gates and
-link/privacy tests pass.
+**Implemented publication boundary:** grouped pages are generated from replay
+indexes and remain metadata-safe. Flat projections apply the effective privacy
+mode before output; repository policy gates snippets and private links. Hosting
+review remains the maintainer's responsibility because a generated site is not
+an authorization to publish a particular artifact.
 
 The MkDocs site must provide:
 

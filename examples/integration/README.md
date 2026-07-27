@@ -15,8 +15,8 @@ commands and stores no citation state outside `.c2s`.
 - Cited regions call `lookup-actions`.
 - Overlapping matches require picker selection before mutation.
 - Mutating actions always carry a concrete `citation_id`.
-- Recovery actions not implemented by the current CLI are rendered as
-  unavailable, not enabled.
+- Implemented recovery actions map to concrete CLI command templates. Deferred
+  actions such as undo and redo are rendered as unavailable, not enabled.
 - Picker cancellation performs no mutation.
 
 ## Reference Client

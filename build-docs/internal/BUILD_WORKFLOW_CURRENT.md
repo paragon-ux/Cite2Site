@@ -277,8 +277,11 @@ Exit criteria:
 
 ## Grouping And Indexing Workflow
 
-**Maturity:** Target, authorized as the next build phase. Current replay/export
-is flat and must not be described as grouped navigation.
+**Maturity:** Partial. G1 provides grouped replay indexes and a derived
+artifact-index cache; G2 supplies deterministic query filters; G3 writes
+grouped JSON and MkDocs navigation; and G4 applies privacy policy before every
+replay/export projection. The generated grouped surfaces intentionally remain
+metadata-safe even when a richer flat projection is authorized.
 
 Actors:
 
@@ -317,9 +320,11 @@ Exit criteria:
 
 ## Publication Workflow
 
-**Maturity:** Partial. Flat MkDocs output exists; grouped pages and substantive
-privacy transforms are target work. A generated page does not establish that the
-privacy policy has been enforced.
+**Maturity:** Implemented privacy contract. `metadata_only` is the default;
+`hash_only` omits accepted text; `snippet` requires explicit text-release
+authorization; and `private_link` requires an explicit HTTPS base URL. A
+generated page remains a derived projection, not publication approval for a
+specific hosting environment.
 
 Actors:
 
@@ -344,12 +349,20 @@ Privacy modes:
 - `snippet`;
 - `private_link`.
 
+`snippet` and `private_link` requests without their matching repository policy
+fail with `E_PRIVACY_POLICY`. Generated MkDocs group pages remain
+metadata-safe; rich fields are limited to the authorized flat projection.
+
 Exit criteria:
 
 - `metadata_only` is default;
 - public export does not leak evidence text by default;
 - generated pages are deterministic;
 - broken artifact links do not break site generation.
+
+Local preview is reproducible after installing MkDocs outside the stdlib core:
+`python -m mkdocs serve -f .c2s/site/mkdocs.yml`. Static hosting publishes the
+generated `.c2s/site` projection; it never replaces citation history authority.
 
 ## CI And Maintainer Workflow
 

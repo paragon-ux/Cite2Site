@@ -190,11 +190,11 @@ But the generated site is not, itself, an authority — it is a readable
 projection of the underlying history, produced so that a person or an
 agent has somewhere pleasant to look, not somewhere new to trust.
 
-Publication policy defaults to metadata-only. The first slice records that
-default; Phase 02 adds the distinct export transforms and no-leak tests needed
-to enforce it across every generated output. The premise remains that a
-citation system should never be the reason private or third-party content ends
-up somewhere public.
+Publication policy defaults to metadata-only, and the projection engine enforces
+that default before it writes or returns an export. Hash-only output retains
+measurements but not accepted text; snippets and private links require explicit
+repository policy. The premise remains that a citation system should never be
+the reason private or third-party content ends up somewhere public.
 
 ## Grouping And Indexing
 
@@ -217,9 +217,11 @@ or agent, can actually orient inside, rather than scroll through.
 
 Cite2Site has to assume, as a baseline, that any cited artifact may
 contain private or third-party content it has no right to publish. That
-assumption is why the default publication mode is metadata-only, and why
+A historical policy proposal stated that
 every mode that exposes more — hash-only, snippet, or private-link —
-requires an explicit, affirmative policy choice rather than an opt-out.
+would require affirmative policy. The current contract instead permits
+hash-only diagnostics without accepted text, while snippet and private-link
+modes require explicit affirmative policy.
 
 The same caution applies to how evidence is recognized in the first
 place: no adapter is permitted to infer that a passage was cited from

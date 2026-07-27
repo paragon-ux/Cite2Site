@@ -1,6 +1,7 @@
 # Phase 02: Privacy And Publication
 
-**Status:** authorized after Phase 01 grouping and indexing is accepted.
+**Status:** implementation completed in the working tree; gate acceptance
+remains subject to the validation criteria below.
 
 ## Purpose
 
@@ -19,8 +20,8 @@ Confirm Phase 01 is marked Done before starting.
 
 Implement deterministic privacy transforms for `metadata_only`, `hash_only`,
 `snippet`, and `private_link`; apply them consistently to status and export;
-complete grouped MkDocs navigation; and provide a reproducible local/static
-publication path.
+preserve the completed grouped MkDocs navigation under those transforms; and
+provide a reproducible local/static publication path.
 
 ## Non-Goals
 
@@ -37,7 +38,8 @@ Before coding, record the following in the protocol/specification if absent:
 2. The repository-policy field that authorizes `snippet` and `private_link`.
 3. Whether a forbidden request returns a structured error or a redacted
    projection, and the stable error code if it errors.
-4. The deterministic site navigation and slug rules for grouped pages.
+4. How each privacy mode affects the completed grouped navigation and page
+   links without altering their deterministic slug rules.
 
 ## Required Changes
 
@@ -52,7 +54,8 @@ Before coding, record the following in the protocol/specification if absent:
 
 ### Publication
 
-- Generate deterministic navigation for flat and grouped pages.
+- Preserve deterministic navigation for flat and grouped pages after privacy
+  transforms are applied.
 - Add a documented local MkDocs preview path without making MkDocs a runtime
   dependency of the stdlib core.
 - Document static-host publication as a projection deployment, not a state
@@ -89,3 +92,10 @@ The phase is accepted only when:
 5. all required validation from the workflow passes;
 6. status, requirements, specs, schemas, examples, and external docs agree.
 
+## Completion Boundary
+
+G4 implements the privacy transform and policy contract. The following are not
+implicit G4 deliverables: hosted deployment automation, a public approval
+workflow for a specific static host, field-level site customization, or native
+editor/browser transport. Those capabilities require their own contracts and
+gates.

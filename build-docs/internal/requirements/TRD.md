@@ -26,7 +26,7 @@ is a gate obligation, not evidence that the runtime already supplies it.
 | TR-101 | Citation repo root is `.c2s` by default. | CLI accepts `--repo`; default is `.c2s`. |
 | TR-102 | Citation events live in `citation-history.jsonl`. | Init creates file; mutations append to it. |
 | TR-103 | Handle events live in `handle-bindings.jsonl`. | Init creates file; handle mutations append to it. |
-| TR-104 | Artifact index lives in `artifact-index.jsonl`. | Init creates file; indexing milestone populates it. |
+| TR-104 | Artifact index lives in `artifact-index.jsonl` as a derived cache. | Successful authority mutations deterministically refresh it; replay does not read it as authority. |
 | TR-105 | Events are hash chained. | `check` validates chain. |
 | TR-106 | Event hashes use canonical JSON. | Hash function sorts keys and omits `event_id`. |
 | TR-107 | Source artifacts are never mutated. | Tests compare source bytes before and after mutation commands. |
@@ -40,7 +40,7 @@ is a gate obligation, not evidence that the runtime already supplies it.
 | `cite-batch` | Validate and append multiple citation events. |
 | `set-handle` | Append handle-binding event. |
 | `lookup-actions` | Return contextual matches and actions. |
-| `citations` | Target command: query projected citations by filters after grouping/indexing. |
+| `citations` | Query projected citations by artifact, handle, tag, status, and batch filters; JSONL emits one metadata-safe result per line. |
 | `status` | Replay projected citation state. |
 | `export` | Write JSON and MkDocs projections. |
 | `check` | Validate repository integrity. |
@@ -58,9 +58,11 @@ Replay must:
 7. apply privacy policy;
 8. return deterministic JSON.
 
-Current maturity: flat replay, hash-chain validation, text observation, and
-status calculation are implemented. Index construction and meaningful privacy
-transforms remain Target requirements until their acceptance suites pass.
+Current maturity: flat replay, hash-chain validation, text observation, status
+calculation, deterministic in-memory index construction, derived artifact
+cache population, index-backed querying, grouped export, and policy-enforced
+privacy transforms are implemented. Lifecycle commands and richer adapters
+remain later-gate requirements.
 
 ## Indexing Requirements
 
@@ -118,9 +120,9 @@ Adapter failure requirements:
 
 ## Export Requirements
 
-Current maturity: flat status JSON, JSONL citations, and minimal MkDocs pages
-are implemented. The grouped files and pages below are Target outputs for the
-grouping/publication gates.
+Current maturity: flat status JSON, JSONL citations, grouped JSON indexes, and
+grouped MkDocs pages are implemented. Flat projections apply the effective
+privacy mode; grouped pages intentionally remain metadata-safe.
 
 JSON export files:
 
@@ -154,6 +156,12 @@ Modes:
 
 Mode names alone do not meet this requirement. Each mode must have an explicit
 input-to-output rule and a negative test proving forbidden evidence is absent.
+
+Publication policy fields are `allow_snippet`, optional `snippet_max_chars`,
+`allow_private_link`, and required `private_link_base` when private links are
+enabled. `private_link_base` must be an absolute HTTPS URL without credentials,
+query, or fragment. Disallowed or invalid rich modes fail with
+`E_PRIVACY_POLICY`.
 
 ## Error Requirements
 

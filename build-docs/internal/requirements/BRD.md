@@ -68,7 +68,7 @@ context, or when users want a persistent public or private citation site.
 | BR-005 | Overlapping citations are manageable. | Must | Multiple matches have deterministic, documented ordering and a mutation requires a chosen citation ID. |
 | BR-006 | Citation history is publishable as a site. | Must | `export` generates deterministic MkDocs-compatible projections. |
 | BR-007 | Default publication does not expose evidence text. | Must | A no-leak fixture proves `metadata_only` suppresses accepted and observed evidence. |
-| BR-008 | Citation collections can be grouped and indexed. | Must | Deterministic indexes exist by artifact, handle, tag, status, and batch. |
+| BR-008 | Citation collections can be grouped and indexed. | Must | G1 provides deterministic replay indexes by artifact, handle, tag, status, and batch; G2 and G3 expose them through query and publication. |
 | BR-009 | Users can inspect current implementation status. | Should | The status matrix cites tests, command checks, or explicit gaps for every capability. |
 | BR-010 | The project has release-quality orientation docs. | Should | Orientation, decision records, and external narratives are present, linked, and distinguish target from current behavior. |
 
@@ -80,8 +80,8 @@ context, or when users want a persistent public or private citation site.
   deterministic JSON output.
 - A published metadata-only site can be generated without evidence text, proven
   by a negative-content test rather than a policy declaration.
-- Every citation appears in grouped indexes after export, proven by an index
-  membership fixture.
+- At v0.3 completion, every citation appears in grouped indexes after G3
+  export, proven by an index membership fixture.
 - All mutating commands append events and pass source-clean tests.
 - Every command failure path returns structured JSON.
 

@@ -14,9 +14,10 @@ and projections that are not in the first runtime slice. It is not a release
 note.
 
 The current runtime implements `init`, `cite-selection`, `cite-batch`,
-`set-handle`, `lookup-actions`, `status`, `export`, and `check`. It does not
-yet implement `citations`, grouped indexes, grouped publication, lifecycle
-commands, or actual right-click integrations. The precise state is maintained
+`set-handle`, `lookup-actions`, `citations`, `status`, `export`, and `check`.
+`status` includes deterministic in-memory grouped indexes and enforces the
+configured projection privacy mode. The runtime does not yet implement
+lifecycle commands or actual right-click integrations. The precise state is maintained
 in `../internal/CURRENT_STATUS_MATRIX.md`; a caller must not infer availability
 from a target contract alone.
 
@@ -136,6 +137,7 @@ Inputs:
 - `--label`, optional;
 - `--tag`, repeatable;
 - `--note`, optional;
+- `--handle-from-first-line`, opt-in and mutually exclusive with `--handle`;
 - `--actor-kind`, default `user`;
 - `--actor-id`, optional.
 
@@ -185,6 +187,28 @@ Tests:
 - event chain valid;
 - replay status `resolved`;
 - handle appears as preferred handle.
+
+## Commands: Workflow Completion
+
+`preflight-selection` validates a proposed citation without writing history. It
+returns the canonical artifact, locator, evidence hash/measurements, calculated
+citation ID, and an explicitly selected handle when first-line handle mode is
+used.
+
+`accept-current`, `retract`, `restore`, `relocate`, and `note` require a
+concrete `--citation-id`. They append compensating citation events; no command
+rewrites a creation, acceptance, or handle-binding event. `accept-current`,
+`retract`, `restore`, and unchanged `relocate` requests are idempotent when the
+requested state already holds.
+
+`relocate` requires an exact artifact/range selection and may include an
+expected content hash. `note` rejects empty content. First-line handle mode is
+available only when explicitly requested and cites the text after the handle
+line; arbitrary text is never interpreted as a handle by default.
+
+Errors include `E_FIRST_LINE_HANDLE`, `E_HANDLE_MODE_CONFLICT`,
+`E_CITATION_RETRACTED`, `E_NOTE_EMPTY`, and the existing range, hash, adapter,
+and citation-not-found codes.
 
 ## Command: `cite-batch`
 
@@ -291,8 +315,7 @@ Tests:
 
 ## Command: `citations`
 
-**Maturity:** Target. Authorized by the grouping/indexing phase; not present in
-the current CLI.
+**Maturity:** Implemented in G2.
 
 Purpose: query projected citations and indexes.
 
@@ -304,6 +327,11 @@ Filters:
 - `--status`;
 - `--batch`;
 - `--format json|jsonl`.
+
+JSON output uses `schemas/citations-response.schema.json`. JSONL output emits
+one metadata-safe citation object per line in the same deterministic order,
+without a wrapper envelope. Errors remain the common structured JSON envelope
+on stderr.
 
 Acceptance:
 
@@ -321,8 +349,7 @@ Rules:
 
 - validates event chains before projection;
 - computes statuses from current artifact observations;
-- includes flat citations in the current slice and grouped indexes after the
-  indexing milestone;
+- includes flat citations and the implemented in-memory grouped indexes;
 - read-only.
 
 ## Command: `export`
@@ -331,14 +358,19 @@ Purpose: write JSON and MkDocs projections.
 
 Writes:
 
-- flat JSON status and flat JSONL citations in the current slice;
-- grouped JSON indexes and grouped pages after the indexing milestone;
-- MkDocs home and flat citations page in the current slice.
+- flat JSON status and flat JSONL citations;
+- grouped JSON indexes by artifact, handle, tag, status, and batch;
+- MkDocs home, flat citations, and group pages with generated navigation.
+
+Grouped JSON and MkDocs pages use metadata-safe index and citation views. Flat
+status and JSONL projections apply the effective privacy transform before they
+are written; a disallowed rich mode fails with `E_PRIVACY_POLICY`.
 
 Rules:
 
 - deterministic order;
 - metadata-only default;
+- `snippet` and `private_link` require explicit repository policy;
 - generated files are not authority.
 
 ## Command: `check`

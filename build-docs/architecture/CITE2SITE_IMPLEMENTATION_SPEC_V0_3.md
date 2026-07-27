@@ -18,11 +18,12 @@ already available.
 
 **Implemented first slice:** source-clean text and Markdown selection capture,
 append-only citation and handle histories, hash-chain validation, a JSON CLI,
-contextual lookup, flat replay/status, flat export, and minimal MkDocs output.
+contextual lookup, replay/status with deterministic in-memory indexes,
+policy-enforced privacy transforms, grouped JSON export, and MkDocs output
+with grouped navigation.
 
-**Target work:** grouped indexes and `citations`, full privacy transforms,
-lifecycle-adjacent commands, richer adapters, grouped publication, and native
-right-click transports. Each target item needs a gate, tests, and status update
+**Target work:** lifecycle-adjacent commands, richer adapters, and native right-click
+transports. Each target item needs a gate, tests, and status update
 before it becomes an implementation claim.
 
 ## Design Argument
@@ -288,6 +289,18 @@ Actions:
 - `alias`;
 - `retire`.
 
+### Workflow Commands
+
+**Maturity:** Implemented in G5. `preflight-selection` is read-only and shares
+the selection validator used by `cite-selection`. `accept-current`, `retract`,
+`restore`, `relocate`, and `note` append citation events and require a concrete
+citation ID. Replay deterministically reduces those events into current
+accepted evidence, locator/artifact, state, and note metadata.
+
+`cite-selection --handle-from-first-line` is an explicit parsing mode. The
+first selected line must be a valid handle and must be followed by cited text;
+the handle line itself is not accepted evidence.
+
 ### `lookup-actions`
 
 Returns contextual actions for a cursor or selection.
@@ -303,7 +316,8 @@ Mutating follow-up actions must name a concrete `citation_id`.
 
 ### `citations`
 
-**Maturity:** Target query command. It is not present in the current CLI.
+**Maturity:** Implemented in G2. The command intersects memberships from
+replay indexes, then emits citations in replay creation order.
 
 Filters:
 
@@ -313,6 +327,10 @@ Filters:
 - `--status`;
 - `--batch`;
 - `--format json|jsonl`.
+
+The query view is metadata-safe in every mode: it omits accepted evidence,
+observed evidence, notes, snippets, and private links. Replay and export apply
+the effective privacy transform before a flat projection is returned or written.
 
 ### `status`
 
@@ -341,8 +359,10 @@ Validates repository integrity.
 
 ## Grouping And Indexing
 
-**Maturity:** Target. Current replay emits a flat citation list; this section
-defines the deterministic index contract for the authorized next phase.
+**Maturity:** Done. G1 implements the deterministic in-memory indexes and the
+derived artifact-index cache; G2 supplies index-backed querying; G3 supplies
+grouped export and MkDocs projection; and G4 supplies enforced privacy
+transforms for flat projections.
 
 Replay must produce flat citations plus indexes:
 
@@ -371,8 +391,10 @@ Index rules:
 
 ## Publication
 
-**Maturity:** Partial. The current slice writes flat status, JSONL citations,
-and minimal MkDocs pages. The grouped outputs below are target work.
+**Maturity:** Implemented. G3 writes deterministic grouped JSON indexes and
+MkDocs group pages with stable, collision-resistant slugs. G4 applies the
+effective privacy transform to flat projections, while grouped pages remain
+metadata-safe by contract.
 
 Export must write:
 
@@ -389,14 +411,15 @@ Static-site publication defaults to `metadata_only`.
 
 | Mode | Behavior |
 |---|---|
-| `metadata_only` | No evidence text. |
-| `hash_only` | Evidence hashes allowed, no evidence text. |
-| `snippet` | Short snippets allowed by explicit policy. |
-| `private_link` | Local/private links allowed for trusted environments. |
+| `metadata_only` | Removes accepted evidence and snippets. |
+| `hash_only` | Emits accepted-evidence hashes and measurements, never accepted text. |
+| `snippet` | Emits a deterministically bounded accepted-text snippet only when `publication.allow_snippet` is true. |
+| `private_link` | Emits a URL derived from an authorized absolute HTTPS `publication.private_link_base`, with the artifact URI encoded as one path segment. |
 
-The current CLI accepts these mode names but does not yet apply distinct output
-transforms. Treat the modes other than the metadata-only default as Target until
-their behavior is independently tested.
+`snippet` and `private_link` requests without their matching policy fields fail
+with `E_PRIVACY_POLICY`. A private-link base may not contain credentials, a
+query, or a fragment. Citation authority retains accepted text; projections
+release it only through the explicitly authorized snippet transform.
 
 ## Error Codes
 
@@ -425,6 +448,13 @@ Required stable errors:
 - `E_HANDLE_ACTION_INVALID`;
 - `E_CITATION_NOT_FOUND`;
 - `E_PRIVACY_MODE`;
+- `E_PRIVACY_POLICY`;
+- `E_FIRST_LINE_HANDLE`;
+- `E_HANDLE_MODE_CONFLICT`;
+- `E_CITATION_RETRACTED`;
+- `E_NOTE_EMPTY`;
+- `E_SCHEMA_UNKNOWN`;
+- `E_SCHEMA_UNSUPPORTED`;
 - `E_AMBIGUOUS_CITATION_TARGET`.
 
 ## Validation Requirements

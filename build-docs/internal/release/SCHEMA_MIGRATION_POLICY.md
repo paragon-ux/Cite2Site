@@ -38,8 +38,9 @@ or migrated.
 files.
 
 **Partial:** No migration command exists because no prior released authority
-schema is currently supported. The release procedure below is the required path
-for introducing the first migration.
+schema is currently supported. The runtime refuses unknown or unsupported
+project and event schema versions before replay or mutation. The release
+procedure below is the required path for introducing the first migration.
 
 **Target:** When `c2s.project.v0.4` or `c2s.event.v0.4` is introduced, the
 release must include migration fixtures and a command or documented manual

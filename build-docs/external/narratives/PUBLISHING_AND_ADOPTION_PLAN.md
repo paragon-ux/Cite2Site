@@ -2,13 +2,18 @@
 
 ## Local Adoption
 
-The current entry point is local CLI use with generated flat projection files:
+The current entry point is local CLI use with generated citation projections:
 
 1. install package;
 2. initialize `.c2s`;
 3. cite a Markdown or text file;
-4. export metadata-only pages;
+4. export local JSON and MkDocs projections;
 5. inspect generated site files.
+
+The configured default is `metadata_only`, and the export transform removes
+accepted evidence before a default projection is returned or written.
+`hash_only` keeps hashes and measurements but never accepted text. Snippets and
+private links are refused unless repository policy explicitly authorizes them.
 
 This requires no Git repository for the cited artifact. The citation repository
 is separate so a user can preserve evidence references for documents, exported
@@ -24,25 +29,25 @@ Agents should use:
   can render as a native menu;
 - `status` and `export` for replay projections.
 
-Agents should not inspect private source files when metadata-only export is
-sufficient.
+Agents should treat the citation repository as sensitive authority state even
+when its default projections are metadata-only. A projection is safe only for
+the configured mode; it does not grant rights to disclose the cited artifact.
 
 ## Publication
 
 The citation repository can be versioned and published through a static host
 such as GitHub Pages once a MkDocs build is configured. Cite2Site's generated
-Markdown is a projection input, not a hosted service requirement. Public
-publication must default to metadata-only, and a publication gate must prove
-that evidence text is absent before this becomes a release claim.
+Markdown is a projection input, not a hosted service requirement. For local
+preview, install MkDocs outside the stdlib core and run
+`python -m mkdocs serve -f .c2s/site/mkdocs.yml`. Static hosting publishes the
+generated `.c2s/site` projection and never becomes citation authority.
 
 ## Expansion Order
 
-1. grouped indexes;
-2. richer MkDocs pages;
-3. privacy modes;
-4. first-line handle mode;
-5. adapter conformance tests;
-6. right-click integration examples.
+1. first-line handle mode and recovery workflows;
+2. adapter conformance tests;
+3. right-click integration examples;
+4. hosted publication automation and review guidance.
 
 ## Adoption Boundaries
 

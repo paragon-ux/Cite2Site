@@ -1,21 +1,22 @@
 # Product Overview
 
 Cite2Site lets people and agents create durable citations from ordinary files
-without adding markers to those files. A user can cite a passage, publish a
-metadata-safe citation site, and share that site with future collaborators or
-chatbot sessions.
+without adding markers to those files. A user can cite a passage, generate a
+local citation site, and share a metadata-safe publication projection without
+turning the cited file into a C2S document.
 
 ## What Exists Today
 
 The current local first slice is a JSON CLI and replay engine for text and
 Markdown files. It can create source-clean citations, accept batches, assign
-handles, look up contextual actions, replay status, export a flat local site,
-and verify event histories. It is useful now for people comfortable with a
-command line and for agents that use structured commands.
+handles, look up contextual actions, replay status, export grouped local
+projections, and verify event histories. It is useful now for people
+comfortable with a command line and for agents that use structured commands.
 
-The intended right-click experience, grouped navigation, and richer artifact
-adapters are not yet shipped. They are the next layers over the same citation
-contracts, rather than a second state system.
+Status, the CLI, and generated MkDocs pages already group/query citations by
+artifact, handle, tag, status, and batch. The intended right-click experience
+and richer artifact adapters are not yet shipped. They are the next layers over
+the same citation contracts, rather than a second state system.
 
 ## Primary Promise
 
@@ -36,7 +37,8 @@ or command line.
 - Lets agents create citations one at a time or in batches.
 - Replays citation history against current files.
 - Generates JSON and MkDocs projections.
-- Defaults public output to metadata-only.
+- Enforces `metadata_only` by default and requires explicit repository policy
+  for snippet or private-link projections.
 
 ## Who It Serves
 
@@ -48,9 +50,9 @@ or command line.
 
 ## Near-Term Direction
 
-Cite2Site has a working local first slice. The next product step is grouped
-indexing so citation sites are navigable by artifact, handle, tag, status, and
-batch instead of only showing a flat list.
+Cite2Site has a working local first slice with deterministic replay indexes,
+query filters, grouped site navigation, and enforced privacy modes. The next
+product step is completing append-only recovery workflows.
 
 The project does not judge whether a source is true. It records evidence that a
 person, agent, or machine explicitly accepted, and later reports how that

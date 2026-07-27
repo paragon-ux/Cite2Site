@@ -1,6 +1,8 @@
 # Phase 01: Grouping And Indexing
 
-**Status:** authorized next implementation phase.
+**Status:** G1 grouping/indexing core, G2 grouped query CLI, and G3 grouped
+export/site are implemented. G4 privacy and publication is also implemented;
+the next active build boundary is Phase 03 workflow completeness.
 
 This prompt is written for an implementation agent. Complete the phase end to
 end before moving to adapters, privacy expansion, or integrations.
@@ -14,6 +16,19 @@ Implemented behavior only when its evidence is complete.
 
 Turn flat citation replay/export into navigable grouped citation indexes by
 artifact, handle, tag, status, and batch.
+
+## Gate Boundaries
+
+This phase spans three independently accepted gates:
+
+| Gate | Scope | Completion evidence |
+|---|---|---|
+| G1 | Deterministic in-memory replay indexes and derived artifact-cache population. | Core membership/order/cache tests and status-schema update. |
+| G2 | `c2s citations` filters and JSON/JSONL result contract. | CLI success/error/filter tests. |
+| G3 | Grouped JSON export and MkDocs group pages. | Deterministic output, link, source-clean, and privacy tests. |
+
+Do not implement a later row merely because it is described below. Complete its
+own acceptance loop before moving forward.
 
 ## Boundary Of This Phase
 
@@ -31,18 +46,21 @@ querying, deterministic export, grouped pages, and metadata-only safety.
 - Keep all outputs deterministic.
 - Keep all command errors structured JSON.
 
-## Required Source Changes
+## Gate-Specific Source Changes
+
+The requirements below are phase-wide. The gate labels are binding: a later
+label is not a requirement of G1.
 
 ### `src/c2s/core.py`
+
+### G1: Replay Indexes And Artifact Cache
 
 Add these pure helpers:
 
 - `citation_sort_key(citation) -> tuple`
 - `build_indexes(projection) -> dict`
 - `index_entry(key, citation_ids, display=None, extra=None) -> dict`
-- `write_grouped_json_exports(repo, indexes) -> dict`
-- `write_grouped_site_pages(repo, projection, indexes) -> None`
-- `populate_artifact_index(repo, projection) -> None`
+- `populate_artifact_index(repo, projection) -> path`
 
 Update `replay()`:
 
@@ -50,6 +68,8 @@ Update `replay()`:
 2. compute deterministic indexes;
 3. include `indexes` in the returned status report;
 4. do not write files during replay.
+
+### G3: Grouped Export And Site
 
 Update `export()`:
 
@@ -60,6 +80,8 @@ Update `export()`:
 5. populate `artifact-index.jsonl` or deterministic artifact index projection;
 6. return paths for grouped outputs.
 
+### G2: Query Handler
+
 Add `citations(args)` command handler:
 
 - filters: artifact, handle, tag, status, batch;
@@ -68,7 +90,7 @@ Add `citations(args)` command handler:
 - returns deterministic results;
 - metadata-only behavior applies.
 
-### `src/c2s/cli.py`
+### G2: `src/c2s/cli.py`
 
 Add `citations` subcommand:
 
@@ -82,24 +104,19 @@ python -m c2s citations --batch sha256:...
 python -m c2s citations --format jsonl
 ```
 
-### `tests/test_first_slice.py`
+### Gate-Specific Tests
 
 Add or split tests for:
 
-- status includes `indexes`;
-- indexes contain artifact, handle, alias, tag, status, and batch groups;
-- grouped index order is deterministic;
-- `citations --handle` returns preferred handle and alias matches;
-- `citations --artifact` returns only artifact matches;
-- `citations --tag` returns only tag matches;
-- `citations --status` returns only status matches;
-- `citations --batch` returns only batch matches;
-- `export` writes all grouped JSON files;
-- `export` writes grouped MkDocs pages;
-- metadata-only grouped pages do not include accepted evidence text;
-- source file bytes do not change.
+- G1: status includes `indexes`; indexes contain artifact, handle, alias, tag,
+  status, and batch groups; grouped index order is deterministic; artifact
+  cache population is deterministic; source file bytes do not change.
+- G2: `citations --handle` returns preferred-handle and alias matches;
+  artifact, tag, status, and batch filters return only matching citations.
+- G3: export writes all grouped JSON files and MkDocs pages; metadata-only
+  grouped pages do not include accepted evidence text.
 
-## Required Output Files
+## G3 Required Output Files
 
 JSON:
 
@@ -175,15 +192,15 @@ In `metadata_only`:
 
 Tests must assert the original selected text does not appear in grouped pages.
 
-## Completion Checklist
+## Phase Completion Checklist (After G3)
 
 - `python -m unittest discover -s tests` passes.
 - `python -m compileall src` passes.
-- `python -m c2s --help` shows `citations`.
+- `python -m c2s --help` shows `citations` after G2.
 - CLI smoke creates two citations with tags/handles, exports grouped pages, and
   queries by handle/tag/status.
-- `build-docs/internal/CURRENT_STATUS_MATRIX.md` marks grouping/indexing rows
-  as implemented only after tests prove them.
+- `build-docs/internal/CURRENT_STATUS_MATRIX.md` marks each delivered row with
+  its G1, G2, or G3 maturity only after that gate's tests prove it.
 - `build-docs/internal/requirements/BRD.md`, `DRD.md`, and `TRD.md` retain
   their current/target distinctions and link the delivered behavior to this
   gate.

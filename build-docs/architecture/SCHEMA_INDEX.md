@@ -23,11 +23,13 @@ dependency decision is explicitly approved.
 
 | Path | Purpose |
 |---|---|
-| `schemas/project.schema.json` | `.c2s/project.json` |
+| `schemas/project.schema.json` | Implemented `.c2s/project.json`, including publication-policy fields. |
 | `schemas/event-envelope.schema.json` | Common append-only event fields |
 | `schemas/citation-created-event.schema.json` | `citation.created` event |
+| `schemas/workflow-citation-event.schema.json` | Implemented G5 citation compensation events |
 | `schemas/handle-bound-event.schema.json` | `handle.bound` event |
 | `schemas/cite-batch-request.schema.json` | Agent batch citation request |
+| `schemas/citations-response.schema.json` | Implemented `citations` JSON query response |
 | `schemas/lookup-actions-response.schema.json` | Contextual menu lookup response |
 | `schemas/status-report.schema.json` | Replay status projection |
 | `schemas/export-indexes.schema.json` | Grouped index projection |
@@ -38,8 +40,10 @@ dependency decision is explicitly approved.
 |---|---|
 | `examples/project.example.json` | Initialized project metadata |
 | `examples/citation-created-event.example.json` | Citation event |
+| `examples/workflow-citation-event.example.json` | Citation compensation event |
 | `examples/handle-bound-event.example.json` | Handle binding event |
 | `examples/cite-batch-request.example.json` | Batch request |
+| `examples/citations-response.example.json` | Implemented citations query response |
 | `examples/lookup-actions-response.example.json` | Overlap action response |
 | `examples/status-report.example.json` | Replay status |
 | `examples/export-indexes.example.json` | Grouped indexes |
@@ -54,5 +58,8 @@ dependency decision is explicitly approved.
   and current status matrix.
 - A schema addition must state its maturity: Implemented, Partial, Target, or
   Open. Do not represent a target-only schema as an available CLI response.
+- `publication.private_link_base` is syntactically an HTTPS URI in the project
+  schema; runtime policy validation additionally rejects credentials, queries,
+  and fragments before generating a link.
 - Examples use fabricated hashes and paths. They are explanatory fixtures, not
   cryptographically valid event histories.

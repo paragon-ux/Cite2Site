@@ -59,6 +59,7 @@
         "kind": {"const": "text"},
         "canonicalization": {"const": "text-utf8-lf-v1"},
         "content_hash": {"$ref": "#/$defs/hash"},
+        "text": {"type": "string"},
         "line_hashes": {"type": "array", "items": {"$ref": "#/$defs/hash"}},
         "byte_count": {"type": "integer", "minimum": 0},
         "line_count": {"type": "integer", "minimum": 0}

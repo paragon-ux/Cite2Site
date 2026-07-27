@@ -72,6 +72,8 @@ the current CLI/core substrate from Target integrations and publication work.
 - [internal/adrs/0005-contextual-actions-not-overlays.md](internal/adrs/0005-contextual-actions-not-overlays.md)
 - [internal/adrs/0006-mkdocs-as-publication-projection.md](internal/adrs/0006-mkdocs-as-publication-projection.md)
 - [internal/adrs/0007-metadata-only-default.md](internal/adrs/0007-metadata-only-default.md)
+- [internal/adrs/0008-session-gates-define-rigor-not-a-hard-stop.md](internal/adrs/0008-session-gates-define-rigor-not-a-hard-stop.md)
+- [internal/adrs/0009-artifact-index-is-a-derived-cache.md](internal/adrs/0009-artifact-index-is-a-derived-cache.md)
 
 ## Change Control Rule
 

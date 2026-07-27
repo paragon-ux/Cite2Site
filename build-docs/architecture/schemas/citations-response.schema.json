@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/0.3/citations-response.schema.json",
+  "title": "Citations Query Response",
+  "type": "object",
+  "required": ["ok", "schema_version", "repository_id", "privacy_mode", "filters", "citations"],
+  "additionalProperties": false,
+  "properties": {
+    "ok": {"const": true},
+    "schema_version": {"const": "c2s.citations.v0.3"},
+    "repository_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "privacy_mode": {"enum": ["metadata_only", "hash_only", "snippet", "private_link"]},
+    "filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "artifact": {"type": "string"},
+        "handle": {"type": "string"},
+        "tag": {"type": "string"},
+        "status": {"type": "string"},
+        "batch": {"type": "string"}
+      }
+    },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["citation_id", "artifact", "locator", "metadata", "aliases", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "citation_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "state": {"type": "string"},
+          "artifact": {"type": "object"},
+          "locator": {"type": "object"},
+          "metadata": {"type": "object", "required": ["tags"], "additionalProperties": false, "properties": {"tags": {"type": "array", "items": {"type": "string"}}}},
+          "batch_id": {"type": ["string", "null"]},
+          "preferred_handle": {"type": ["string", "null"]},
+          "aliases": {"type": "array", "items": {"type": "string"}},
+          "status": {"type": "string"},
+          "created_at": {"type": ["string", "null"]},
+          "created_event_id": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}

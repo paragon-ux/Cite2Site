@@ -45,23 +45,22 @@ Not authority:
 - first-slice tests under `tests`;
 - source-clean text and Markdown citation creation;
 - batch creation, handle binding, contextual lookup, status, export, and
-  integrity checks.
+  integrity checks;
+- deterministic grouped indexes, index-backed query filters, grouped MkDocs
+  navigation, and policy-enforced privacy transforms.
 
 **Target, not current user interface:** editor, browser, and document-tool
-right-click integrations; grouped indexes and query command; richer privacy
-transforms; lifecycle-adjacent recovery commands; and adapter conformance
-coverage. The status matrix names the exact limitations and next gates.
+right-click integrations; lifecycle-adjacent recovery commands; richer adapter
+coverage; and remote CI/release automation. The status matrix names the exact
+limitations and next gates.
 
 ## Build Order
 
 1. Preserve append-only event authority.
-2. Finish grouping and indexing.
-3. Expand export and MkDocs pages.
-4. Add workflow commands.
-5. Harden privacy modes.
-6. Add adapter conformance tests.
-7. Add integrations over `lookup-actions`.
-8. Add CI and release automation.
+2. Complete workflow commands.
+3. Add adapter conformance tests.
+4. Add integrations over `lookup-actions`.
+5. Add CI and release automation.
 
 ## Agent Rules
 

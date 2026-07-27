@@ -8,14 +8,16 @@ rather than storing their own authoritative state.
 
 The first slice supports text and Markdown selections through `filesystem-text`
 and `markdown` semantics. The implemented commands are `init`,
-`cite-selection`, `cite-batch`, `set-handle`, `lookup-actions`, `status`,
-`export`, and `check`. Each command uses a structured JSON success or error
-envelope.
+`cite-selection`, `cite-batch`, `set-handle`, `lookup-actions`, `citations`,
+`status`, `export`, and `check`. Each command uses a structured JSON success
+or error envelope; `citations --format jsonl` emits one result object per line.
 
-The current export is deliberately flat. Grouped indexes, `citations` queries,
-fully distinct privacy transforms, lifecycle-adjacent commands, and native
-editor/browser integrations are target work. A design specification is not a
-claim that these interfaces are already available.
+The current export includes grouped JSON indexes and MkDocs pages by artifact,
+handle, tag, status, and batch. `status` supplies deterministic in-memory
+indexes and `citations` supplies index-backed JSON and JSONL filters. Complete
+privacy transforms are implemented; lifecycle-adjacent commands and native
+editor/browser integrations remain target work. A design specification is not a claim that
+these interfaces are already available.
 
 ## Authority
 
@@ -37,20 +39,20 @@ for replay, never rewritten to carry markers or hidden metadata.
 - `cite-batch`;
 - `set-handle`;
 - `lookup-actions`;
+- `citations`;
 - `status`;
 - `export`;
 - `check`.
 
 ## Next Engineering Gate
 
-The implementation has flat export and status projection. The next engineering
-work is grouped indexing:
+The implementation has indexed status projection, query filters, and grouped
+export and enforced privacy modes. The next engineering work is append-only
+workflow completion:
 
-- populate artifact index;
-- build indexes by artifact, handle, tag, status, and batch;
-- add query filters;
-- generate grouped JSON and MkDocs pages.
+- implement acceptance, retraction, restoration, relocation, and note events;
+- add first-line handle extraction and preflight selection;
+- preserve source-clean and structured-error guarantees.
 
-The gate is accepted only when deterministic index, export, privacy, and
-source-clean tests pass. This keeps a useful static site from becoming a
-separate state model.
+Each gate requires determinism, privacy, and source-clean evidence so a useful
+static site does not become a separate state model.
