@@ -11,8 +11,8 @@ still determined by `build-docs/internal/CURRENT_STATUS_MATRIX.md`.
 - G6 adapter hardening:
   - adapter protocol (`src/c2s/adapter.py`): `BaseAdapter` ABC, `FilesystemTextAdapter`,
     `MarkdownAdapter`, registry, diagnostics;
-  - adapter conformance harness (`tests/test_adapter_conformance.py`): 59 tests
-    covering all 8 contract methods across both adapters;
+  - adapter conformance harness (`tests/test_adapter_conformance.py`): 35 test
+    methods covering all 8 contract methods across both adapters;
   - workspace boundary enforcement (`E_ARTIFACT_OUTSIDE_WORKSPACE`).
 - G7 integration examples:
   - integration contract documentation

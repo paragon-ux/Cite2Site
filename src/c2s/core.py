@@ -66,9 +66,9 @@ def load_json(path: Path) -> Any:
         with path.open("r", encoding="utf-8") as fh:
             return json.load(fh)
     except FileNotFoundError as exc:
-        raise C2SError("E_FILE_NOT_FOUND", f"file not found: {path}", path=str(path)) from exc
+        raise C2SError("E_FILE_NOT_FOUND", f"file not found: {path}", path=path.name) from exc
     except json.JSONDecodeError as exc:
-        raise C2SError("E_JSON_INVALID", f"invalid JSON in {path}", path=str(path), line=exc.lineno) from exc
+        raise C2SError("E_JSON_INVALID", f"invalid JSON in {path}", path=path.name, line=exc.lineno) from exc
 
 
 def dump_json(path: Path, value: Any) -> None:
@@ -111,22 +111,22 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
             try:
                 records.append(json.loads(line))
             except json.JSONDecodeError as exc:
-                raise C2SError("E_JSONL_INVALID", f"invalid JSONL in {path}", path=str(path), line=lineno) from exc
+                raise C2SError("E_JSONL_INVALID", f"invalid JSONL in {path}", path=path.name, line=lineno) from exc
     return records
 
 
 def validate_chain(path: Path) -> str:
     previous = EMPTY_HASH
     for index, event in enumerate(read_jsonl(path), 1):
-        validate_schema_version(event.get("schema_version"), SCHEMA_VERSION, path=str(path), record=index)
+        validate_schema_version(event.get("schema_version"), SCHEMA_VERSION, path=path.name, record=index)
         if event.get("previous_event_hash") != previous:
-            raise C2SError("E_EVENT_CHAIN", "event chain hash mismatch", path=str(path), record=index)
+            raise C2SError("E_EVENT_CHAIN", "event chain hash mismatch", path=path.name, record=index)
         event_id = event.get("event_id")
         if not isinstance(event_id, str):
-            raise C2SError("E_EVENT_ID_MISSING", "event is missing event_id", path=str(path), record=index)
+            raise C2SError("E_EVENT_ID_MISSING", "event is missing event_id", path=path.name, record=index)
         expected = hash_event(event)
         if event_id != expected:
-            raise C2SError("E_EVENT_HASH", "event_id does not match canonical event hash", path=str(path), record=index)
+            raise C2SError("E_EVENT_HASH", "event_id does not match canonical event hash", path=path.name, record=index)
         previous = event_id
     return previous
 
@@ -181,7 +181,7 @@ class Repo:
         if not self.project_file.exists():
             raise C2SError("E_REPO_NOT_INITIALIZED", "Cite2Site repository is not initialized", repo=str(self.root))
         project = load_json(self.project_file)
-        validate_schema_version(project.get("schema_version") if isinstance(project, dict) else None, "c2s.project.v0.3", path=str(self.project_file))
+        validate_schema_version(project.get("schema_version") if isinstance(project, dict) else None, "c2s.project.v0.3", path=self.project_file.name)
         return project
 
     @property

@@ -17,8 +17,8 @@ future-phase prompt is not sufficient evidence by itself. See
 
 ## Practical Status Statement
 
-Cite2Site has a working local first slice, but it is not yet a complete v0.3.0
-release. The implemented substrate proves the append-only event model,
+Cite2Site has a complete local v0.3.0 first slice. The implemented substrate
+proves the append-only event model,
 source-clean citation creation, batch citation, handle binding, contextual
 lookup, replay status, metadata-only export, structured JSON errors, and unit
 test baseline.
