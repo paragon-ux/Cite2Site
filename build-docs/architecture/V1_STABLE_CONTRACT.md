@@ -300,12 +300,7 @@ different implementation complexity and deployment risk:
 
 Required for `cite-selection` and `cite-batch`. The adapter must independently
 verify the caller's claimed selection against the actual artifact (the
-mechanism behind `E_CONTENT_HASH_MISMATCH`). For local files (Markdown, DOCX,
-PDF, XLSX), this means reading and canonicalizing the file directly. For
-browser documents, this can use a thin adapter: the browser extension supplies
-the selected text and content hash, and `canonicalize`/`evidence` structure
-and hash what was handed to them without independently re-fetching the live
-page.
+mechanism behind `E_CONTENT_HASH_MISMATCH`).
 
 **Tier 1 adapters unblock creation.** They are smaller, self-contained builds
 and can ship independently of Tier 2.
@@ -313,31 +308,88 @@ and can ship independently of Tier 2.
 ### Tier 2 — Replay/Relocation (observe, compare, summarize, privacy)
 
 Required for `status`, `lookup-actions`, `citations`, and `export` to report
-current state. The adapter must re-read the artifact later and reconcile drift
-(what changed, what moved, what disappeared). This is harder for non-file
-artifacts:
-
-- **Browser/DOM:** requires a re-observation mechanism (extension or
-  headless browser) and a locator model less stable than byte offsets.
-- **DOCX/PDF/XLSX:** structural changes across revisions can make "same
-  paragraph/cell" ambiguous; `ambiguous` is the correct status when structure
-  shifts can't be resolved.
+current state. The adapter must re-read the artifact later and reconcile drift.
 
 **Tier 2 adapters can be deferred** without blocking creation. A citation
 created with a Tier-1-only adapter reports `adapter_unavailable` until the
 Tier 2 methods are implemented.
 
-### Adapter Development Priority
+### Implementation Strategy: One ConverterAdapter, Not Three Per-Format Adapters
 
-Per the external user journey review, the recommended build order is:
+For local-file formats (DOCX, PDF, XLSX), Tier 1 and most of Tier 2 do not
+require format-specific code. Instead:
 
-1. **Browser Tier 1** (smallest scope — the extension supplies evidence directly)
-2. **DOCX Tier 1** (local file, similar to filesystem-text)
-3. **PDF Tier 1** (local file, text extraction + hashing)
-4. **XLSX Tier 1** (local file, cell range canonicalization)
-5. **Tier 2 for each** (replay/relocation — defer until Tier 1 is stable)
+- **`canonicalize()`** shells out to a registered external converter for the
+  file extension (e.g., `mammoth`/`pandoc` for DOCX, `pdftotext` for PDF, a
+  CSV-export path for XLSX) and treats its stdout as canonical text.
+- **`evidence()` / `locate()` / `compare()`** reuse the exact same text-search
+  reconciliation code already built and tested for the filesystem-text
+  adapter — no format-specific parsing logic needed.
+- **One generic `ConverterAdapter`**, configured with a `{file extension →
+  converter command}` registry, replaces three separate per-format adapters.
 
-Each new adapter must pass the Tier 1 subset of the adapter conformance
+**Converter version pinning (required):** The hash chain is only meaningful if
+`canonicalize()` produces byte-identical output for byte-identical input on
+every machine, every time. External converters are not guaranteed to do this
+across versions. Therefore `identify()` MUST record the converter name and
+version used per citation, so a converter upgrade that silently changes output
+is detectable and attributable rather than a silent replay failure.
+
+**Determinism testing (required):** Converter output must be tested for
+byte-identical determinism across two runs on the same fixture file. This test
+must run in CI — converter behavior can differ across OS and container base
+images. A version-pin test must also assert that a simulated version mismatch
+is surfaced, not silently ignored.
+
+### Browser Adapter: Creation vs. Re-Observation
+
+Browser pages have no file to point a converter at. The strategy splits by
+lifecycle phase:
+
+**Creation (Tier 1, client-supplied text):** The browser extension already has
+the live DOM and the exact selected text at selection time. A thin browser
+adapter accepts the client-supplied text and content hash directly —
+`canonicalize`/`evidence` structure and hash what was handed to them without
+independently re-fetching the live page. The selection MUST NOT be run through
+an extractor (like Readability) at creation time, since extractors designed to
+strip boilerplate could clip content that was genuinely part of the user's
+selection (a sidebar quote, a table cell, a comment).
+
+**Re-observation (Tier 2, Readability-based):** A background process fetches
+the URL, runs `@mozilla/readability` server-side via `jsdom` (no live browser
+session required) to strip navigation/ads/boilerplate, and produces
+deterministic canonical text — the same role a converter plays for DOCX/PDF/
+XLSX. The accepted evidence is searched for in the new extraction, reusing
+the same `resolved` / `changed` / `missing` reconciliation logic.
+
+**Honesty requirement (critical):** A plain HTTP fetch gets server-rendered
+HTML, not JS-rendered SPA content, and nothing behind a login wall or paywall.
+A Readability re-fetch that confidently compares against content the user
+never actually saw is worse than an honest "can't verify" — it produces a
+false `resolved` or `missing`. Therefore pages requiring JS rendering,
+authentication, or likely to be personalized (heuristics: near-empty `<body>`,
+login/paywall redirects, known SPA framework markers) MUST report
+`adapter_unavailable`, not a comparison against unrelated content.
+
+The Readability library version must be recorded per observation (same
+discipline as converter version pinning). Full JS-rendering/headless support
+(Playwright-class, browser binary in CI) is a separate, heavier build —
+`adapter_unavailable` is the correct answer for that subset until it is built.
+
+### Adapter Development Priority (Revised)
+
+1. **ConverterAdapter (DOCX/PDF/XLSX)** — one adapter, three configurations,
+   reusing existing evidence/locate/compare code. Highest-leverage: unblocks
+   three journeys for the cost of one, plus determinism/version-pin tests.
+2. **Browser Tier 1 (creation only)** — client-supplied text, no converter.
+   Small, independent build.
+3. **Browser Tier 2 (Readability re-observation)** — Readability-based fetch
+   for static/server-rendered pages, reusing same reconciliation logic as (1).
+   Honesty test (JS/auth pages → `adapter_unavailable`) built FIRST.
+4. **Headless browser support** — JS-rendered/auth pages. Separate build;
+   requires browser binary in CI. Deferred.
+
+Each new adapter must pass the relevant tier subset of the adapter conformance
 harness (`tests/test_adapter_conformance.py`) before creation is accepted.
 
 **Isolation rule:** experimental/deferred surfaces must not be referenced as

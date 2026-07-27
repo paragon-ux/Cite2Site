@@ -130,6 +130,57 @@ Located in `examples/integration/fixtures/`.
 
 ---
 
+## Post-v1 Adapter-Specific Fixtures
+
+The following fixture categories are defined for adapter builds deferred past
+v1.0 stabilization (Phase 7). They are specified here so the test contract is
+stable before implementation begins.
+
+### 7. ConverterAdapter Fixtures
+
+Located in `tests/compat_fixtures/converter/`.
+
+| Fixture | Description | Expected |
+|---|---|---|
+| `docx_sample.docx` | Minimal .docx with known text | mammoth/pandoc stdout matches canonical plaintext |
+| `pdf_sample.pdf` | Minimal .pdf with known text | pdftotext stdout matches canonical plaintext |
+| `xlsx_sample.xlsx` | Minimal .xlsx with known cells | CSV-export path matches canonical plaintext |
+| `converter_determinism/` | Run each converter twice on same fixture | Byte-identical stdout across both runs |
+| `converter_version_mismatch/` | Simulate recorded vs installed converter version mismatch | Error surfaced, not silently ignored |
+| `reindent_docx.docx` | Content edit before cited region | Accepted text still found once → `resolved` |
+| `edit_docx.docx` | Cited passage itself edited | `changed` |
+| `remove_docx.docx` | Cited passage removed | `missing` |
+
+**Version pinning:** `identify()` must record converter name + version per
+citation. A converter upgrade that changes output must be detectable, not a
+silent replay failure. Determinism tests must run in CI — converter behavior
+can differ across OS and container base images.
+
+### 8. Browser Readability Re-Observation Fixtures
+
+Located in `tests/compat_fixtures/readability/`.
+
+| Fixture | Description | Expected |
+|---|---|---|
+| `static_page.html` | Static server-rendered page with cited passage | Readability extraction → cited text found → `resolved` |
+| `static_page_edited.html` | Same page, cited passage edited | `changed` |
+| `static_page_removed.html` | Same page, cited passage removed | `missing` |
+| `static_page_determinism/` | Fetch + extract same fixture twice | Byte-identical output; Readability version pinned |
+| `spa_shell.html` | JS-rendered SPA (static shell, content via script) | `adapter_unavailable`, NOT `missing`/`resolved` |
+| `login_redirect.html` | Mock auth redirect | `adapter_unavailable`, NOT comparison against login page |
+
+**Honesty requirement (critical):** The SPA-shell and login-redirect fixtures
+test the negative case FIRST. A false `resolved` against unrelated content is
+a worse failure mode than an honest `adapter_unavailable`. JS-rendered/
+authenticated/personalized pages without headless render support must report
+`adapter_unavailable`.
+
+`@mozilla/readability` version must be recorded per observation (same
+discipline as converter version pinning). Full headless rendering
+(Playwright-class, browser binary in CI) is a separate, deferred build.
+
+---
+
 ## Current Coverage
 
 All 10 fixture categories are defined above. The corresponding test classes
