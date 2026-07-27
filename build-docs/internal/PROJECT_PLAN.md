@@ -209,14 +209,13 @@ reference. Browser-extension and document-tool examples are deferred.
 
 Gate: G0 and G8.
 
-Status: Done (local); remote CI pending.
+Status: Done.
 
 Goal: make the project maintainable.
 
-Current delivery: CI workflow (`.github/workflows/ci.yml`), package build check,
+Current delivery: CI workflow (`.github/workflows/ci.yml`), first remote CI run observed passing, package build check,
 release checklist, schema migration policy, changelog, security checklist,
-and migration fixture tests (`tests/test_migration_fixtures.py`). Remote CI
-run not yet observed.
+and migration fixture tests (`tests/test_migration_fixtures.py`).
 
 ### M7: v1.0 Stabilization
 
