@@ -183,7 +183,7 @@ discipline as converter version pinning). Full headless rendering
 
 ## Current Coverage
 
-All 10 fixture categories are defined above. The corresponding test classes
+All 8 fixture categories are defined above (6 v1.0 baseline + 2 post-v1 adapter). The corresponding test classes
 are specified in this corpus document for future implementation. Frozen
 fixtures are to be placed under `tests/compat_fixtures/` and tested by
 `tests/test_compat.py` when built per the test matrix below.

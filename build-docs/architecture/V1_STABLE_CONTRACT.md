@@ -314,7 +314,7 @@ current state. The adapter must re-read the artifact later and reconcile drift.
 created with a Tier-1-only adapter reports `adapter_unavailable` until the
 Tier 2 methods are implemented.
 
-### Implementation Strategy: One ConverterAdapter, Not Three Per-Format Adapters
+#### Implementation Strategy: One ConverterAdapter, Not Three Per-Format Adapters
 
 For local-file formats (DOCX, PDF, XLSX), Tier 1 and most of Tier 2 do not
 require format-specific code. Instead:
