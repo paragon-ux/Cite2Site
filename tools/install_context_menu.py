@@ -27,7 +27,7 @@ PYTHON = sys.executable
 def _build_command() -> str:
     return (
         f'cmd /k "{PYTHON}" "{DEMO_SCRIPT}"'
-        f' --repo "%CD%\\.c2s"'
+        f' --repo .c2s'
         f' --artifact "%1"'
         f' --start 0 --end 0'
     )

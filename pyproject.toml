@@ -5,9 +5,32 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cite2site"
 version = "1.0.0"
-description = "Source-clean universal citations with append-only history and static-site projections."
+description = "Source-clean citations that don't touch your files. Record evidence outside the file, replay it to check if it still holds."
 requires-python = ">=3.11"
 dependencies = []
+license = {text = "MIT"}
+authors = [{name = "Cite2Site contributors"}]
+keywords = ["citations", "evidence", "verification", "source-clean", "append-only", "cli"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Text Processing",
+    "Topic :: Software Development :: Documentation",
+]
+
+[project.urls]
+Homepage = "https://github.com/paragon-ux/Cite2Site"
+Documentation = "https://paragon-ux.github.io/Cite2Site/"
+Repository = "https://github.com/paragon-ux/Cite2Site"
+
+[project.optional-dependencies]
+human = ["context-menu"]
 
 [project.scripts]
 c2s = "c2s.cli:main"

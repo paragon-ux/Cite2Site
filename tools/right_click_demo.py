@@ -60,7 +60,25 @@ def main() -> int:
     parser.add_argument("--end", type=int, required=True, help="End of selection (0-based char offset)")
     args = parser.parse_args()
 
-    client = C2SThinClient(Path(args.repo))
+    # Resolve repo — walk up from artifact if not found at given path
+    repo_path = Path(args.repo)
+    if not repo_path.exists():
+        artifact_path = Path(args.artifact).resolve()
+        if not artifact_path.exists():
+            print(f"Error: artifact '{args.artifact}' does not exist")
+            return 1
+        # Walk up from artifact's directory looking for .c2s
+        for parent in [artifact_path.parent] + list(artifact_path.parent.parents):
+            candidate = parent / ".c2s"
+            if candidate.exists():
+                repo_path = candidate
+                break
+        else:
+            print(f"Error: no .c2s repository found at '{args.repo}' or above '{args.artifact}'")
+            print("Run 'c2s init' first.")
+            return 1
+
+    client = C2SThinClient(repo_path)
 
     # --- 1. Look up what's at this position ---
     print(f"Looking up citations in {args.artifact} at {args.start}-{args.end}...")
