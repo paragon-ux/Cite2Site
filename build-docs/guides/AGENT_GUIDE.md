@@ -237,7 +237,7 @@ provides structured context (e.g., `{"path": "citation-history.jsonl", "line": 1
 
 ## Error Code Reference
 
-39 stable error codes. See `build-docs/architecture/V1_STABLE_CONTRACT.md` §5
+38 stable C2SError codes. See `build-docs/architecture/V1_STABLE_CONTRACT.md` §5
 for the complete catalog. Key codes for agent workflows:
 
 | Code | Recovery |

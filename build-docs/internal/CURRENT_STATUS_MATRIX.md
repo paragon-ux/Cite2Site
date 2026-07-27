@@ -70,6 +70,7 @@ DOCX) and native editor/browser integrations remain deferred to post-v1 gates.
 | Testing | CI validation workflow | Done | `.github/workflows/ci.yml` covers unit tests, compile checks, CLI help, smoke flow, docs validation, and source-clean checks from a clean checkout. First remote run observed and passed. | |
 | Packaging | Editable install | Done | `pyproject.toml`; `python -m pip install -e .` passed locally. | No CI or release build artifact. | Add CI matrix and release workflow. |
 | Docs | Build contract | Done | Internal requirements, workflow, plan, specifications, external narratives, ADRs, and documentation standard are present; live Markdown links validate. | Documents must continue to track implementation maturity. | Require truth-label and cross-reference review in every behavior-changing gate. |
+| Release | v1 stabilization (Phase 7) | Done | `V1_STABLE_CONTRACT.md` (38 codes, 7 event types, 15 commands, 6 schema IDs), `USER_GUIDE.md`, `AGENT_GUIDE.md`, `COMPATIBILITY_CORPUS.md`, `SUPPORT_POLICY.md`, release checklist verified, threat/privacy sign-off complete. | Compatibility test corpus fixtures and test_compat.py are specified but not yet implemented. | Build compatibility test suite per corpus spec. |
 
 ## Release Readiness By Version
 
@@ -91,10 +92,13 @@ DOCX) and native editor/browser integrations remain deferred to post-v1 gates.
 
 ## Immediate Next Build: Phase 7 — v1 Stabilization
 
-G0-G8 are complete and remote CI has been observed passing. Phase 7 is now
-authorized. Remaining work:
+G0-G8 and Phase 7 v1 stabilization are complete. The v1 stable contract,
+user guide, agent guide, compatibility corpus specification, support policy,
+release checklist, and threat/privacy checklist are delivered and signed off.
+Remaining deferred work:
 
-1. enter Phase 7 (v1 stabilization): schema freeze, migration rules, threat model;
-2. freeze v1 schemas, CLI contracts, and projection shapes;
-3. publish user and agent guides;
-4. prepare v1.0 release tag and notes.
+1. implement `tests/test_compat.py` and `tests/compat_fixtures/` per the
+   compatibility corpus specification;
+2. add block-aware Markdown, PDF, and DOCX adapters;
+3. add browser-extension and document-tool examples;
+4. prepare v1.0 release tag.

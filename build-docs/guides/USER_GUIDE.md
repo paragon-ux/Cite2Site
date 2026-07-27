@@ -300,7 +300,7 @@ Every error returns structured JSON. Common codes:
 | `E_PRIVACY_POLICY` | Snippet/private_link requires policy override |
 | `E_REPO_NOT_INITIALIZED` | Run `c2s init` first |
 
-See the v1.0 Stable Contract for the full catalog of 39 error codes.
+See the v1.0 Stable Contract for the full catalog of 38 C2SError codes.
 
 ---
 

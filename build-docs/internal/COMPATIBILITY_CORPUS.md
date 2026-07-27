@@ -133,9 +133,10 @@ Located in `examples/integration/fixtures/`.
 ## Current Coverage
 
 All 10 fixture categories are defined above. The corresponding test classes
-are implemented in `tests/test_compat.py` and verified against frozen fixtures
-stored in `tests/compat_fixtures/`.
+are specified in this corpus document for future implementation. Frozen
+fixtures are to be placed under `tests/compat_fixtures/` and tested by
+`tests/test_compat.py` when built per the test matrix below.
 
-Initial v1.0 corpus: 40+ fixtures across 6 categories covering all 7 event
-types, 39 error codes, 4 privacy modes, export determinism, batch semantics,
-schema migration, and integration contracts.
+Initial v1.0 corpus specification: 40+ fixture definitions across 6 categories
+covering all 7 event types, 38 error codes, 4 privacy modes, export determinism,
+batch semantics, schema migration, and integration contracts.

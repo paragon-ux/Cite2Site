@@ -219,7 +219,7 @@ and migration fixture tests (`tests/test_migration_fixtures.py`).
 
 ### M7: v1.0 Stabilization
 
-Status: Authorized (G0-G8 complete, remote CI observed passing).
+Status: Done (v1.0 contracts frozen, guides published, release docs finalized).
 
 Goal: freeze stable user and agent contracts.
 
@@ -265,6 +265,7 @@ Acceptance:
 8. Add adapter conformance.
 9. Add integrations.
 10. Add CI/release/migration.
+11. Freeze v1 stable contracts, publish user/agent guides, finalize release docs.
 
 ## Risk Register
 

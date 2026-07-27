@@ -94,4 +94,4 @@ ambiguous mutation can modify citation history.
 | | Privacy | PASS | metadata_only default; snippet/link policy-gated; grouped indexes metadata-safe |
 | | Migration | PASS | 9 migration fixture tests; schema version validation; tamper/hash-chain rejection |
 | | Packaging | PASS | check_package_artifact.py: wheel builds, installs, smoke flows, export deterministic |
-| | Errors | PASS | 39 stable codes cataloged; structured JSON envelope; no path leaks in messages/details |
+| | Errors | PASS | 38 C2SError codes cataloged; structured JSON envelope; no path leaks in messages/details |

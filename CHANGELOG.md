@@ -48,8 +48,9 @@ still determined by `build-docs/internal/CURRENT_STATUS_MATRIX.md`.
   - agent guide (`build-docs/guides/AGENT_GUIDE.md`);
   - support policy (`build-docs/internal/release/SUPPORT_POLICY.md`);
   - threat/privacy checklist sign-off table completed;
-  - release checklist verified: 98 tests pass, package artifact check
-    passes, remote CI observed green.
+  - release checklist verified: 98 tests pass (59 conformance + 23 first-slice
+    + 7 integration + 9 migration), package artifact check passes, remote CI
+    observed green.
 
 ### Release Notes
 
