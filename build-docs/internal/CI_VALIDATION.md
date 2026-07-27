@@ -5,14 +5,12 @@
 CI is the automated enforcement layer for session gates. It must stay aligned
 with `BUILD_WORKFLOW_CURRENT.md` and `AGENTS.md`.
 
-## Current Integrity Caveat
+## Documentation Integrity
 
-The workflow definition is present, but this checkout currently deletes several
-external documents and ADRs that `AGENTS.md` expects agents to consult when
-relevant. The local link check verifies present Markdown targets; it cannot
-prove that the complete planned documentation set is present. Do not call the
-documentation release-complete while this owner-controlled availability gap
-remains.
+The local link check verifies the mapped build-doc set, including external
+narratives and ADRs. It does not establish that prose is truthful, so every
+documentation gate must also review maturity labels, cross-references, and
+current-versus-target language against the status matrix.
 
 ## Workflow File
 

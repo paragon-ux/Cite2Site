@@ -57,7 +57,7 @@ flat citation ledger rather than a useful citation memory surface.
 | Testing | Session gate model | Done | `BUILD_WORKFLOW_CURRENT.md` defines one-session gates G0 through G8 and validation requirements. | Gates are documentation-enforced until CI expands per phase. | Keep each phase prompt aligned with gate acceptance. |
 | Testing | CI validation workflow | Partial | `.github/workflows/ci.yml` and `build-docs/internal/CI_VALIDATION.md` validate docs, unit tests, compile checks, CLI help, and smoke behavior from a clean checkout. | Remote GitHub Actions run has not been observed in this branch. | Confirm first remote CI run after push and fix any platform issue. |
 | Packaging | Editable install | Done | `pyproject.toml`; `python -m pip install -e .` passed locally. | No CI or release build artifact. | Add CI matrix and release workflow. |
-| Docs | Build contract | Partial | Current internal requirements, workflow, plan, specs, schemas, and documentation standard are present; live Markdown links validate. | External narratives and ADRs are deleted from this checkout while `AGENTS.md` still expects relevant ADR context. | Restore owner-controlled files in a dedicated documentation-completeness gate, then validate their links and authority chain. |
+| Docs | Build contract | Done | Internal requirements, workflow, plan, specifications, external narratives, ADRs, and documentation standard are present; live Markdown links validate. | Documents must continue to track implementation maturity. | Require truth-label and cross-reference review in every behavior-changing gate. |
 
 ## Release Readiness By Version
 

@@ -93,14 +93,10 @@ python -m c2s export
 
 | ADR | Decision |
 |---|---|
-| 0001 source-clean citations | C2S does not write markers into cited artifacts. |
-| 0002 dedicated citation repository | Citation history lives in a dedicated `.c2s` repository. |
-| 0003 append-only replay | Projected state is replay output, not mutable authority. |
-| 0004 handles as editable refs | Handles are editable aliases over immutable citation IDs. |
-| 0005 contextual actions, not overlays | UI integrations call `lookup-actions`; overlays are not authority. |
-| 0006 MkDocs as publication projection | MkDocs is the first publication projection. |
-| 0007 metadata-only default | Public export defaults to metadata-only. |
-
-The ADR files are currently absent from this checkout. Do not infer their
-contents from this index; restore or locate the owner-controlled records before
-changing an architectural invariant.
+| [0001-source-clean-citations.md](../adrs/0001-source-clean-citations.md) | C2S does not write markers into cited artifacts. |
+| [0002-dedicated-citation-repository.md](../adrs/0002-dedicated-citation-repository.md) | Citation history lives in a dedicated `.c2s` repository. |
+| [0003-append-only-replay.md](../adrs/0003-append-only-replay.md) | Projected state is replay output, not mutable authority. |
+| [0004-handles-as-editable-refs.md](../adrs/0004-handles-as-editable-refs.md) | Handles are editable aliases over immutable citation IDs. |
+| [0005-contextual-actions-not-overlays.md](../adrs/0005-contextual-actions-not-overlays.md) | UI integrations call `lookup-actions`; overlays are not authority. |
+| [0006-mkdocs-as-publication-projection.md](../adrs/0006-mkdocs-as-publication-projection.md) | MkDocs is the first publication projection. |
+| [0007-metadata-only-default.md](../adrs/0007-metadata-only-default.md) | Public export defaults to metadata-only. |

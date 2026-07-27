@@ -187,6 +187,5 @@ Tests must assert the original selected text does not appear in grouped pages.
 - `build-docs/internal/requirements/BRD.md`, `DRD.md`, and `TRD.md` retain
   their current/target distinctions and link the delivered behavior to this
   gate.
-- Re-run documentation validation after updating generated-output contracts;
-  record the separate deleted-document completeness blocker without treating it
-  as a failure of present-document link validation.
+- Re-run documentation validation after updating generated-output contracts and
+  verify every restored ADR/external reference remains live.

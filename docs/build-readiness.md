@@ -12,7 +12,3 @@ readiness authority lives in:
 - `build-docs/architecture/SCHEMA_INDEX.md`
 
 Do not maintain a second build-readiness contract here.
-
-The current checkout has an explicit availability caveat for deleted external
-documents and ADRs. See the build-doc map and status matrix before interpreting
-this pointer as evidence of a complete documentation release.

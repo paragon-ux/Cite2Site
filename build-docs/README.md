@@ -39,15 +39,26 @@ Architecture files are implementation contracts. When command behavior,
 event shape, replay output, export shape, or adapter semantics change, update
 the architecture package first or in the same patch.
 
-## Availability Notice
+## External Product Narrative
 
-This checkout currently omits the external product-narrative files and ADRs
-named by the historical documentation map. They are not recreated or edited by
-this pass because they are owner-controlled deletions in the worktree. Their
-absence is a documentation-completeness blocker: `AGENTS.md` still directs
-agents to consult relevant ADRs. Restore them deliberately in a dedicated gate,
-then apply this standard before treating the documentation set as release-
-complete. The local link check only verifies documents that are present.
+- [external/overviews/PRODUCT_OVERVIEW.md](external/overviews/PRODUCT_OVERVIEW.md)
+- [external/overviews/ENGINEERING_OVERVIEW.md](external/overviews/ENGINEERING_OVERVIEW.md)
+- [external/overviews/WHITEPAPER.md](external/overviews/WHITEPAPER.md)
+- [external/narratives/END_TO_END_NARRATIVE.md](external/narratives/END_TO_END_NARRATIVE.md)
+- [external/narratives/PUBLISHING_AND_ADOPTION_PLAN.md](external/narratives/PUBLISHING_AND_ADOPTION_PLAN.md)
+
+External documents explain the product in ordinary language while distinguishing
+the current CLI/core substrate from Target integrations and publication work.
+
+## ADRs
+
+- [internal/adrs/0001-source-clean-citations.md](internal/adrs/0001-source-clean-citations.md)
+- [internal/adrs/0002-dedicated-citation-repository.md](internal/adrs/0002-dedicated-citation-repository.md)
+- [internal/adrs/0003-append-only-replay.md](internal/adrs/0003-append-only-replay.md)
+- [internal/adrs/0004-handles-as-editable-refs.md](internal/adrs/0004-handles-as-editable-refs.md)
+- [internal/adrs/0005-contextual-actions-not-overlays.md](internal/adrs/0005-contextual-actions-not-overlays.md)
+- [internal/adrs/0006-mkdocs-as-publication-projection.md](internal/adrs/0006-mkdocs-as-publication-projection.md)
+- [internal/adrs/0007-metadata-only-default.md](internal/adrs/0007-metadata-only-default.md)
 
 ## Change Control Rule
 
