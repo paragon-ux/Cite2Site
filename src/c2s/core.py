@@ -66,9 +66,9 @@ def load_json(path: Path) -> Any:
         with path.open("r", encoding="utf-8") as fh:
             return json.load(fh)
     except FileNotFoundError as exc:
-        raise C2SError("E_FILE_NOT_FOUND", f"file not found: {path}", path=path.name) from exc
+        raise C2SError("E_FILE_NOT_FOUND", f"file not found: {path.name}", path=path.name) from exc
     except json.JSONDecodeError as exc:
-        raise C2SError("E_JSON_INVALID", f"invalid JSON in {path}", path=path.name, line=exc.lineno) from exc
+        raise C2SError("E_JSON_INVALID", f"invalid JSON in {path.name}", path=path.name, line=exc.lineno) from exc
 
 
 def dump_json(path: Path, value: Any) -> None:
@@ -111,7 +111,7 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
             try:
                 records.append(json.loads(line))
             except json.JSONDecodeError as exc:
-                raise C2SError("E_JSONL_INVALID", f"invalid JSONL in {path}", path=path.name, line=lineno) from exc
+                raise C2SError("E_JSONL_INVALID", f"invalid JSONL in {path.name}", path=path.name, line=lineno) from exc
     return records
 
 
