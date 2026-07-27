@@ -349,7 +349,7 @@ class ConverterAdapter(FilesystemTextAdapter):
                 adapter=self.name,
             )
         # Normalize line endings, same as filesystem-text
-        return r.stdout.replace("\r\n", "\n").replace("\r", "\n")
+        return canonical_text(r.stdout)
 
     # evidence(), locate(), observe(), compare(), summarize(), privacy()
     # are all inherited from FilesystemTextAdapter.
