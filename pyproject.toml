@@ -7,7 +7,7 @@ name = "cite2site"
 version = "1.0.0"
 description = "Source-clean citations that don't touch your files. Record evidence outside the file, replay it to check if it still holds."
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["context-menu"]
 license = {text = "MIT"}
 authors = [{name = "Cite2Site contributors"}]
 keywords = ["citations", "evidence", "verification", "source-clean", "append-only", "cli"]
@@ -28,9 +28,6 @@ classifiers = [
 Homepage = "https://github.com/paragon-ux/Cite2Site"
 Documentation = "https://paragon-ux.github.io/Cite2Site/"
 Repository = "https://github.com/paragon-ux/Cite2Site"
-
-[project.optional-dependencies]
-human = ["context-menu"]
 
 [project.scripts]
 c2s = "c2s.cli:main"
