@@ -7,7 +7,7 @@ name = "cite2site"
 version = "1.0.4"
 description = "Source-clean citations that don't touch your files. Record evidence outside the file, replay it to check if it still holds."
 requires-python = ">=3.11"
-dependencies = ["context-menu"]
+dependencies = []
 license = "MIT"
 license-files = ["LICENSE"]
 readme = "README.md"
