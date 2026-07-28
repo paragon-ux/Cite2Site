@@ -16,6 +16,89 @@ import sys
 from pathlib import Path
 from typing import Any
 
+# --- Protocol version ---
+PROTOCOL_VERSION = "1.0"
+
+# --- Action dispatch table ---
+# Each action maps to: handler, requires_citation_id, requires_artifact
+ACTIONS: dict[str, dict[str, Any]] = {
+    "cite-selection":       {"handler": "handle_cite_selection",       "requires_citation_id": False, "description": "Cite selected text"},
+    "lookup-actions":       {"handler": "handle_lookup_actions",       "requires_citation_id": False, "description": "Look up citations at position"},
+    "cite-file-selection":  {"handler": "handle_cite_file_selection",  "requires_citation_id": False, "description": "Cite selection from dropped file"},
+    "lookup-file-selection":{"handler": "handle_lookup_file_selection","requires_citation_id": False, "description": "Look up citations in dropped file"},
+    "retract":              {"handler": "handle_retract",              "requires_citation_id": True,  "description": "Retract a citation"},
+    "restore":              {"handler": "handle_restore",              "requires_citation_id": True,  "description": "Restore a retracted citation"},
+    "set-handle":           {"handler": "handle_set_handle",           "requires_citation_id": True,  "description": "Set or rename a citation handle"},
+    "note":                 {"handler": "handle_note",                 "requires_citation_id": True,  "description": "Add a note to a citation"},
+    "accept-current":       {"handler": "handle_accept_current",       "requires_citation_id": True,  "description": "Accept current evidence"},
+    "relocate":             {"handler": "handle_relocate",             "requires_citation_id": True,  "description": "Relocate a citation"},
+}
+
+# --- Action label table (for extension UI) ---
+ACTION_LABELS: dict[str, str] = {
+    "cite":              "Cite with Cite2Site",
+    "set_handle":        "Change handle",
+    "note":              "Add note",
+    "accept_current":    "Accept current evidence",
+    "relocate":          "Relocate citation",
+    "retract":           "Retract citation",
+    "restore":           "Restore citation",
+    "open":              "Open citation",
+}
+
+
+def _mutate(repo_dir: Path, action: str, citation_id: str, extra_args: list[str] | None = None) -> dict[str, Any]:
+    """Run a mutation command and refresh export afterwards."""
+    if not citation_id:
+        return {"ok": False, "error": {"code": "E_EXTENSION_MISSING_CITATION_ID", "message": "citation_id is required for mutations."}}
+    args = [action, "--citation-id", citation_id]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_c2s(repo_dir, args)
+    if result.get("ok"):
+        export_result = _run_c2s(repo_dir, ["export"], timeout=60)
+        if not export_result.get("ok"):
+            result["_export"] = export_result
+    return result
+
+
+def handle_retract(message: dict[str, Any]) -> dict[str, Any]:
+    return _mutate(_load_repo_dir(), "retract", str(message.get("citation_id", "")))
+
+
+def handle_restore(message: dict[str, Any]) -> dict[str, Any]:
+    return _mutate(_load_repo_dir(), "restore", str(message.get("citation_id", "")))
+
+
+def handle_set_handle(message: dict[str, Any]) -> dict[str, Any]:
+    handle_val = message.get("handle", "")
+    if not handle_val:
+        return {"ok": False, "error": {"code": "E_EXTENSION_INVALID", "message": "handle is required for set-handle."}}
+    return _mutate(_load_repo_dir(), "set-handle", str(message.get("citation_id", "")),
+                   ["--handle", str(handle_val), "--action", message.get("handle_action", "bind")])
+
+
+def handle_note(message: dict[str, Any]) -> dict[str, Any]:
+    note_text = message.get("note", "")
+    if not note_text:
+        return {"ok": False, "error": {"code": "E_EXTENSION_INVALID", "message": "note text is required."}}
+    return _mutate(_load_repo_dir(), "note", str(message.get("citation_id", "")),
+                   ["--text", str(note_text)])
+
+
+def handle_accept_current(message: dict[str, Any]) -> dict[str, Any]:
+    return _mutate(_load_repo_dir(), "accept-current", str(message.get("citation_id", "")))
+
+
+def handle_relocate(message: dict[str, Any]) -> dict[str, Any]:
+    artifact = message.get("artifact", "")
+    start = message.get("start")
+    end = message.get("end")
+    if not artifact or start is None or end is None:
+        return {"ok": False, "error": {"code": "E_EXTENSION_INVALID", "message": "artifact, start, end required for relocate."}}
+    return _mutate(_load_repo_dir(), "relocate", str(message.get("citation_id", "")),
+                   ["--artifact", str(artifact), "--start", str(start), "--end", str(end)])
+
 _MAX_INBOUND_BYTES = 64 * 1024 * 1024
 _MAX_OUTBOUND_BYTES = 1024 * 1024
 
@@ -365,40 +448,36 @@ def handle_cite_file_selection(message: dict[str, Any]) -> dict[str, Any]:
 
 
 def dispatch(message: dict[str, Any]) -> dict[str, Any]:
-    action = message.get("action")
-    if action == "cite-selection":
-        return handle_cite_selection(message)
-    if action == "lookup-actions":
-        return handle_lookup_actions(message)
-    if action == "cite-file-selection":
-        return handle_cite_file_selection(message)
-    if action == "lookup-file-selection":
-        # Persist file and lookup at position
-        file_info = message.get("file", {})
-        file_content = file_info.get("content", "")
-        if not file_content:
-            return {"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "File content is empty."}}
-        try:
-            repo_dir = _load_repo_dir()
-        except RuntimeError as exc:
-            return {"ok": False, "error": {"code": "E_EXTENSION_CONFIG", "message": str(exc)}}
-        repo = Path(repo_dir)
-        file_hash = hashlib.sha256(file_content.encode()).hexdigest()
-        captured_dir = repo / "captured" / "files" / file_hash
-        captured_dir.mkdir(parents=True, exist_ok=True)
-        file_path = captured_dir / file_info.get("name", "imported.txt")
-        file_path.write_text(file_content, encoding="utf-8")
-        start = message.get("start", 0)
-        end = message.get("end", 0)
-        result = _run_c2s(
-            repo_dir,
-            ["lookup-actions", "--artifact", str(file_path), "--start", str(start), "--end", str(end)],
-        )
-        return result
-    return {
-        "ok": False,
-        "error": {"code": "E_EXTENSION_UNKNOWN_ACTION", "message": f"Unknown action: {action}"},
-    }
+    action = message.get("action", "")
+    action_def = ACTIONS.get(action)
+
+    if action_def is None:
+        return {
+            "ok": False,
+            "protocol_version": PROTOCOL_VERSION,
+            "error": {"code": "E_EXTENSION_UNKNOWN_ACTION", "message": f"Unknown action: {action or '(missing)'}"},
+        }
+
+    if action_def["requires_citation_id"] and not message.get("citation_id"):
+        return {
+            "ok": False,
+            "protocol_version": PROTOCOL_VERSION,
+            "error": {"code": "E_EXTENSION_MISSING_CITATION_ID", "message": f"citation_id is required for action '{action}'."},
+        }
+
+    handler_name = action_def["handler"]
+    handler = globals().get(handler_name)
+    if handler is None:
+        return {
+            "ok": False,
+            "protocol_version": PROTOCOL_VERSION,
+            "error": {"code": "E_EXTENSION_INTERNAL", "message": f"Handler {handler_name} not found."},
+        }
+
+    result = handler(message)
+    if isinstance(result, dict):
+        result.setdefault("protocol_version", PROTOCOL_VERSION)
+    return result
 
 
 def main() -> None:
