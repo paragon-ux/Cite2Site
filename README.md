@@ -33,7 +33,14 @@ against the current state of your files.
 
 ```bash
 pip install cite2site
-c2s init
+c2s init                          # creates ~/.c2s globally. Run again = no-op.
+c2s init --repo /some/other/.c2s  # or: create a repo at a specific path
+```
+
+> **Repo location**: `c2s init` (no arguments) defaults to `$HOME/.c2s`
+> (`%USERPROFILE%\.c2s` on Windows). All other commands accept `--repo <path>`
+> to target a different repository. To change the active repo, pass `--repo` to
+> every command or set the `CITE2SITE_REPO` environment variable.
 
 # Load the Chrome extension:
 # 1. Go to chrome://extensions, enable Developer mode
