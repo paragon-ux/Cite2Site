@@ -61,7 +61,13 @@ fileInput.addEventListener("change", () => {
 
 async function loadFile(file) {
   if (file.size > 10 * 1024 * 1024) { statusEl.textContent = "File too large (max 10 MB)."; return; }
-  const text = await file.text();
+  let text;
+  try {
+    text = await file.text();
+  } catch (e) {
+    statusEl.textContent = "Could not read file (binary or encoding error).";
+    return;
+  }
   currentFileName = file.name;
   currentFileContent = text;
   content.textContent = text;
