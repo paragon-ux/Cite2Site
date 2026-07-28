@@ -18,7 +18,7 @@ from typing import Any
 from urllib.parse import quote, urlsplit, urlunsplit
 
 SCHEMA_VERSION = "c2s.event.v0.3"
-TOOL = {"name": "c2s", "version": "1.0.0"}
+TOOL = {"name": "c2s", "version": "1.0.1"}
 EMPTY_HASH = "sha256:" + ("0" * 64)
 TEXT_CANON = "text-utf8-lf-v1"
 VALID_STATUSES = {
