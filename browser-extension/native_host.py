@@ -2,15 +2,9 @@
 """Cite2Site Native Messaging Host for Chrome Extension.
 
 Reads JSON messages from stdin (Chrome native messaging protocol),
-runs ``c2s`` commands, and writes JSON responses to stdout.
-Processes one message and exits.
+runs c2s commands, writes JSON responses to stdout. One message, one exit.
 """
-from __future__ import annotations
-
-import json
-import struct
-import subprocess
-import sys
+import json, struct, subprocess, sys, tempfile
 from pathlib import Path
 
 
@@ -42,62 +36,54 @@ def _run_c2s(cmd: list[str]) -> dict:
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
     except subprocess.TimeoutExpired:
-        return {"ok": False, "error": {"code": "E_EXTENSION_TIMEOUT", "message": "c2s command timed out."}}
+        return {"ok": False, "error": {"code": "E_TIMEOUT", "message": "timed out"}}
     except FileNotFoundError:
-        return {"ok": False, "error": {"code": "E_EXTENSION_C2S_NOT_FOUND", "message": "c2s not found on PATH."}}
+        return {"ok": False, "error": {"code": "E_NO_C2S", "message": "c2s not found"}}
     if r.returncode != 0:
-        return {"ok": False, "error": {"code": "E_EXTENSION_C2S_ERROR", "message": r.stderr.strip() or f"c2s exited with code {r.returncode}"}}
+        return {"ok": False, "error": {"code": "E_C2S_ERROR", "message": r.stderr.strip() or f"exit {r.returncode}"}}
     try:
         return json.loads(r.stdout)
     except json.JSONDecodeError:
-        return {"ok": False, "error": {"code": "E_EXTENSION_BAD_JSON", "message": r.stderr or r.stdout}}
+        return {"ok": False, "error": {"code": "E_BAD_JSON", "message": r.stderr or r.stdout}}
 
 
-def handle_lookup_actions(msg: dict) -> dict:
+def handle_cite(msg: dict) -> dict:
+    text = msg.get("selectedText", "")
+    if not text:
+        return {"ok": False, "error": {"code": "E_EMPTY", "message": "No text selected"}}
+
     c2s_dir = _find_c2s_dir()
     if c2s_dir is None:
-        return {"ok": False, "error": {"code": "E_REPO_NOT_FOUND", "message": "No .c2s repository found."}}
-    artifact = msg.get("artifact", "")
-    start = msg.get("start")
-    end = msg.get("end")
-    if start is None or end is None or start == "" or end == "":
-        return {"ok": False, "error": {"code": "E_EXTENSION_INVALID", "message": "start and end are required."}}
-    return _run_c2s(["c2s", "--repo", c2s_dir, "lookup-actions",
-                     "--artifact", str(artifact), "--start", str(start), "--end", str(end)])
+        return {"ok": False, "error": {"code": "E_NO_REPO", "message": "No .c2s repo. Run c2s init first."}}
 
+    # Persist capture to .c2s/captured/ so it survives replay
+    captured_dir = Path(c2s_dir) / "captured"
+    captured_dir.mkdir(parents=True, exist_ok=True)
+    capture_path = captured_dir / f"web-{hash(text) & 0xFFFFFFFF:08x}.txt"
+    capture_path.write_text(text, encoding="utf-8")
 
-def handle_cite_selection(msg: dict) -> dict:
-    selected_text = msg.get("selectedText", "")
-    if not selected_text:
-        return {"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "No text selected."}}
-    c2s_dir = _find_c2s_dir()
-    if c2s_dir is None:
-        return {"ok": False, "error": {"code": "E_REPO_NOT_FOUND", "message": "No .c2s repository found."}}
-    import tempfile
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False, encoding="utf-8") as f:
-        f.write(selected_text)
-        tmp_path = f.name
-    try:
-        return _run_c2s(["c2s", "--repo", c2s_dir, "cite-selection",
-                         "--artifact", tmp_path, "--start", "0",
-                         "--end", str(len(selected_text)),
-                         "--adapter", "filesystem-text"])
-    finally:
-        Path(tmp_path).unlink(missing_ok=True)
+    result = _run_c2s(["c2s", "--repo", c2s_dir, "cite-selection",
+                       "--artifact", str(capture_path),
+                       "--start", "0", "--end", str(len(text)),
+                       "--adapter", "filesystem-text"])
+
+    # Regenerate the site so citations.md reflects the new citation
+    if result.get("ok"):
+        _run_c2s(["c2s", "--repo", c2s_dir, "export"])
+
+    return result
 
 
 def main() -> None:
     msg = read_message()
     if msg is None:
-        send_message({"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "No message received."}})
+        send_message({"ok": False, "error": {"code": "E_EMPTY", "message": "No message"}})
         return
     action = msg.get("action", "")
     if action == "cite-selection":
-        result = handle_cite_selection(msg)
-    elif action == "lookup-actions":
-        result = handle_lookup_actions(msg)
+        result = handle_cite(msg)
     else:
-        result = {"ok": False, "error": {"code": "E_EXTENSION_UNKNOWN_ACTION", "message": f"Unknown action: {action}"}}
+        result = {"ok": False, "error": {"code": "E_UNKNOWN", "message": f"Unknown action: {action}"}}
     send_message(result)
 
 

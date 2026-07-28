@@ -138,10 +138,15 @@ def main(argv: list[str] | None = None) -> int:
 
     def _install_native_host(_args: argparse.Namespace) -> dict[str, Any]:
         from ._native_host import install
-        install()
+        ext_id = getattr(_args, "extension_id", None)
+        if not ext_id:
+            print("Error: --extension-id is required. Find it at chrome://extensions.", file=sys.stderr)
+            return {"ok": False, "error": {"code": "E_USAGE", "message": "--extension-id required"}}
+        install(ext_id)
         return {"ok": True}
 
     p_nh = sub.add_parser("install-native-host")
+    p_nh.add_argument("--extension-id", required=True, help="Chrome extension ID from chrome://extensions")
     p_nh.set_defaults(func=_install_native_host)
 
     try:
