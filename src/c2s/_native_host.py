@@ -60,6 +60,17 @@ def install() -> None:
     manifest["allowed_origins"] = ["chrome-extension://*/"]
 
     manifest_path = manifest_dir / f"{_HOST_NAME}.json"
+
+    # Check if already installed with same configuration
+    if manifest_path.exists():
+        try:
+            existing = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if existing.get("path") == manifest.get("path", ""):
+                print(f"Native host already installed: {manifest_path}", file=sys.stderr)
+                return
+        except (json.JSONDecodeError, OSError):
+            pass  # corrupt or unreadable — overwrite
+
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
     if sys.platform == "win32":
