@@ -321,10 +321,9 @@ def handle_cite_file_selection(message: dict[str, Any]) -> dict[str, Any]:
     if not selected_text:
         return {"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "No text selected."}}
 
-    # Validate hash
-    actual_hash = hashlib.sha256(selected_text.encode()).hexdigest()
-    expected_hash = "sha256:" + actual_hash
-    if content_hash and content_hash != expected_hash:
+    # Validate hash using existing helper
+    actual_hash = _content_hash(selected_text)
+    if content_hash and content_hash != actual_hash:
         return {"ok": False, "error": {"code": "E_CONTENT_HASH_MISMATCH", "message": "Selection hash mismatch."}}
 
     try:
