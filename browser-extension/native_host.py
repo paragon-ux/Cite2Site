@@ -3,9 +3,7 @@
 
 Reads JSON messages from stdin (Chrome native messaging protocol),
 runs ``c2s`` commands, and writes JSON responses to stdout.
-
-Install this host so the Chrome extension can talk to c2s:
-    c2s install-native-host
+Processes one message and exits.
 """
 from __future__ import annotations
 
@@ -17,7 +15,6 @@ from pathlib import Path
 
 
 def read_message() -> dict | None:
-    """Read a single native-messaging JSON message from stdin."""
     raw_len = sys.stdin.buffer.read(4)
     if not raw_len or len(raw_len) < 4:
         return None
@@ -27,84 +24,67 @@ def read_message() -> dict | None:
 
 
 def send_message(data: dict) -> None:
-    """Write a single native-messaging JSON message to stdout."""
     raw = json.dumps(data).encode("utf-8")
     sys.stdout.buffer.write(struct.pack("@I", len(raw)))
     sys.stdout.buffer.write(raw)
     sys.stdout.buffer.flush()
 
 
-def handle_lookup_actions(msg: dict) -> dict:
-    """Run c2s lookup-actions for the given position."""
-    c2s_dir = None
+def _find_c2s_dir() -> str | None:
     for parent in [Path.cwd()] + list(Path.cwd().parents):
         candidate = parent / ".c2s"
         if candidate.exists():
-            c2s_dir = candidate
-            break
-    if c2s_dir is None:
-        return {"ok": False, "error": {"code": "E_REPO_NOT_FOUND", "message": "No .c2s repository found."}}
+            return str(candidate)
+    return None
 
-    artifact = msg.get("artifact", "")
-    start = msg.get("start", 0)
-    end = msg.get("end", 0)
-    r = subprocess.run(
-        ["c2s", "--repo", str(c2s_dir), "lookup-actions",
-         "--artifact", str(artifact), "--start", str(start), "--end", str(end)],
-        capture_output=True, text=True, timeout=30,
-    )
+
+def _run_c2s(cmd: list[str]) -> dict:
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "error": {"code": "E_EXTENSION_TIMEOUT", "message": "c2s command timed out."}}
+    except FileNotFoundError:
+        return {"ok": False, "error": {"code": "E_EXTENSION_C2S_NOT_FOUND", "message": "c2s not found on PATH."}}
     try:
         return json.loads(r.stdout)
     except json.JSONDecodeError:
         return {"ok": False, "error": {"code": "E_EXTENSION_BAD_JSON", "message": r.stderr or r.stdout}}
 
 
+def handle_lookup_actions(msg: dict) -> dict:
+    c2s_dir = _find_c2s_dir()
+    if c2s_dir is None:
+        return {"ok": False, "error": {"code": "E_REPO_NOT_FOUND", "message": "No .c2s repository found."}}
+    artifact = msg.get("artifact", "")
+    start = msg.get("start")
+    end = msg.get("end")
+    if start is None or end is None:
+        return {"ok": False, "error": {"code": "E_EXTENSION_INVALID", "message": "start and end are required."}}
+    return _run_c2s(["c2s", "--repo", c2s_dir, "lookup-actions",
+                     "--artifact", str(artifact), "--start", str(start), "--end", str(end)])
+
+
 def handle_cite_selection(msg: dict) -> dict:
-    """Run c2s cite-selection for the given selection."""
     selected_text = msg.get("selectedText", "")
     if not selected_text:
         return {"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "No text selected."}}
-
-    # Find the .c2s repo — walk up from CWD
-    repo = Path.cwd()
-    c2s_dir = None
-    for parent in [repo] + list(repo.parents):
-        candidate = parent / ".c2s"
-        if candidate.exists():
-            c2s_dir = candidate
-            break
-
+    c2s_dir = _find_c2s_dir()
     if c2s_dir is None:
-        return {"ok": False, "error": {"code": "E_REPO_NOT_FOUND", "message": "No .c2s repository found. Run 'c2s init' first."}}
-
-    # Write selected text to a temp file so c2s can canonicalize it
+        return {"ok": False, "error": {"code": "E_REPO_NOT_FOUND", "message": "No .c2s repository found."}}
     import tempfile
     with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False, encoding="utf-8") as f:
         f.write(selected_text)
         tmp_path = f.name
-
     try:
-        r = subprocess.run(
-            [
-                "c2s", "--repo", str(c2s_dir),
-                "cite-selection",
-                "--artifact", tmp_path,
-                "--start", "0",
-                "--end", str(len(selected_text)),
-                "--adapter", "filesystem-text",
-            ],
-            capture_output=True, text=True, timeout=30,
-        )
-        try:
-            return json.loads(r.stdout)
-        except json.JSONDecodeError:
-            return {"ok": False, "error": {"code": "E_EXTENSION_BAD_JSON", "message": r.stderr or r.stdout}}
+        return _run_c2s(["c2s", "--repo", c2s_dir, "cite-selection",
+                         "--artifact", tmp_path, "--start", "0",
+                         "--end", str(len(selected_text)),
+                         "--adapter", "filesystem-text"])
     finally:
         Path(tmp_path).unlink(missing_ok=True)
 
 
 def main() -> None:
-    """Process a single native-messaging message and exit."""
     msg = read_message()
     if msg is None:
         send_message({"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "No message received."}})
