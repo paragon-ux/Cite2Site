@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 import shutil
+import os
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -129,6 +130,19 @@ class ReplacementRuntimeTests(unittest.TestCase):
 
             self.assertTrue(response["ok"])
             self.assertIn("citation_id", response)
+
+    def test_native_host_script_runs_as_standalone_file(self):
+        env = dict(os.environ)
+        env["PYTHONPATH"] = str(ROOT / "src")
+        completed = subprocess.run(
+            [sys.executable, str(ROOT / "src" / "c2s" / "native_host.py")],
+            input=b"",
+            capture_output=True,
+            env=env,
+            check=False,
+        )
+
+        self.assertEqual(0, completed.returncode, completed.stderr.decode("utf-8", errors="replace"))
 
     def test_reconciliation_imports_replacement_operations_deterministically(self):
         with tempfile.TemporaryDirectory() as tmp:

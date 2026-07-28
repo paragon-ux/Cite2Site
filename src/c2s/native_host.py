@@ -9,8 +9,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from . import replacement
-from .core import C2SError
+from c2s import replacement
+from c2s.core import C2SError
 
 PROTOCOL_VERSION = "replacement.v1"
 INTEGRATION_SCHEMA = "c2s.integration.replacement.v1"

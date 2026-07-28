@@ -40,7 +40,7 @@ gate that depends on gates R1-R8.
 | Duplicate policy | Scoped supersession | Partial | Handle-scoped duplicate supersession events are emitted and tested. | Group/none policy mutation and full reevaluation commands are not implemented. | Complete R6 policy commands. |
 | Reconciliation | Deterministic semantic branch reconciliation | Partial | `reconcile` imports completed operations from same replacement repository identity and rejects mismatches/conflicts. | Full structural conflict catalog and hash-chain rehashing remain incomplete. | Expand R7 fixtures. |
 | Publication | Metadata-only default | Partial | `export` writes metadata-only status/site projections without evidence text. | Full status/site navigation and no-leak matrix incomplete. | Expand R8 projection tests. |
-| Gate 9 | Replacement integration and Chrome extension | Actionable | Native host accepts `c2s.integration.replacement.v1`; extension sends replacement cite/lookup messages with idempotency; `dist/cite2site-2.0.0a1-py3-none-any.whl` built and installed; native host registered to `C:\Users\USER\.c2s-replacement`. | Manual Chrome validation still required before Done. | Stop for user manual validation before marking R9 Done. |
+| Gate 9 | Replacement integration and Chrome extension | Actionable | Native host accepts `c2s.integration.replacement.v1`; extension sends replacement cite/lookup messages with idempotency; `dist/cite2site-2.0.0a2-py3-none-any.whl` built and installed; native host registered to `C:\Users\USER\.c2s-replacement`; framed native-message duplicate precheck produced distinct `citation_id`s. | Manual Chrome validation still required before Done. | Stop for user manual validation before marking R9 Done. |
 
 ## Historical V0.3/V1 Status
 
