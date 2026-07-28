@@ -98,4 +98,5 @@ def install() -> None:
     print("  2. Enable 'Developer mode'", file=sys.stderr)
     print("  3. Click 'Load unpacked'", file=sys.stderr)
     print("  4. Select the browser-extension/ folder", file=sys.stderr)
-    print("  5. Select text on any page, right-click -> Cite with Cite2Site", file=sys.stderr)
+    print("  5. RESTART Chrome completely (close all windows)", file=sys.stderr)
+    print("  6. Select text on any page, right-click -> Cite with Cite2Site", file=sys.stderr)
