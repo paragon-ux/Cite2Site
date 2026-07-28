@@ -34,6 +34,31 @@ def send_message(data: dict) -> None:
     sys.stdout.buffer.flush()
 
 
+def handle_lookup_actions(msg: dict) -> dict:
+    """Run c2s lookup-actions for the given position."""
+    c2s_dir = None
+    for parent in [Path.cwd()] + list(Path.cwd().parents):
+        candidate = parent / ".c2s"
+        if candidate.exists():
+            c2s_dir = candidate
+            break
+    if c2s_dir is None:
+        return {"ok": False, "error": {"code": "E_REPO_NOT_FOUND", "message": "No .c2s repository found."}}
+
+    artifact = msg.get("artifact", "")
+    start = msg.get("start", 0)
+    end = msg.get("end", 0)
+    r = subprocess.run(
+        ["c2s", "--repo", str(c2s_dir), "lookup-actions",
+         "--artifact", str(artifact), "--start", str(start), "--end", str(end)],
+        capture_output=True, text=True, timeout=30,
+    )
+    try:
+        return json.loads(r.stdout)
+    except json.JSONDecodeError:
+        return {"ok": False, "error": {"code": "E_EXTENSION_BAD_JSON", "message": r.stderr or r.stdout}}
+
+
 def handle_cite_selection(msg: dict) -> dict:
     """Run c2s cite-selection for the given selection."""
     selected_text = msg.get("selectedText", "")
@@ -79,16 +104,19 @@ def handle_cite_selection(msg: dict) -> dict:
 
 
 def main() -> None:
-    while True:
-        msg = read_message()
-        if msg is None:
-            break
-        action = msg.get("action", "")
-        if action == "cite-selection":
-            result = handle_cite_selection(msg)
-        else:
-            result = {"ok": False, "error": {"code": "E_EXTENSION_UNKNOWN_ACTION", "message": f"Unknown action: {action}"}}
-        send_message(result)
+    """Process a single native-messaging message and exit."""
+    msg = read_message()
+    if msg is None:
+        send_message({"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "No message received."}})
+        return
+    action = msg.get("action", "")
+    if action == "cite-selection":
+        result = handle_cite_selection(msg)
+    elif action == "lookup-actions":
+        result = handle_lookup_actions(msg)
+    else:
+        result = {"ok": False, "error": {"code": "E_EXTENSION_UNKNOWN_ACTION", "message": f"Unknown action: {action}"}}
+    send_message(result)
 
 
 if __name__ == "__main__":
