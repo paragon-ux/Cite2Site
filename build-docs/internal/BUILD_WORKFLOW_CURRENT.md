@@ -104,6 +104,7 @@ the status matrix shows a gate is already Done.
 | G7 | Right-click integration contract | Prove human interactivity without overlays. | minimal editor/browser/document integration examples, action schema examples, overlap picker docs. | integration contract smoke tests or fixture tests, lookup overlap tests. | Update integration rows. |
 | G8 | Release/migration hardening | Prepare a stable public release path. | release checklist, migration policy/tests, package build check, changelog/security checklist. | clean checkout CI, package build, migration fixture tests, docs validation. | Update release readiness rows. |
 | v1 | v1.0 stabilization | Freeze stable contracts after G0-G8 acceptance. | schema freeze, CLI contract freeze, compatibility fixtures, user guide, agent guide. | Compatibility suite, cross-version migration tests, deterministic output, doc cross-reference. | All Done rows confirmed; remaining deferred work explicitly recorded. |
+| G9 | Phase 7 Pt2 — Chrome Extension | Deliver M0-M8 milestones sequentially; one milestone per sub-gate. | M0 freeze transport, M1 restore popup, M2 shared protocol, M3 contextual picker, M4 context-menu actions, M5 mutations, M6 action panel, M7 unsupported guard, M8 regression suite. | Per-milestone gate: manual Chrome test + automated protocol tests + export/history verification. | M0-M2 Done; M3-M8 Planned. |
 
 Gate acceptance requires all listed tests to pass. A gate can be closed as
 Partial only when the missing work is explicitly listed in the status matrix

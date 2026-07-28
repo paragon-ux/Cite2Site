@@ -72,6 +72,11 @@ DOCX) and native editor/browser integrations remain deferred to post-v1 gates.
 | Docs | Build contract | Done | Internal requirements, workflow, plan, specifications, external narratives, ADRs, and documentation standard are present; live Markdown links validate. | Documents must continue to track implementation maturity. | Require truth-label and cross-reference review in every behavior-changing gate. |
 | Release | v1 stabilization (Phase 7) | Done | `V1_STABLE_CONTRACT.md` (38 codes, 7 event types, 15 commands, 6 schema IDs), `USER_GUIDE.md`, `AGENT_GUIDE.md`, `COMPATIBILITY_CORPUS.md`, `SUPPORT_POLICY.md`, release checklist verified, threat/privacy sign-off complete. | Compatibility test corpus fixtures and test_compat.py are specified but not yet implemented. | Build compatibility test suite per corpus spec. |
 
+| Extension | Chrome extension (M0) | Done | `browser-extension/manifest.json`, `background.js`; `src/c2s/_native_host.py`; `c2s install-native-host` writes registry + profile manifests; right-click context-menu cite flow confirmed via manual Chrome test. | | |
+| Extension | Popup file drop (M1) | Done | `browser-extension/popup.html`, `popup.js` restore drop-zone, file picker, text viewer, selection tracking, cite/lookup via native host; persistent capture model (`.c2s/captured/files/<hash>/<name>`); manual Chrome gate confirmed. | | |
+| Extension | Shared protocol (M2) | Done | `native_host.py` ACTIONS table (10 actions), PROTOCOL_VERSION 1.0, ACTION_LABELS for UI, mutation routing with citation_id enforcement, centralized error normalization; `background.js` sender validation + action-label table; `tools/test_m2_protocol.py` (8 tests). | M3-M8 deferred per sequential milestone rule. | Proceed to M3 after user acceptance. |
+| Extension | Contextual picker (M3-M8) | Planned | See `PHASE_07_PT2_POST_v1_CHECKPOINTS.md` milestones 3-8. | Not yet implemented. | Await M2 acceptance then implement in order. |
+
 ## Release Readiness By Version
 
 | Version | Release Goal | Readiness | Exit Criteria |
@@ -82,7 +87,7 @@ DOCX) and native editor/browser integrations remain deferred to post-v1 gates.
 
 1. Richer file type support beyond text/Markdown is not present (PDF, DOCX, etc.).
 2. Runtime schema validation is not implemented, but migration fixture tests cover schema version, corrupt-file, and hash-chain rejection paths.
-3. No migration command exists because there is only one implementation schema,
+3. Chrome extension milestones M3-M8 (contextual picker, context-menu actions, mutations in popup, action panel, unsupported-actions guard, regression suite) are deferred per sequential milestone gate rule; see `build-docs/internal/phase_prompts/PHASE_07_PT2_POST_v1_CHECKPOINTS.md`.
    but migration fixture tests (`tests/test_migration_fixtures.py`) cover
    schema version validation, corrupt inputs, hash-chain integrity, and
    source preservation.
