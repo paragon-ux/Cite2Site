@@ -4,7 +4,7 @@ All notable Cite2Site release changes are recorded here. This changelog is a
 maintainer release artifact, not capability authority; current availability is
 still determined by `build-docs/internal/CURRENT_STATUS_MATRIX.md`.
 
-## 1.0.0 — 2025-07-27
+## 1.0.0 — 2026-07-27
 
 ### Added
 
@@ -56,9 +56,10 @@ still determined by `build-docs/internal/CURRENT_STATUS_MATRIX.md`.
 
 - Remote CI evidence is intentionally not recorded here. A release entry may
   link to remote CI only after the run has actually completed.
-- Cite2Site still has a stdlib-only runtime dependency set. The local artifact
-  check uses Python packaging tools through `pip`; it does not add runtime
-  package dependencies.
+- Cite2Site has one dependency: `context-menu` (Windows right-click
+  integration). The core citation engine has no runtime dependencies beyond
+  the Python standard library. The local artifact check uses Python
+  packaging tools through `pip`; it does not add runtime dependencies.
 
 ## 0.3.0
 
