@@ -33,7 +33,7 @@ def send_message(data: dict) -> None:
 def _find_c2s_dir() -> str | None:
     for parent in [Path.cwd()] + list(Path.cwd().parents):
         candidate = parent / ".c2s"
-        if candidate.exists():
+        if candidate.is_dir():
             return str(candidate)
     return None
 
@@ -45,6 +45,8 @@ def _run_c2s(cmd: list[str]) -> dict:
         return {"ok": False, "error": {"code": "E_EXTENSION_TIMEOUT", "message": "c2s command timed out."}}
     except FileNotFoundError:
         return {"ok": False, "error": {"code": "E_EXTENSION_C2S_NOT_FOUND", "message": "c2s not found on PATH."}}
+    if r.returncode != 0:
+        return {"ok": False, "error": {"code": "E_EXTENSION_C2S_ERROR", "message": r.stderr.strip() or f"c2s exited with code {r.returncode}"}}
     try:
         return json.loads(r.stdout)
     except json.JSONDecodeError:
@@ -58,7 +60,7 @@ def handle_lookup_actions(msg: dict) -> dict:
     artifact = msg.get("artifact", "")
     start = msg.get("start")
     end = msg.get("end")
-    if start is None or end is None:
+    if start is None or end is None or start == "" or end == "":
         return {"ok": False, "error": {"code": "E_EXTENSION_INVALID", "message": "start and end are required."}}
     return _run_c2s(["c2s", "--repo", c2s_dir, "lookup-actions",
                      "--artifact", str(artifact), "--start", str(start), "--end", str(end)])
