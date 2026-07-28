@@ -11,7 +11,7 @@ __all__ = [
     "adapter_diagnostics",
 ]
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 from .adapter import (  # noqa: E402  — re-export after version
     AdapterArtifact,

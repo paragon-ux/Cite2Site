@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cite2site"
-version = "1.0.1"
+version = "1.0.2"
 description = "Source-clean citations that don't touch your files. Record evidence outside the file, replay it to check if it still holds."
 requires-python = ">=3.11"
 dependencies = ["context-menu"]
