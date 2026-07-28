@@ -5,6 +5,8 @@ import json
 import sys
 from typing import Any, Callable
 
+from pathlib import Path
+
 from . import core
 from .adapter import _SUPPORTED as _ADAPTER_CHOICES
 
@@ -27,6 +29,17 @@ def emit_jsonl(value: dict[str, Any]) -> int:
     return 0
 
 
+def _do_init(args):
+    """Init repo, idempotent — reports 'already initialized' when repo exists."""
+    repo_path = args.repo if args.repo != ".c2s" else str(Path.home() / ".c2s")
+    try:
+        return core.init_repo(core.repo_from_arg(repo_path), force=args.force)
+    except core.C2SError as exc:
+        if exc.code == "E_REPO_EXISTS":
+            return {"ok": True, "message": f"Already initialized: {repo_path}"}
+        raise
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = JsonArgumentParser(prog="c2s")
     parser.add_argument("--repo", default=".c2s", help="citation repository path")
@@ -34,7 +47,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_init = sub.add_parser("init")
     p_init.add_argument("--force", action="store_true")
-    p_init.set_defaults(func=lambda args: core.init_repo(core.repo_from_arg(args.repo), force=args.force))
+    p_init.set_defaults(func=lambda args: _do_init(args))
 
     def add_actor(p: argparse.ArgumentParser) -> None:
         p.add_argument("--actor-kind", default="user", choices=["user", "agent", "machine"])
