@@ -4,7 +4,7 @@
 Reads JSON messages from stdin (Chrome native messaging protocol),
 runs c2s commands, writes JSON responses to stdout. One message, one exit.
 """
-import json, struct, subprocess, sys, tempfile
+import hashlib, json, struct, subprocess, sys
 from pathlib import Path
 
 
@@ -59,7 +59,7 @@ def handle_cite(msg: dict) -> dict:
     # Persist capture to .c2s/captured/ so it survives replay
     captured_dir = Path(c2s_dir) / "captured"
     captured_dir.mkdir(parents=True, exist_ok=True)
-    capture_path = captured_dir / f"web-{hash(text) & 0xFFFFFFFF:08x}.txt"
+    capture_path = captured_dir / f"web-{hashlib.sha256(text.encode()).hexdigest()[:8]}.txt"
     capture_path.write_text(text, encoding="utf-8")
 
     result = _run_c2s(["c2s", "--repo", c2s_dir, "cite-selection",
@@ -69,7 +69,9 @@ def handle_cite(msg: dict) -> dict:
 
     # Regenerate the site so citations.md reflects the new citation
     if result.get("ok"):
-        _run_c2s(["c2s", "--repo", c2s_dir, "export"])
+        export_result = _run_c2s(["c2s", "--repo", c2s_dir, "export"])
+        if not export_result.get("ok"):
+            result["export_error"] = export_result.get("error", {}).get("message", "export failed")
 
     return result
 
