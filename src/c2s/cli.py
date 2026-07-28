@@ -136,6 +136,14 @@ def main(argv: list[str] | None = None) -> int:
     p_check = sub.add_parser("check")
     p_check.set_defaults(func=core.check)
 
+    def _install_native_host(_args: argparse.Namespace) -> dict[str, Any]:
+        from ._native_host import install
+        install()
+        return {"ok": True}
+
+    p_nh = sub.add_parser("install-native-host")
+    p_nh.set_defaults(func=_install_native_host)
+
     try:
         args = parser.parse_args(argv)
         func: Callable[[argparse.Namespace], dict[str, Any]] = args.func
