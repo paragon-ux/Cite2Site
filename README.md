@@ -41,13 +41,13 @@ c2s init --repo /some/other/.c2s  # or: create a repo at a specific path
 > (`%USERPROFILE%\.c2s` on Windows). All other commands accept `--repo <path>`
 > to target a different repository. To change the active repo, pass `--repo` to
 > every command or set the `CITE2SITE_REPO` environment variable.
-
-# Load the Chrome extension:
-# 1. Go to chrome://extensions, enable Developer mode
-# 2. Click "Load unpacked" and select the browser-extension/ folder
-# 3. Right-click any selected text on any page -> "Cite with Cite2Site"
-#    Or drag a file into the extension popup, select text, and click Cite
-```
+> to target a different repository. Pass `--repo` to every command to switch.
+>
+Load the Chrome extension:
+1. Go to chrome://extensions, enable Developer mode
+2. Click "Load unpacked" and select the browser-extension/ folder
+3. Right-click any selected text on any page -> "Cite with Cite2Site"
+   Or drag a file into the extension popup, select text, and click Cite
 
 The Chrome extension covers 90% of users — cite text from any webpage or
 local file without leaving the browser. For editor-specific integrations,
