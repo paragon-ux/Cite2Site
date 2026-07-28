@@ -58,7 +58,15 @@ def _mutate(repo_dir: Path, action: str, citation_id: str, extra_args: list[str]
     if result.get("ok"):
         export_result = _run_c2s(repo_dir, ["export"], timeout=60)
         if not export_result.get("ok"):
-            result["_export"] = export_result
+            return {
+                "ok": False,
+                "error": {
+                    "code": "E_EXTENSION_EXPORT",
+                    "message": "The mutation was recorded, but the site projection could not be refreshed.",
+                    "details": {"export_error": export_result.get("error")},
+                },
+                "mutation": result,
+            }
     return result
 
 
@@ -249,6 +257,11 @@ def _content_hash(text: str) -> str:
     return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def _safe_file_name(value: Any) -> str:
+    name = str(value or "imported.txt").replace("\\", "/").rsplit("/", 1)[-1]
+    return name or "imported.txt"
+
+
 def _capture_paths(repo_dir: Path, source_url: str, content_hash: str) -> tuple[Path, Path]:
     source_key = hashlib.sha256(
         (source_url + "\0" + content_hash).encode("utf-8")
@@ -392,7 +405,7 @@ def handle_cite_file_selection(message: dict[str, Any]) -> dict[str, Any]:
     """Persist entire file snapshot, then cite the selection."""
     file_info = message.get("file", {})
     selection = message.get("selection", {})
-    file_name = file_info.get("name", "imported.txt")
+    file_name = _safe_file_name(file_info.get("name", "imported.txt"))
     file_content = file_info.get("content", "")
     selected_text = selection.get("selectedText", "")
     sel_start = selection.get("start", 0)
@@ -419,7 +432,7 @@ def handle_cite_file_selection(message: dict[str, Any]) -> dict[str, Any]:
     file_hash = hashlib.sha256(file_content.encode()).hexdigest()
     captured_dir = repo / "captured" / "files" / file_hash
     captured_dir.mkdir(parents=True, exist_ok=True)
-    file_path = captured_dir / file_name
+    file_path = captured_dir / Path(file_name).name
     file_path.write_text(file_content, encoding="utf-8")
     # Metadata sidecar
     meta = {
@@ -440,11 +453,42 @@ def handle_cite_file_selection(message: dict[str, Any]) -> dict[str, Any]:
     )
 
     if result.get("ok"):
-        export_result = _run_c2s(repo_dir, ["export"])
+        export_result = _run_c2s(repo_dir, ["export"], timeout=60)
         if not export_result.get("ok"):
-            result.setdefault("_export", export_result)
-
+            return {
+                "ok": False,
+                "error": {
+                    "code": "E_EXTENSION_EXPORT",
+                    "message": "The citation was recorded, but the site projection could not be refreshed.",
+                    "details": {"export_error": export_result.get("error")},
+                },
+                "citation": result,
+            }
     return result
+
+
+def handle_lookup_file_selection(message: dict[str, Any]) -> dict[str, Any]:
+    """Persist file and run lookup-actions at the given position."""
+    file_info = message.get("file", {})
+    file_content = file_info.get("content", "")
+    if not file_content:
+        return {"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "File content is empty."}}
+    try:
+        repo_dir = _load_repo_dir()
+    except RuntimeError as exc:
+        return {"ok": False, "error": {"code": "E_EXTENSION_CONFIG", "message": str(exc)}}
+    repo = Path(repo_dir)
+    file_hash = hashlib.sha256(file_content.encode()).hexdigest()
+    captured_dir = repo / "captured" / "files" / file_hash
+    captured_dir.mkdir(parents=True, exist_ok=True)
+    file_path = captured_dir / _safe_file_name(file_info.get("name", "imported.txt"))
+    file_path.write_text(file_content, encoding="utf-8")
+    start = message.get("start", 0)
+    end = message.get("end", 0)
+    return _run_c2s(
+        repo_dir,
+        ["lookup-actions", "--artifact", str(file_path), "--start", str(start), "--end", str(end)],
+    )
 
 
 def dispatch(message: dict[str, Any]) -> dict[str, Any]:
@@ -474,7 +518,13 @@ def dispatch(message: dict[str, Any]) -> dict[str, Any]:
             "error": {"code": "E_EXTENSION_INTERNAL", "message": f"Handler {handler_name} not found."},
         }
 
-    result = handler(message)
+    try:
+        result = handler(message)
+    except RuntimeError as exc:
+        result = {
+            "ok": False,
+            "error": {"code": "E_EXTENSION_CONFIG", "message": str(exc)},
+        }
     if isinstance(result, dict):
         result.setdefault("protocol_version", PROTOCOL_VERSION)
     return result

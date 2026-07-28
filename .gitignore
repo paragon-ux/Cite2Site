@@ -7,5 +7,7 @@ build/
 dist/
 *.egg-info/
 build-docs/archive/
-site/
 .agents/
+.reasonix/
+.c2s/
+site/
