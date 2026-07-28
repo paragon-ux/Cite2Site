@@ -22,7 +22,7 @@ def install() -> None:
     ])
     menu.compile()
     print("Cite2Site added to Windows right-click menu.", file=sys.stderr)
-    print("Right-click any file -> Cite2Site -> Look up citations here / Cite selection here", file=sys.stderr)
+    print("Right-click any file -> Cite2Site -> Look up citations here", file=sys.stderr)
 
 
 def uninstall() -> None:
