@@ -142,8 +142,8 @@ def main(argv: list[str] | None = None) -> int:
         if not ext_id:
             print("Error: --extension-id is required. Find it at chrome://extensions.", file=sys.stderr)
             return {"ok": False, "error": {"code": "E_USAGE", "message": "--extension-id required"}}
-        install(ext_id)
-        return {"ok": True}
+        details = install(ext_id, _args.repo)
+        return {"ok": True, **details}
 
     p_nh = sub.add_parser("install-native-host")
     p_nh.add_argument("--extension-id", required=True, help="Chrome extension ID from chrome://extensions")
