@@ -39,8 +39,6 @@ c2s init --repo /some/other/.c2s  # or: create a repo at a specific path
 
 > **Repo location**: `c2s init` (no arguments) defaults to `$HOME/.c2s`
 > (`%USERPROFILE%\.c2s` on Windows). All other commands accept `--repo <path>`
-> to target a different repository. To change the active repo, pass `--repo` to
-> every command or set the `CITE2SITE_REPO` environment variable.
 > to target a different repository. Pass `--repo` to every command to switch.
 >
 Load the Chrome extension:
