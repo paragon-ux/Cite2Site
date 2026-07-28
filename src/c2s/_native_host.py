@@ -106,24 +106,24 @@ def install() -> None:
     manifest, exe = _build_manifest(script, manifest_dir)
     manifest_path = manifest_dir / f"{_HOST_NAME}.json"
 
-    # Check idempotent
+    # Check idempotent — but still update Chrome profiles
+    already = False
     if manifest_path.exists():
         try:
             existing = json.loads(manifest_path.read_text(encoding="utf-8"))
             if existing.get("path") == manifest.get("path", ""):
-                print(f"Native host already installed: {manifest_path}", file=sys.stderr)
-                return
+                already = True
         except (json.JSONDecodeError, OSError):
             pass
 
-    # Write primary manifest
-    _write_manifest(manifest, manifest_path)
-    print(f"Native host installed: {manifest_path}", file=sys.stderr)
+    if not already:
+        _write_manifest(manifest, manifest_path)
+        _register_registry(manifest_path)
+        print(f"Native host installed: {manifest_path}", file=sys.stderr)
+    else:
+        print(f"Native host already installed: {manifest_path}", file=sys.stderr)
 
-    # Register with Windows registry
-    _register_registry(manifest_path)
-
-    # Also write to Chrome profile directories (belt and suspenders)
+    # Always sync to Chrome profiles (belt and suspenders)
     _write_to_chrome_profiles(manifest)
 
     print("", file=sys.stderr)
