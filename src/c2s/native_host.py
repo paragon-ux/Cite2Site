@@ -305,18 +305,94 @@ def handle_lookup_actions(message: dict[str, Any]) -> dict[str, Any]:
     )
 
 
+def handle_cite_file_selection(message: dict[str, Any]) -> dict[str, Any]:
+    """Persist entire file snapshot, then cite the selection."""
+    file_info = message.get("file", {})
+    selection = message.get("selection", {})
+    file_name = file_info.get("name", "imported.txt")
+    file_content = file_info.get("content", "")
+    selected_text = selection.get("selectedText", "")
+    sel_start = selection.get("start", 0)
+    sel_end = selection.get("end", 0)
+    content_hash = selection.get("contentHash", "")
+
+    if not file_content:
+        return {"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "File content is empty."}}
+    if not selected_text:
+        return {"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "No text selected."}}
+
+    try:
+        repo_dir = _load_repo_dir()
+    except RuntimeError as exc:
+        return {"ok": False, "error": {"code": "E_EXTENSION_CONFIG", "message": str(exc)}}
+
+    repo = Path(repo_dir)
+    # Persist full file under .c2s/captured/files/<hash>/<name>
+    file_hash = hashlib.sha256(file_content.encode()).hexdigest()
+    captured_dir = repo / "captured" / "files" / file_hash
+    captured_dir.mkdir(parents=True, exist_ok=True)
+    file_path = captured_dir / file_name
+    file_path.write_text(file_content, encoding="utf-8")
+    # Metadata sidecar
+    meta = {
+        "name": file_name,
+        "size": len(file_content.encode("utf-8")),
+        "imported_at": message.get("_timestamp", ""),
+    }
+    (captured_dir / "metadata.json").write_text(json.dumps(meta), encoding="utf-8")
+
+    # Cite the selection from the persisted file
+    result = _run_c2s(
+        repo_dir,
+        [
+            "cite-selection", "--artifact", str(file_path),
+            "--start", str(sel_start), "--end", str(sel_end),
+            "--adapter", "filesystem-text",
+        ],
+    )
+
+    if result.get("ok"):
+        export_result = _run_c2s(repo_dir, ["export"])
+        if not export_result.get("ok"):
+            result.setdefault("_export", export_result)
+
+    return result
+
+
 def dispatch(message: dict[str, Any]) -> dict[str, Any]:
     action = message.get("action")
     if action == "cite-selection":
         return handle_cite_selection(message)
     if action == "lookup-actions":
         return handle_lookup_actions(message)
+    if action == "cite-file-selection":
+        return handle_cite_file_selection(message)
+    if action == "lookup-file-selection":
+        # Persist file and lookup at position
+        file_info = message.get("file", {})
+        file_content = file_info.get("content", "")
+        if not file_content:
+            return {"ok": False, "error": {"code": "E_EXTENSION_EMPTY", "message": "File content is empty."}}
+        try:
+            repo_dir = _load_repo_dir()
+        except RuntimeError as exc:
+            return {"ok": False, "error": {"code": "E_EXTENSION_CONFIG", "message": str(exc)}}
+        repo = Path(repo_dir)
+        file_hash = hashlib.sha256(file_content.encode()).hexdigest()
+        captured_dir = repo / "captured" / "files" / file_hash
+        captured_dir.mkdir(parents=True, exist_ok=True)
+        file_path = captured_dir / file_info.get("name", "imported.txt")
+        file_path.write_text(file_content, encoding="utf-8")
+        start = message.get("start", 0)
+        end = message.get("end", 0)
+        result = _run_c2s(
+            repo_dir,
+            ["lookup-actions", "--artifact", str(file_path), "--start", str(start), "--end", str(end)],
+        )
+        return result
     return {
         "ok": False,
-        "error": {
-            "code": "E_EXTENSION_UNKNOWN_ACTION",
-            "message": f"Unknown action: {action}",
-        },
+        "error": {"code": "E_EXTENSION_UNKNOWN_ACTION", "message": f"Unknown action: {action}"},
     }
 
 
