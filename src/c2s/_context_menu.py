@@ -19,10 +19,6 @@ def install() -> None:
             name="Look up citations here",
             command='cmd /c cd /d "%~dp1" && c2s lookup-actions --artifact "%1" --start 0 --end 0 && pause',
         ),
-        menus.ContextCommand(
-            name="Cite selection here",
-            command='cmd /c cd /d "%~dp1" && c2s cite-selection --artifact "%1" --start 0 --end 0 && pause',
-        ),
     ])
     menu.compile()
     print("Cite2Site added to Windows right-click menu.", file=sys.stderr)
