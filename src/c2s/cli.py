@@ -31,7 +31,7 @@ def emit_jsonl(value: dict[str, Any]) -> int:
 
 def _do_init(args):
     """Init repo, idempotent — reports 'already initialized' when repo exists."""
-    repo_path = args.repo if args.repo != ".c2s" else str(Path.home() / ".c2s")
+    repo_path = args.repo if args.repo is not None else str(Path.home() / ".c2s")
     try:
         return core.init_repo(core.repo_from_arg(repo_path), force=args.force)
     except core.C2SError as exc:
@@ -42,7 +42,7 @@ def _do_init(args):
 
 def main(argv: list[str] | None = None) -> int:
     parser = JsonArgumentParser(prog="c2s")
-    parser.add_argument("--repo", default=".c2s", help="citation repository path")
+    parser.add_argument("--repo", default=None, help="citation repository path")
     sub = parser.add_subparsers(dest="command", required=True, parser_class=JsonArgumentParser)
 
     p_init = sub.add_parser("init")
