@@ -21,9 +21,24 @@ def _host_script_path() -> Path:
 
 
 def _create_wrapper_bat(script: Path, dest_dir: Path) -> Path:
-    bat = dest_dir / script.with_suffix(".bat").name
-    bat.write_text(f'@echo off\r\n"{sys.executable}" "{script}"\r\n', encoding="utf-8")
-    return bat
+    """Copy native_host.py and native_host.bat to dest_dir, return .bat path."""
+    import shutil
+    shutil.copy2(script, dest_dir / script.name)
+    # Also copy the .bat wrapper alongside it
+    bat_src = script.with_suffix(".bat")
+    bat_dst = dest_dir / bat_src.name
+    if bat_src.exists():
+        shutil.copy2(bat_src, bat_dst)
+        # Replace __PYTHON__ placeholder with actual Python path
+        content = bat_dst.read_text(encoding="utf-8")
+        content = content.replace("__PYTHON__", sys.executable)
+        bat_dst.write_text(content, encoding="utf-8")
+        return bat_dst
+    else:
+        # Fallback: create .bat wrapper from scratch
+        bat = dest_dir / script.with_suffix(".bat").name
+        bat.write_text(f'@echo off\r\n"{sys.executable}" "{script}"\r\n', encoding="utf-8")
+        return bat
 
 
 def _build_manifest(script: Path, manifest_dir: Path) -> tuple[dict, Path]:
@@ -69,24 +84,29 @@ def _register_registry(manifest_path: Path) -> bool:
 
 
 def _write_to_chrome_profiles(manifest: dict) -> None:
-    """Write manifest to every Chrome profile's NativeMessagingHosts dir."""
+    """Write manifest to every REAL Chrome profile's NativeMessagingHosts dir.
+    A real profile has a 'Preferences' file."""
     if sys.platform != "win32":
         return
     chrome_dir = Path.home() / "AppData" / "Local" / "Google" / "Chrome" / "User Data"
     if not chrome_dir.exists():
         return
-    written = False
+    written = 0
     for profile in chrome_dir.iterdir():
         if not profile.is_dir():
+            continue
+        # Only real Chrome profiles have a Preferences file
+        if not (profile / "Preferences").exists():
             continue
         nh_dir = profile / "NativeMessagingHosts"
         nh_dir.mkdir(parents=True, exist_ok=True)
         dest = nh_dir / f"{_HOST_NAME}.json"
         _write_manifest(manifest, dest)
-        print(f"  Chrome profile: {dest}", file=sys.stderr)
-        written = True
-    if not written:
-        print("  No Chrome profiles found in User Data", file=sys.stderr)
+        written += 1
+    if written == 0:
+        print("  No Chrome profiles found", file=sys.stderr)
+    else:
+        print(f"  Synced to {written} Chrome profile(s)", file=sys.stderr)
 
 
 def install() -> None:
