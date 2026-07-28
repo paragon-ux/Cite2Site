@@ -41,9 +41,11 @@ c2s cite-selection --artifact notes.md --start 0 --end 11 --handle ALPHA
 c2s install-context-menu
 ```
 
-Right-click any file in Explorer → **Cite2Site → Look up citations here** to
-see what citations exist at that position. **Cite selection here** to create
-a new citation.
+Right-click any file in **Windows File Explorer** → **Cite2Site → Look up
+citations here** to see what citations exist at that position. The context
+menu appears in File Explorer only — not in editor apps (VS Code, Notepad++)
+or browsers. If it doesn't show after install, restart Explorer:
+`taskkill /f /im explorer.exe && start explorer.exe`.
 
 The `lookup-actions` command behind the menu is the same contract editor
 plugins and browser extensions call. See the **[Integration Contract](build-docs/architecture/INTEGRATION_CONTRACT.md)**
