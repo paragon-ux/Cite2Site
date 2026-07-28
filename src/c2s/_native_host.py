@@ -62,7 +62,9 @@ def _validate_extension_id(extension_id: str) -> str:
     return normalized
 
 
-def _validate_repo(repo_arg: str | Path) -> Path:
+def _validate_repo(repo_arg: str | Path | None) -> Path:
+    if repo_arg is None:
+        repo_arg = str(Path.home() / ".c2s")
     repo_dir = Path(repo_arg).expanduser().resolve()
     if not (repo_dir / "project.json").is_file():
         raise C2SError(

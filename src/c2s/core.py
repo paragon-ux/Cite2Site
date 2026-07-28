@@ -193,7 +193,9 @@ class Repo:
         return Path(self.project.get("workspace_root", str(self.root.parent))).resolve()
 
 
-def repo_from_arg(repo: str | Path = ".c2s") -> Repo:
+def repo_from_arg(repo: str | Path | None = None) -> Repo:
+    if repo is None:
+        repo = ".c2s"
     return Repo(Path(repo).resolve())
 
 
