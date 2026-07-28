@@ -17,7 +17,7 @@ def install() -> None:
     menu.add_items([
         menus.ContextCommand(
             name="Look up citations here",
-            command='cmd /c cd /d "%~dp1" && c2s lookup-actions --artifact "%1" --start 0 --end 0 && pause',
+            command='cmd /k cd /d "%~dp1" && c2s lookup-actions --artifact "%1" --start 0 --end 0',
         ),
     ])
     menu.compile()
