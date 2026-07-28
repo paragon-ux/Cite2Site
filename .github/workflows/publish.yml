@@ -1,0 +1,46 @@
+# Publish Cite2Site to PyPI using trusted publishing (OpenID Connect).
+# No API tokens — PyPI verifies the GitHub Actions identity directly.
+#
+# One-time maintainer setup (do this once before the first publish):
+#   1. Go to https://pypi.org/manage/project/cite2site/settings/publishing/
+#   2. Register a pending publisher:
+#        Owner:       paragon-ux
+#        Repository:  Cite2Site
+#        Workflow:    publish.yml
+#        Environment: pypi
+#   3. Confirm.
+#
+# After setup, every push of a v* tag (e.g. v1.0.0) publishes automatically.
+# Manual publishes can be triggered from the Actions tab.
+
+name: Publish to PyPI
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        run: pip install build
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
