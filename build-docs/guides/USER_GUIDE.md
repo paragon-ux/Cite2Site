@@ -1,6 +1,10 @@
 # Cite2Site User Guide — v1.0
 
-**Status:** v1.0 stable. Grounded in implemented workflows per Phase 7.
+**Status:** historical v1.0 guide pending replacement rewrite.
+
+This guide describes archived v0.3/v1 behavior. The replacement protocol uses
+record-instance citation IDs, stable groups, group-owned handle IDs, completed
+atomic operations, scoped duplicate policy, and semantic reconciliation.
 
 ---
 

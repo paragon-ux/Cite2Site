@@ -1,6 +1,13 @@
 # Technical Requirements Document
 
-**Status:** internal technical requirements authority.
+**Status:** internal technical requirements authority, pending replacement rewrite.
+
+**Replacement boundary:** technical requirements that describe the v0.3/v1
+two-ledger model, evidence-derived citation identity, direct string handles,
+or old projection shapes are historical until rewritten. The active technical
+model is completed atomic operations, record-instance citation IDs, stable
+groups, group-owned handles, complete rolling tallies, scoped supersession, and
+replacement-only reconciliation.
 
 ## Requirement Interpretation
 

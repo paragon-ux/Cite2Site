@@ -32,10 +32,10 @@ Every CI run must verify:
 5. unit tests with `python -m unittest discover -s tests`;
 6. import/compile health with `python -m compileall src`;
 7. CLI help with `python -m c2s --help`;
-8. CLI smoke flow covering `init`, `cite-selection`, `lookup-actions`,
-   `status`, `export`, and `check`;
-9. source-clean behavior during the smoke flow;
-10. expected flat export files are generated.
+8. archived-format repository rejection before replacement replay or writes,
+   once replacement runtime work begins;
+9. source-clean behavior for any replacement command touching artifacts;
+10. expected replacement projections are generated once projection work begins.
 
 The check list is evidence, not ceremony. A changed public behavior must add a
 test at the layer where it can regress: core/replay, CLI envelope, generated
@@ -73,14 +73,15 @@ Examples:
 Before reporting a gate as accepted, run the local equivalent of the CI stack:
 
 ```powershell
-python -m unittest discover -s tests
+python -m unittest discover -s tests -p test_replacement_archival_boundary.py
 python -m compileall src
 python -m c2s --help
 ```
 
 Also run docs validation and command-specific smoke checks for changed
-surfaces. The exact local command may differ from CI shell syntax, but the
-validated behavior must be the same.
+replacement surfaces. The default `c2s` CLI remains transitional until the
+replacement entry point is wired; do not treat old CLI smoke success as
+replacement conformance.
 
 For a documentation-only gate, validate local links, parse JSON schemas and
 examples, search for unresolved placeholders and obsolete project references,

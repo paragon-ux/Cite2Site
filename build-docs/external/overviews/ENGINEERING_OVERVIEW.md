@@ -1,5 +1,10 @@
 # Engineering Overview
 
+**Status:** historical v0.3/v1 narrative pending replacement rewrite.
+
+The active replacement protocol is defined by the refined reconciliation RFC
+and archival boundary. This overview is preserved for history only.
+
 Cite2Site is a local Python package with a CLI-first core. Integrations such as
 editor menus or browser extensions should call the CLI or library contracts
 rather than storing their own authoritative state.

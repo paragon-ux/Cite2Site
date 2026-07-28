@@ -1,94 +1,84 @@
 # Agent Guidance
 
-Welcome — you're picking up work on Cite2Site, a source-clean, append-only
-citation tool. This file is your orientation. Read it before touching any
-code or docs.
+Welcome. You are working on Cite2Site, a source-clean, append-only citation
+tool. Read this file before touching code or docs.
 
-The short version: Cite2Site never edits the files people cite. Every
-citation is recorded externally in an append-only history, and everything
-else — status, exports, the published site — is a replay of that history.
-Keep that in mind and most of the rules below will feel obvious.
+## Current Boundary
+
+Cite2Site is in the **Replacement Protocol and Archival Separation Gate**.
+The v0.3/v1 implementation and documents are historical material preserved by
+Git history and by the archive index. They are no longer active protocol
+authority.
+
+Do not resume Gate 9 / Phase 7 Part 2 Chrome-extension work until the
+replacement authority package and foundation implementation are complete.
 
 ## Start Here, In Order
 
-`AGENTS.md` (this file) is the single source of truth for fresh-agent
-orientation. Read these in order before implementing anything:
+1. `AGENTS.md`.
+2. `build-docs/README.md`.
+3. `build-docs/internal/CURRENT_STATUS_MATRIX.md`.
+4. `build-docs/internal/BUILD_WORKFLOW_CURRENT.md`.
+5. `build-docs/internal/CI_VALIDATION.md`.
+6. `build-docs/internal/PROJECT_PLAN.md`.
+7. `build-docs/architecture/policies/OFFICIAL_MERGE_AND_RECONCILIATION_POLICY_REFINED_V3.md`.
+8. `build-docs/architecture/policies/OFFICIAL_PROTOCOL_MIGRATION_V2.md`.
+9. `build-docs/architecture/ARCHIVAL_BOUNDARY.md`.
+10. `build-docs/architecture/CITE2SITE_REPLACEMENT_IMPLEMENTATION_SPEC.md`.
+11. `build-docs/architecture/REPLACEMENT_SCHEMA_INDEX.md`.
+12. Relevant ADRs in `build-docs/internal/adrs/`.
+13. `build-docs/internal/phase_prompts/REPLACEMENT_PROTOCOL_ARCHIVAL_SEPARATION_GATE.md`.
 
-1. `AGENTS.md` — you're here. Invariants, scope boundaries, gate rules.
-2. `build-docs/README.md` for the active documentation map.
-3. `build-docs/internal/CURRENT_STATUS_MATRIX.md` for what's actually built
-   versus planned.
-4. `build-docs/internal/BUILD_WORKFLOW_CURRENT.md` for how users, agents,
-   CI, and releases fit together.
-5. `build-docs/internal/CI_VALIDATION.md` for the automated gate checks.
-6. `build-docs/internal/PROJECT_PLAN.md` for phase order and milestone
-   scope.
-7. `build-docs/architecture/CITE2SITE_PROTOCOL_SPEC_V0_3.md` for command
-   contracts.
-8. `build-docs/architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md` for
-   engine contracts.
-9. `build-docs/architecture/SCHEMA_INDEX.md` and the referenced
-   schemas/examples, whenever a request or response shape changes.
-10. Relevant ADRs in `build-docs/internal/adrs/`, whenever an architectural
-    invariant changes.
-11. The matching phase prompt in `build-docs/internal/phase_prompts/`, if
-    one exists for the active phase.
+If a historical summary or archived document disagrees with current source,
+the status matrix, or active ADRs, trust the active source and docs.
 
-If a historical summary (including this file, from memory) ever disagrees
-with current source, the status matrix, or the ADRs — trust the current
-source and docs, not the summary.
+## Non-Negotiable Invariants
 
-## The Rules That Actually Matter
+- Cited artifacts stay source-clean. Do not add comments, bookmarks, IDs, or
+  hidden markers to cited files.
+- Authority remains append-only. Existing completed authority records are not
+  rewritten or deleted.
+- Status, exports, generated indexes, and MkDocs output are replay projections,
+  not sources of truth.
+- Publication defaults to metadata-only and must not expose evidence text
+  unless explicitly authorized.
+- The archived v0.3/v1 ledger model based on `.c2s/citation-history.jsonl` and
+  `.c2s/handle-bindings.jsonl` is unsupported by the active replacement
+  runtime.
+- Replacement citation IDs identify intentional record instances. They are not
+  derived solely from evidence identity or target fingerprints.
+- Replacement groups and handles are stable authority objects with immutable
+  IDs. Names and paths are mutable display data, not identity.
+- Duplicate handling is scoped through group and handle policy. Duplicate
+  evidence must not suppress intentional citation creation.
+- Mutating commands require stable `operation_id` and `idempotency_key`.
+- Replay processes only completed atomic operations.
+- Semantic reconciliation applies only to repositories that already conform to
+  the replacement protocol and share valid replacement ancestry.
+- Archived-format repositories fail closed before replay, mutation,
+  reconciliation, projection, or publication. This task does not authorize
+  runtime migration or import.
 
-These are non-negotiable, because they're what makes Cite2Site trustworthy:
+## Session Rule
 
-- **Never mark up cited artifacts.** No comments, bookmarks, or injected
-  IDs — the source stays exactly as the user left it.
-- **`.c2s/citation-history.jsonl` and `.c2s/handle-bindings.jsonl` are the
-  only authority files.** Everything else is derived from them.
-- **Status pages, exports, and the MkDocs site are replay projections**,
-  not sources of truth. Never treat generated output as authoritative.
-- **Handles are editable aliases, not identity.** A citation's real
-  identity is its citation ID; renaming a handle never changes what it
-  points to.
-- **When contextual hits overlap, mutating actions must name a concrete
-  `citation_id`.** Never guess which citation the user meant.
-- **Static-site publication defaults to metadata-only.** Don't expose
-  evidence text unless the user has explicitly opted in.
-- **`build-docs/` is where planning, requirements, workflow, spec, status,
-  and ADR context live.** Check it before assuming scope.
+One regular coding session is one acceptance gate. A gate is accepted only when
+implementation, tests, docs, and status evidence agree.
 
-## Session = One Gate
+Before editing:
 
-Treat one regular coding session as one acceptance gate. A gate is only
-"accepted" once implementation, tests, docs, and status updates for that
-session are all done — a half-finished gate isn't a finished gate.
+- run `git status --short`;
+- confirm the active gate in `build-docs/internal/BUILD_WORKFLOW_CURRENT.md`;
+- confirm the change maps to the status matrix, project plan, requirements,
+  active architecture policy/spec, and schema package.
 
-**Before you start editing:**
-
-- run `git status --short` to see what's already in flight;
-- check `build-docs/internal/BUILD_WORKFLOW_CURRENT.md` for the active
-  phase and gate;
-- confirm your change maps to the status matrix, project plan,
-  requirements, and architecture specs. If it doesn't map anywhere, that's
-  a sign to update the docs first, or to treat the change as out of scope.
-
-**While you're implementing:**
+While implementing:
 
 - keep cited artifacts source-clean;
-- append to authority state — never rewrite event history;
-- update docs in the same patch as the behavior change, not a follow-up;
-- add or update tests for every new behavior and failure mode.
+- append authority rather than rewriting it;
+- keep docs and tests in the same patch as behavior changes;
+- preserve unrelated user changes;
+- do not continue old-model behavior merely because old tests or docs exist.
 
-**Before you report the change as done, run the gate validation:**
-
-- `python -m unittest discover -s tests`;
-- `python -m compileall src`;
-- CLI smoke checks for any commands you touched;
-- docs validation, if `build-docs/`, `README.md`, or `AGENTS.md` changed;
-- export determinism or source-clean checks, if generated output or
-  artifact mutation behavior changed.
-
-If any of these can't run, say exactly what's blocking you and don't mark
-the gate as accepted. A clearly reported blocker is far more useful than an
-optimistic "done."
+Before reporting a gate as done, run the validation required by
+`build-docs/internal/CI_VALIDATION.md` and the active gate prompt. If validation
+cannot run, report the blocker and do not mark the gate accepted.

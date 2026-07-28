@@ -2,6 +2,11 @@
 
 **Status:** internal release procedure.
 
+**Replacement boundary:** this is a historical v0.3/v1 release procedure. The
+active replacement protocol does not authorize runtime migration from v0.3/v1
+repositories. Archived-format repositories must fail closed before replay or
+mutation.
+
 ## Authority And Current Versions
 
 The current implementation uses these schema versions:

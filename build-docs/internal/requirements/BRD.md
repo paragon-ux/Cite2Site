@@ -1,6 +1,13 @@
 # Business Requirements Document
 
-**Status:** internal product requirements authority.
+**Status:** internal product requirements authority, pending replacement rewrite.
+
+**Replacement boundary:** requirements in this document that depend on
+evidence-derived citation IDs, string handles as identity/aliases, or the
+v0.3/v1 two-ledger authority model are historical until rewritten. Active
+replacement requirements are governed first by
+`OFFICIAL_MERGE_AND_RECONCILIATION_POLICY_REFINED_V3.md`,
+`OFFICIAL_PROTOCOL_MIGRATION_V2.md`, and `ARCHIVAL_BOUNDARY.md`.
 
 ## How To Read This Document
 

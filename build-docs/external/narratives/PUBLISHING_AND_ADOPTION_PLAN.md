@@ -1,5 +1,10 @@
 # Publishing And Adoption Plan
 
+**Status:** historical v0.3/v1 narrative pending replacement rewrite.
+
+The active replacement protocol is defined by the refined reconciliation RFC
+and archival boundary. This plan is preserved for history only.
+
 ## Local Adoption
 
 The current entry point is local CLI use with generated citation projections:

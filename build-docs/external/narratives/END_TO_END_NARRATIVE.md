@@ -1,5 +1,10 @@
 # End-To-End Narrative
 
+**Status:** historical v0.3/v1 narrative pending replacement rewrite.
+
+The active replacement protocol is defined by the refined reconciliation RFC
+and archival boundary. This narrative is preserved for history only.
+
 ## Current CLI Journey
 
 1. A person or agent works with a local text or Markdown file.

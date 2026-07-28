@@ -1,8 +1,13 @@
 # ADR 0004: Handles As Editable Refs
 
+**Replacement boundary:** Superseded by ADR 0011 and the replacement
+reconciliation RFC. This ADR records historical v0.3/v1 behavior; the active
+replacement protocol uses stable group-owned `handle_id` objects with complete
+rolling tallies.
+
 ## Status
 
-Accepted
+Superseded
 
 ## Context
 

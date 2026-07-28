@@ -1,6 +1,11 @@
 # Cite2Site Agent Guide — v1.0
 
-**Status:** v1.0 stable. Grounded in implemented agent workflows per Phase 7.
+**Status:** historical v1.0 guide pending replacement rewrite.
+
+This guide describes archived v0.3/v1 behavior and must not be used as active
+replacement agent guidance. Replacement agents must use operation idempotency,
+groups, handle IDs, target fingerprints, scoped supersession, and replacement
+reconciliation semantics.
 
 ---
 

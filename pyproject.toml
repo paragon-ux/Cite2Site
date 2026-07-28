@@ -14,7 +14,7 @@ readme = "README.md"
 authors = [{name = "Cite2Site contributors"}]
 keywords = ["citations", "evidence", "verification", "source-clean", "append-only", "cli"]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Operating System :: OS Independent",

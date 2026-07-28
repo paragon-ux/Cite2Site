@@ -1,5 +1,12 @@
 # Cite2Site
 
+**Status:** historical v1.0 product README. The active project is in the
+Replacement Protocol and Archival Separation Gate.
+
+This README describes the archived v0.3/v1 runtime. It is preserved for
+history and must not be read as the active replacement protocol contract.
+Current authority starts at `AGENTS.md` and `build-docs/README.md`.
+
 **v1.0** — Source-clean citations that don't touch your files.
 
 Cite2Site lets you point at evidence — in code, in a doc, on a page —

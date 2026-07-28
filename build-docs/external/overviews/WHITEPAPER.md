@@ -1,6 +1,9 @@
 # Cite2Site Whitepaper
 
-**Status:** external product and architecture narrative.
+**Status:** historical v0.3/v1 product and architecture narrative pending replacement rewrite.
+
+The active replacement protocol is defined by the refined reconciliation RFC
+and archival boundary. This whitepaper is preserved for history only.
 
 ## Abstract
 

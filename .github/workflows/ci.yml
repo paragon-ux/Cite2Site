@@ -58,9 +58,12 @@ jobs:
               "build-docs/internal/BUILD_WORKFLOW_CURRENT.md",
               "build-docs/internal/CI_VALIDATION.md",
               "build-docs/internal/PROJECT_PLAN.md",
-              "build-docs/architecture/CITE2SITE_PROTOCOL_SPEC_V0_3.md",
-              "build-docs/architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md",
-              "build-docs/architecture/SCHEMA_INDEX.md",
+              "build-docs/architecture/policies/OFFICIAL_MERGE_AND_RECONCILIATION_POLICY_REFINED_V3.md",
+              "build-docs/architecture/policies/OFFICIAL_PROTOCOL_MIGRATION_V2.md",
+              "build-docs/architecture/ARCHIVAL_BOUNDARY.md",
+              "build-docs/architecture/CITE2SITE_REPLACEMENT_IMPLEMENTATION_SPEC.md",
+              "build-docs/architecture/REPLACEMENT_SCHEMA_INDEX.md",
+              "build-docs/internal/phase_prompts/REPLACEMENT_PROTOCOL_ARCHIVAL_SEPARATION_GATE.md",
           ]
           for target in required:
               if not (repo / target).exists():

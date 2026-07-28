@@ -1,6 +1,12 @@
 # Design Requirements Document
 
-**Status:** internal design requirements authority.
+**Status:** internal design requirements authority, pending replacement rewrite.
+
+**Replacement boundary:** design requirements that describe string handles,
+old grouped indexes, or v0.3/v1 workflow commands are historical until
+rewritten. Replacement design must use stable groups, group-owned handle IDs,
+complete tallies, scoped supersession, operation idempotency, and deterministic
+reconciliation.
 
 ## Scope And Maturity
 

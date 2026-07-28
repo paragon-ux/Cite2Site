@@ -2,6 +2,11 @@
 
 **Status:** internal release procedure.
 
+**Replacement boundary:** this is a historical v0.3/v1 release checklist. Do
+not use it to release the replacement protocol. Replacement release readiness
+requires replacement schemas, tests, archived-repository rejection, and
+reconciliation evidence.
+
 ## Authority And Scope
 
 This checklist is used by a maintainer preparing a Cite2Site release candidate.

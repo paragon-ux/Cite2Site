@@ -1,6 +1,10 @@
 # Integration Contract
 
-**Status:** Implemented contract for Cite2Site integration authors.
+**Status:** historical v0.3/v1 integration contract pending replacement rewrite.
+
+This contract describes archived lookup/action shapes. Replacement integrations
+must wait for replacement command and message schemas with groups, handle IDs,
+operation idempotency, scoped duplicates, and archived-repository rejection.
 
 ## Purpose
 

@@ -1,4 +1,9 @@
-# Product Overview — Cite2Site v1.0
+# Product Overview - Cite2Site v1.0
+
+**Status:** historical v0.3/v1 narrative pending replacement rewrite.
+
+The active replacement protocol is defined by the refined reconciliation RFC
+and archival boundary. This overview is preserved for history only.
 
 Cite2Site is a source-clean citation tool that records evidence outside your
 files so the files themselves never change. Create a citation from selected

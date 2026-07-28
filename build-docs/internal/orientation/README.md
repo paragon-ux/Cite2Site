@@ -2,6 +2,10 @@
 
 **Status:** internal orientation for humans and agents.
 
+**Replacement boundary:** this document contains v0.3/v1 orientation material.
+Current replacement authority starts at `AGENTS.md`, `build-docs/README.md`,
+the refined reconciliation RFC, and the archival boundary.
+
 ## What This Document Can Tell You
 
 This is a map of the current technical direction, not proof that every target
