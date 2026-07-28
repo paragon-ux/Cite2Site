@@ -1,0 +1,7 @@
+{
+  "event_type": "citation.created",
+  "citation_id": "cit_01J00000000000000000000002",
+  "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "artifact": "notes.md",
+  "locator": { "start": 0, "end": 11 }
+}

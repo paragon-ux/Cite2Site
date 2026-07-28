@@ -5,13 +5,14 @@ tool. Read this file before touching code or docs.
 
 ## Current Boundary
 
-Cite2Site is in the **Replacement Protocol and Archival Separation Gate**.
-The v0.3/v1 implementation and documents are historical material preserved by
-Git history and by the archive index. They are no longer active protocol
-authority.
+Cite2Site is in the replacement-protocol rebuild. The v0.3/v1 implementation
+and documents have been moved out of this repository to the sibling archival
+folder `Cite2Site-Archival/` and remain preserved by Git history. They are not
+active protocol authority.
 
-Do not resume Gate 9 / Phase 7 Part 2 Chrome-extension work until the
-replacement authority package and foundation implementation are complete.
+The active gate sequence is `R0` through `R9`. Gate 9 is no longer an
+old-model Chrome checkpoint; it is the replacement-aware integration gate
+defined by the current workflow and replacement integration contract.
 
 ## Start Here, In Order
 
@@ -26,8 +27,9 @@ replacement authority package and foundation implementation are complete.
 9. `build-docs/architecture/ARCHIVAL_BOUNDARY.md`.
 10. `build-docs/architecture/CITE2SITE_REPLACEMENT_IMPLEMENTATION_SPEC.md`.
 11. `build-docs/architecture/REPLACEMENT_SCHEMA_INDEX.md`.
-12. Relevant ADRs in `build-docs/internal/adrs/`.
-13. `build-docs/internal/phase_prompts/REPLACEMENT_PROTOCOL_ARCHIVAL_SEPARATION_GATE.md`.
+12. `build-docs/architecture/INTEGRATION_CONTRACT.md`.
+13. Relevant ADRs in `build-docs/internal/adrs/`.
+14. The active replacement gate prompt in `build-docs/internal/phase_prompts/`.
 
 If a historical summary or archived document disagrees with current source,
 the status matrix, or active ADRs, trust the active source and docs.
@@ -42,9 +44,9 @@ the status matrix, or active ADRs, trust the active source and docs.
   not sources of truth.
 - Publication defaults to metadata-only and must not expose evidence text
   unless explicitly authorized.
-- The archived v0.3/v1 ledger model based on `.c2s/citation-history.jsonl` and
-  `.c2s/handle-bindings.jsonl` is unsupported by the active replacement
-  runtime.
+- Archived v0.3/v1 ledgers are unsupported by the active replacement runtime.
+  They must fail closed before replay, mutation, reconciliation, projection, or
+  publication.
 - Replacement citation IDs identify intentional record instances. They are not
   derived solely from evidence identity or target fingerprints.
 - Replacement groups and handles are stable authority objects with immutable
@@ -55,9 +57,9 @@ the status matrix, or active ADRs, trust the active source and docs.
 - Replay processes only completed atomic operations.
 - Semantic reconciliation applies only to repositories that already conform to
   the replacement protocol and share valid replacement ancestry.
-- Archived-format repositories fail closed before replay, mutation,
-  reconciliation, projection, or publication. This task does not authorize
-  runtime migration or import.
+- The active integration surface must use replacement repository identity,
+  completed operations, record-instance citations, groups, handle IDs,
+  idempotency, and scoped duplicate policy.
 
 ## Session Rule
 

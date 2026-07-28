@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-reconciliation.schema.json",
+  "title": "Replacement Reconciliation Result",
+  "type": "object",
+  "required": ["schema_version", "ok", "operations_imported", "conflicts"],
+  "properties": {
+    "schema_version": { "const": "c2s.reconciliation.replacement.v1" },
+    "ok": { "type": "boolean" },
+    "operations_imported": { "type": "integer", "minimum": 0 },
+    "conflicts": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": true
+}

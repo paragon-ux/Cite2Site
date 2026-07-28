@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - "codex/**"
+      - "integration/**"
 
 jobs:
   validate:
@@ -63,7 +64,9 @@ jobs:
               "build-docs/architecture/ARCHIVAL_BOUNDARY.md",
               "build-docs/architecture/CITE2SITE_REPLACEMENT_IMPLEMENTATION_SPEC.md",
               "build-docs/architecture/REPLACEMENT_SCHEMA_INDEX.md",
-              "build-docs/internal/phase_prompts/REPLACEMENT_PROTOCOL_ARCHIVAL_SEPARATION_GATE.md",
+              "build-docs/architecture/INTEGRATION_CONTRACT.md",
+              "build-docs/internal/phase_prompts/REPLACEMENT_GATE_00_ARCHIVAL_SEPARATION.md",
+              "build-docs/internal/phase_prompts/REPLACEMENT_GATE_09_INTEGRATION.md",
           ]
           for target in required:
               if not (repo / target).exists():
@@ -82,21 +85,21 @@ jobs:
       - name: Check CLI help
         run: python -m c2s --help
 
-      - name: Run CLI smoke workflow
+      - name: Run replacement CLI smoke workflow
         run: |
           tmp="$(mktemp -d)"
           cd "$tmp"
           printf 'Alpha claim\nBeta claim\n' > notes.md
           before_hash="$(sha256sum notes.md | cut -d ' ' -f 1)"
-          c2s --repo .c2s init
-          c2s --repo .c2s cite-selection --artifact notes.md --start 0 --end 11 --handle ALPHA --tag demo
+          c2s --repo .c2s init --idempotency-key smoke-init
+          c2s --repo .c2s cite-selection --artifact notes.md --start 0 --end 11 --handle ALPHA --idempotency-key smoke-alpha-1
+          c2s --repo .c2s cite-selection --artifact notes.md --start 0 --end 11 --handle ALPHA --idempotency-key smoke-alpha-2
           c2s --repo .c2s lookup-actions --artifact notes.md --start 0 --end 11
           c2s --repo .c2s status
           c2s --repo .c2s export
           c2s --repo .c2s check
           after_hash="$(sha256sum notes.md | cut -d ' ' -f 1)"
           test "$before_hash" = "$after_hash"
+          test -f .c2s/operations.jsonl
           test -f .c2s/exports/c2s-status.json
-          test -f .c2s/exports/c2s-citations.jsonl
           test -f .c2s/site/docs/index.md
-          test -f .c2s/site/docs/citations.md

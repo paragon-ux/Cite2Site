@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-supersession.schema.json",
+  "title": "Replacement Scoped Supersession Event",
+  "type": "object",
+  "required": ["event_type", "scope", "group_id", "superseded_citation_id", "dominant_citation_id", "target_fingerprint"],
+  "properties": {
+    "event_type": { "const": "scoped.supersession.applied" },
+    "scope": { "enum": ["handle", "group"] },
+    "group_id": { "type": "string", "minLength": 1 },
+    "handle_id": { "type": "string" },
+    "superseded_citation_id": { "type": "string", "minLength": 1 },
+    "dominant_citation_id": { "type": "string", "minLength": 1 },
+    "target_fingerprint": { "type": "string", "pattern": "^sha256:" },
+    "reason": { "const": "superseded" }
+  },
+  "additionalProperties": false
+}

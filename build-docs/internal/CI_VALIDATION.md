@@ -58,30 +58,31 @@ behavior is part of a public or agent-facing contract.
 
 Examples:
 
-- G1 grouping/indexing adds grouped replay unit tests.
-- G2 query CLI adds `c2s citations` smoke checks.
-- G3 grouped export adds generated grouped-file checks.
-- G4 privacy modes adds no-leak export checks for every publication mode.
-- G5 workflow commands adds smoke checks for new mutating commands and
-  structured errors.
-- G6 adapter hardening adds adapter conformance fixture checks.
-- G7 integration contracts adds fixture-based `lookup-actions` examples.
-- G8 release hardening adds package build and migration fixture checks.
+- R1 repository identity adds replacement init and archived-repository
+  rejection checks.
+- R2 atomic operations adds idempotency and incomplete-operation checks.
+- R3 citations adds distinct duplicate-evidence citation and source-clean
+  checks.
+- R4/R5 group and handle gates add complete rolling-tally checks.
+- R6 duplicate policy adds scoped supersession checks.
+- R7 reconciliation adds replacement-only merge-direction checks.
+- R8 projections adds deterministic export and metadata-only no-leak checks.
+- R9 integration adds native-host fixtures, package build, and manual Chrome
+  evidence.
 
 ## Local Equivalent
 
 Before reporting a gate as accepted, run the local equivalent of the CI stack:
 
 ```powershell
-python -m unittest discover -s tests -p test_replacement_archival_boundary.py
+python -m unittest discover -s tests
 python -m compileall src
 python -m c2s --help
 ```
 
 Also run docs validation and command-specific smoke checks for changed
-replacement surfaces. The default `c2s` CLI remains transitional until the
-replacement entry point is wired; do not treat old CLI smoke success as
-replacement conformance.
+replacement surfaces. Old v0.3/v1 CLI smoke checks are not active replacement
+conformance.
 
 For a documentation-only gate, validate local links, parse JSON schemas and
 examples, search for unresolved placeholders and obsolete project references,

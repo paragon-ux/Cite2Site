@@ -7,28 +7,22 @@
 This document defines the clean break between the historical v0.3/v1
 Cite2Site authority model and the replacement protocol.
 
-The historical model is preserved for audit and design history. It is not an
-active runtime contract, compatibility target, migration input, or conformance
-suite for the replacement implementation.
+The historical model is preserved for audit and design history in the sibling
+folder `Cite2Site-Archival/` and in Git history. It is not an active runtime
+contract, compatibility target, migration input, or conformance suite for the
+replacement implementation.
 
 ## Historical Material
 
-Historical v0.3/v1 material includes:
+Historical v0.3/v1 material includes the old protocol and implementation
+specifications, stable contract, schema inventory, schemas, examples,
+compatibility corpus, phase prompts, guides, release docs, integration
+examples, tests, and old user/agent workflow descriptions.
 
-- `build-docs/architecture/CITE2SITE_PROTOCOL_SPEC_V0_3.md`;
-- `build-docs/architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md`;
-- `build-docs/architecture/V1_STABLE_CONTRACT.md`;
-- `build-docs/architecture/SCHEMA_INDEX.md`;
-- `build-docs/architecture/schemas/`;
-- `build-docs/architecture/examples/`;
-- `build-docs/internal/COMPATIBILITY_CORPUS.md`;
-- old v0.3/v1 user, agent, workflow, and integration guidance where it
-  describes string handles, evidence-derived citation IDs, or the two-ledger
-  authority model.
-
-The stable historical reference for the interrupted baseline is commit
-`9b761e2b05298313425e6d5b0c2033c08dfed114` on
-`integration/gate9-finalization`. Git history remains the primary archive.
+The stable historical reference for the interrupted baseline is
+`../Cite2Site-Archival/from-integration-gate9-finalization-b4b741d/` plus
+commit `9b761e2b05298313425e6d5b0c2033c08dfed114` on
+`integration/gate9-finalization`.
 
 ## Active Replacement Authority
 
@@ -61,6 +55,8 @@ security review. This boundary does not authorize one.
 
 ## Documentation Rule
 
-Archived documents must not appear in the active reading order or active
-schema index. When referenced, they must be named as **Historical**,
-**Superseded**, and **Unsupported by the active runtime**.
+Archived documents must not appear in the active repository reading order,
+active schema index, active conformance tests, or release guidance. When
+referenced, they must be named as **Historical**, **Superseded**, and
+**Unsupported by the active runtime**, and the reference must point outside the
+repo or to Git history.

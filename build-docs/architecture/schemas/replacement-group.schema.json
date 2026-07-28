@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-group.schema.json",
+  "title": "Replacement Group Event",
+  "type": "object",
+  "required": ["event_type", "group_id"],
+  "properties": {
+    "event_type": { "enum": ["group.created", "group.renamed", "group.moved", "group.merged", "group.retired", "group.aliased", "group.membership.added"] },
+    "group_id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "parent_group_id": { "type": ["string", "null"] },
+    "duplicate_policy": { "enum": ["handle", "group", "none"] },
+    "citation_id": { "type": "string" }
+  },
+  "additionalProperties": true
+}

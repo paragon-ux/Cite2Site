@@ -80,8 +80,16 @@ derived projections.
 Archived-format repositories are rejected before reconciliation and are not
 converted.
 
-## Transitional Implementation Status
+## Implementation Status
 
-The checked-in Python runtime still contains archived v0.3/v1 behavior. Until
-replacement foundation work lands, it must be treated as transitional code and
-must not be cited as replacement-protocol conformance.
+The checked-in Python entry point is replacement-native. It initializes
+replacement repositories, rejects archived repositories, writes completed
+operations, enforces idempotency, creates record-instance citations, maintains
+default group and handle tallies, emits handle-scoped supersession events,
+exports metadata-only projections, and imports completed operations during
+same-repository reconciliation.
+
+The implementation is still foundation-level for groups, handles, duplicate
+policy, reconciliation, projections, and Chrome integration. Those areas must
+not be described as release-complete until their gate-specific management
+commands, fixtures, package evidence, and manual validation land.

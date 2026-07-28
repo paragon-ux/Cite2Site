@@ -1,0 +1,10 @@
+{
+  "event_type": "scoped.supersession.applied",
+  "scope": "handle",
+  "group_id": "grp_01J00000000000000000000000",
+  "handle_id": "hdl_01J00000000000000000000003",
+  "superseded_citation_id": "cit_01J00000000000000000000002",
+  "dominant_citation_id": "cit_01J00000000000000000000004",
+  "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "reason": "superseded"
+}

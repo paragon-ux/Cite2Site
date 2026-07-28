@@ -1,24 +1,5 @@
-"""Cite2Site first-slice implementation."""
+"""Cite2Site replacement-protocol runtime."""
 
-__all__ = [
-    "__version__",
-    "BaseAdapter",
-    "FilesystemTextAdapter",
-    "MarkdownAdapter",
-    "AdapterArtifact",
-    "get_adapter",
-    "adapter_for_uri",
-    "adapter_diagnostics",
-]
+__all__ = ["__version__"]
 
-__version__ = "1.0.6"
-
-from .adapter import (  # noqa: E402  — re-export after version
-    AdapterArtifact,
-    BaseAdapter,
-    FilesystemTextAdapter,
-    MarkdownAdapter,
-    adapter_diagnostics,
-    adapter_for_uri,
-    get_adapter,
-)
+__version__ = "2.0.0"

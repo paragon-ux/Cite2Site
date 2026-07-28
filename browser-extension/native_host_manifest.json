@@ -1,6 +1,6 @@
 {
   "name": "com.cite2site.cite",
-  "description": "Cite2Site native messaging host — bridges Chrome extension to c2s CLI",
+  "description": "Cite2Site replacement native messaging host",
   "path": "NATIVE_HOST_PYTHON_PATH",
   "type": "stdio",
   "allowed_origins": ["chrome-extension://EXTENSION_ID_PLACEHOLDER/"]

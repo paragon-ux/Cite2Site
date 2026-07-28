@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-project.schema.json",
+  "title": "Cite2Site Replacement Project",
+  "type": "object",
+  "required": ["schema_version", "repository_id", "default_group_id"],
+  "properties": {
+    "schema_version": { "const": "c2s.project.replacement.v1" },
+    "repository_id": { "type": "string", "minLength": 1 },
+    "default_group_id": { "type": "string", "minLength": 1 },
+    "created_at": { "type": "string" }
+  },
+  "additionalProperties": false
+}

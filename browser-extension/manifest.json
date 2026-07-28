@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Cite2Site",
-  "version": "1.0.1",
-  "description": "Right-click any text to cite it. Source-clean, append-only citations.",
+  "version": "2.0.0",
+  "description": "Replacement-protocol source-clean citations with groups, handles, and idempotency.",
   "permissions": [
     "contextMenus",
     "nativeMessaging",

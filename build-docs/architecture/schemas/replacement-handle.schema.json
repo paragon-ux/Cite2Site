@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-handle.schema.json",
+  "title": "Replacement Handle Event",
+  "type": "object",
+  "required": ["event_type", "handle_id", "group_id"],
+  "properties": {
+    "event_type": { "enum": ["handle.created", "handle.renamed", "handle.merged", "handle.retired", "handle.aliased", "handle.binding.added"] },
+    "handle_id": { "type": "string", "minLength": 1 },
+    "group_id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "citation_id": { "type": "string" }
+  },
+  "additionalProperties": true
+}

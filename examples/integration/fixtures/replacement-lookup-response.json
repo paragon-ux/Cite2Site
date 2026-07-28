@@ -1,0 +1,12 @@
+{
+  "schema_version": "c2s.integration.replacement.v1",
+  "ok": true,
+  "actions": [
+    {
+      "action": "citation.create",
+      "requires_idempotency_key": true,
+      "group_id": "grp_01J00000000000000000000000"
+    }
+  ],
+  "matches": []
+}

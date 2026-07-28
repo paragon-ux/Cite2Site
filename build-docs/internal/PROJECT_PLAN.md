@@ -35,28 +35,27 @@ Cite2Site succeeds under the replacement protocol when:
 14. tests and docs distinguish replacement behavior from historical v0.3/v1
     behavior.
 
-## Milestone Plan
+## Gate Plan
 
-| Milestone | Status | Goal |
+| Gate | Status | Goal |
 |---|---:|---|
-| R0: Archival separation | Partial | Establish active replacement authority and exclude v0.3/v1 from active reading order. |
-| R1: Repository identity | Planned | Define and implement replacement repository schema and archived-format rejection. |
-| R2: Atomic operations | Planned | Implement operation envelope, completion records, idempotency, and completed-operation replay. |
-| R3: Citations and fingerprints | Planned | Implement record-instance citation IDs and deterministic target fingerprints. |
-| R4: Groups and memberships | Planned | Implement default Inbox, group hierarchy, memberships, and group rolling tallies. |
-| R5: Handles and bindings | Planned | Implement stable handle IDs, handle names/aliases, ambiguity, and handle rolling tallies. |
-| R6: Duplicate policy | Planned | Implement handle/group/none policies and scoped supersession. |
-| R7: Reconciliation | Planned | Implement semantic branch reconciliation for replacement repositories only. |
-| R8: Projections and publication | Planned | Implement replacement status/export/site projections with metadata-only default. |
-| R9: Integrations and Chrome extension | Blocked | Resume Gate 9 only after replacement foundations and schemas exist. |
+| R0: Archival separation | Done | Move archived files outside the repo and replace active docs with replacement authority. |
+| R1: Repository identity | Done | Define and implement replacement repository schema, initialization, and archived-format rejection. |
+| R2: Atomic operations | Done | Implement operation envelope, completed records, idempotency, and completed-operation replay. |
+| R3: Citations and fingerprints | Done | Implement record-instance citation IDs and deterministic target fingerprints. |
+| R4: Groups and memberships | Partial | Implement default Inbox, group hierarchy, memberships, and group rolling tallies. |
+| R5: Handles and bindings | Partial | Implement stable handle IDs, handle names/aliases, ambiguity, and handle rolling tallies. |
+| R6: Duplicate policy | Partial | Implement handle/group/none policies and scoped supersession. |
+| R7: Reconciliation | Partial | Implement semantic branch reconciliation for replacement repositories only. |
+| R8: Projections and publication | Partial | Implement replacement status/export/site projections with metadata-only default. |
+| R9: Integrations and Chrome extension | Actionable | Replacement-aware native-host and extension contract are installed for manual validation. |
 
 ## Out Of Scope
 
 - Runtime migration from v0.3/v1 repositories.
 - Dual reducers, version switches, or transparent fallback.
 - Automatic import of archived histories.
-- Chrome-extension mutation work before replacement command/message shapes
-  exist.
+- Compatibility with archived Chrome-extension command/message shapes.
 
 ## Definition Of Done
 

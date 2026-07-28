@@ -4,8 +4,8 @@
 
 The active Cite2Site protocol is the replacement model defined by the refined
 reconciliation RFC and clean archival boundary. The v0.3/v1 implementation was
-historically completed through its prior gates, but those completion claims are
-not active replacement-protocol conformance.
+historically completed through its prior gates, but those files now belong in
+the sibling `Cite2Site-Archival/` folder, not in the active repository.
 
 Status meanings:
 
@@ -14,49 +14,43 @@ Status meanings:
 - **Partial**: implemented in a limited replacement-compatible form, with clear
   gaps.
 - **Planned**: accepted replacement design direction, not implemented.
+- **Actionable**: prerequisites are sufficiently present to begin the gate,
+  but acceptance evidence is still required.
 - **Archived**: historical v0.3/v1 behavior preserved for audit, unsupported by
   the active runtime.
 - **Blocked**: cannot proceed until a named prerequisite is complete.
 
 ## Practical Status Statement
 
-Gate 9 / Phase 7 Part 2 Chrome-extension work is blocked. The duplicate
-behavior exposed a protocol-level conflict: evidence-derived citation IDs and
-global duplicate suppression are incompatible with the replacement requirement
-that every intentional citation receives a distinct record-instance
-`citation_id`, while retries are suppressed only by operation idempotency.
-
-The active immediate gate is the **Replacement Protocol and Archival Separation
-Gate**.
+The active work is the replacement `R0` through `R9` gate sequence. Gate 9 is
+not an old checkpoint continuation; it is the replacement-aware integration
+gate that depends on gates R1-R8.
 
 ## Replacement Capability Matrix
 
 | Area | Capability | Status | Current Evidence | Gap | Next Action |
 |---|---|---:|---|---|---|
-| Authority | Clean archival boundary | Partial | `MIGRATION_DIRECTIVE.md`, `OFFICIAL_MERGE_AND_RECONCILIATION_POLICY_REFINED_V3.md`, `OFFICIAL_PROTOCOL_MIGRATION_V2.md`, `ARCHIVAL_BOUNDARY.md`, ADR 0011. | Historical docs and tests still need full exclusion/label sweep. | Complete archive-boundary documentation pass. |
+| Authority | Clean archival boundary | Done | Archived package moved to `../Cite2Site-Archival/from-integration-gate9-finalization-b4b741d/`; old tracked docs/tests/examples removed from active repo; replacement docs, schemas, examples, and R0-R9 prompts exist. | Remote CI not yet run. | Commit and push for remote evidence when ready. |
 | Authority | Active replacement RFC | Done | `OFFICIAL_MERGE_AND_RECONCILIATION_POLICY_REFINED_V3.md` defines groups, handles, tallies, scoped supersession, atomic operations, idempotency, and reconciliation. | None for policy authority. | Keep RFC as active protocol source. |
-| Authority | Runtime rejects archived repositories | Partial | `src/c2s/replacement.py` rejects archived v0.3/v1 repository shape with `E_ARCHIVED_PROTOCOL_UNSUPPORTED`; `tests/test_replacement_archival_boundary.py` proves no writes occur. | The default `c2s` CLI still exposes transitional v0.3/v1 behavior and must be replaced before claiming active runtime conformance. | Wire replacement repository identity into the active CLI/runtime entry point. |
-| Authority | Atomic completed operations | Planned | Required by RFC sections 11, 13, 14 and replacement implementation spec. | No replacement operation ledger exists. | Implement new repository identity and operation envelope. |
-| Citation | Record-instance citation IDs | Planned | RFC section 3. | Current runtime derives citation IDs from evidence identity. | Replace citation allocation before accepting creation commands. |
-| Groups | Stable `group_id` objects and memberships | Planned | RFC sections 4 and 6. | Current grouping is derived indexes only. | Implement default Inbox group and membership authority. |
-| Handles | Stable group-owned `handle_id` objects | Planned | RFC section 5. | Current handles are raw strings over citation IDs. | Implement handle objects and name ambiguity behavior. |
-| Duplicate policy | Scoped supersession | Planned | RFC sections 8, 9, and 12. | Current runtime has no scoped supersession events. | Implement handle/group/none duplicate policies. |
-| Reconciliation | Deterministic semantic branch reconciliation | Planned | RFC section 14. | No replacement reconciliation command exists. | Implement after operation, group, handle, and tally foundations. |
-| Publication | Metadata-only default | Planned | Existing invariant remains conceptually valid; RFC section 16 preserves default. | Replacement projection shapes are not specified or implemented. | Define replacement projection schemas and no-leak tests. |
-| Gate 9 | Chrome extension Phase 7 Part 2 | Blocked | `REPLACEMENT_PROTOCOL_ARCHIVAL_SEPARATION_GATE.md` blocks Gate 9 until replacement foundations exist. | Current extension protocol assumes archived lookup/action shapes. | Rewrite Gate 9 objective after replacement foundations pass. |
+| Authority | Runtime rejects archived repositories | Done | `src/c2s/replacement.py`, `src/c2s/cli.py`, and `tests/test_replacement_archival_boundary.py`; active CLI no longer exposes old mutation commands. | Remote CI not yet run. | Keep rejection fixture in active suite. |
+| Authority | Atomic completed operations | Done | `operations.jsonl`, completed operation records, idempotency hash checks, and `tests/test_replacement_runtime.py`. | Concurrent writer locking remains future hardening. | Add locking before multi-process release claims. |
+| Citation | Record-instance citation IDs | Done | Duplicate-evidence test creates distinct `cit_` IDs and idempotent retry returns the original result. | Current adapter is UTF-8 text only. | Extend adapters under replacement contract later. |
+| Groups | Stable `group_id` objects and memberships | Partial | `init` creates default Inbox group; citation creation appends group membership and complete tally. | Group rename/move/merge commands not implemented. | Implement full R4 management commands. |
+| Handles | Stable group-owned `handle_id` objects | Partial | Citation creation creates or reuses group-owned handles and maintains handle tallies. | Handle rename/merge/alias commands not implemented. | Implement full R5 management commands. |
+| Duplicate policy | Scoped supersession | Partial | Handle-scoped duplicate supersession events are emitted and tested. | Group/none policy mutation and full reevaluation commands are not implemented. | Complete R6 policy commands. |
+| Reconciliation | Deterministic semantic branch reconciliation | Partial | `reconcile` imports completed operations from same replacement repository identity and rejects mismatches/conflicts. | Full structural conflict catalog and hash-chain rehashing remain incomplete. | Expand R7 fixtures. |
+| Publication | Metadata-only default | Partial | `export` writes metadata-only status/site projections without evidence text. | Full status/site navigation and no-leak matrix incomplete. | Expand R8 projection tests. |
+| Gate 9 | Replacement integration and Chrome extension | Actionable | Native host accepts `c2s.integration.replacement.v1`; extension sends replacement cite/lookup messages with idempotency; `dist/cite2site-2.0.0a1-py3-none-any.whl` built and installed; native host registered to `C:\Users\USER\.c2s-replacement`. | Manual Chrome validation still required before Done. | Stop for user manual validation before marking R9 Done. |
 
 ## Historical V0.3/V1 Status
 
-The v0.3/v1 CLI/core, schemas, guides, and Gate 0 through v1 stabilization work
-are **Archived**. Historical completion remains inspectable through Git history
-and historical documents, but it is not active protocol conformance and must not
-drive new implementation.
+The v0.3/v1 CLI/core, schemas, guides, tests, examples, and Gate 0 through v1
+stabilization work are **Archived** in `Cite2Site-Archival/`. Historical
+completion remains inspectable through that folder and Git history, but it is
+not active protocol conformance and must not drive new implementation.
 
 ## Known Current Gaps
 
-1. The active runtime still contains transitional v0.3/v1 behavior.
-2. Replacement schemas and examples are indexed as required but not yet written.
-3. Active tests still contain old-model assertions and must be separated before
-   replacement implementation can be accepted.
-4. Gate 9 is blocked until the replacement protocol foundation is implemented
-   and tested.
+1. Group, handle, duplicate-policy, reconciliation, and projection management
+   are foundation-level implementations, not full release-grade feature sets.
+2. Gate 9 cannot be marked Done until user manual Chrome validation passes.

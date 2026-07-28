@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-operation.schema.json",
+  "title": "Cite2Site Completed Operation",
+  "type": "object",
+  "required": ["schema_version", "operation_id", "idempotency_key", "command", "semantic_payload_hash", "status", "events"],
+  "properties": {
+    "schema_version": { "const": "c2s.operation.replacement.v1" },
+    "operation_id": { "type": "string", "minLength": 1 },
+    "idempotency_key": { "type": "string", "minLength": 1 },
+    "command": { "type": "string", "minLength": 1 },
+    "semantic_payload_hash": { "type": "string", "pattern": "^sha256:" },
+    "status": { "const": "completed" },
+    "events": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": true
+}

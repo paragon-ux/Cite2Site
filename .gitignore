@@ -11,3 +11,4 @@ build-docs/archive/
 .reasonix/
 .c2s/
 site/
+.tmp-replacement-smoke/

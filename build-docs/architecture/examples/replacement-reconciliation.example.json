@@ -1,0 +1,6 @@
+{
+  "schema_version": "c2s.reconciliation.replacement.v1",
+  "ok": true,
+  "operations_imported": 2,
+  "conflicts": []
+}

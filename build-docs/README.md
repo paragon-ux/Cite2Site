@@ -2,9 +2,10 @@
 
 **Status:** active build documentation map.
 
-Cite2Site is in the Replacement Protocol and Archival Separation Gate. The
-historical v0.3/v1 package remains preserved, but it is not current
-implementation authority and must not be used to resume Gate 9 work.
+Cite2Site is in the replacement-protocol rebuild. The historical v0.3/v1
+package has been moved to the sibling archival folder `Cite2Site-Archival/`
+and remains preserved by Git history. It is not current implementation
+authority.
 
 Fresh agents must start with `AGENTS.md`. This file is the map after that
 orientation step.
@@ -16,7 +17,16 @@ orientation step.
 - [internal/CI_VALIDATION.md](internal/CI_VALIDATION.md)
 - [internal/PROJECT_PLAN.md](internal/PROJECT_PLAN.md)
 - [internal/DOCUMENTATION_STANDARD.md](internal/DOCUMENTATION_STANDARD.md)
-- [internal/phase_prompts/REPLACEMENT_PROTOCOL_ARCHIVAL_SEPARATION_GATE.md](internal/phase_prompts/REPLACEMENT_PROTOCOL_ARCHIVAL_SEPARATION_GATE.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_00_ARCHIVAL_SEPARATION.md](internal/phase_prompts/REPLACEMENT_GATE_00_ARCHIVAL_SEPARATION.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_01_REPOSITORY_IDENTITY.md](internal/phase_prompts/REPLACEMENT_GATE_01_REPOSITORY_IDENTITY.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_02_ATOMIC_OPERATIONS.md](internal/phase_prompts/REPLACEMENT_GATE_02_ATOMIC_OPERATIONS.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_03_CITATIONS.md](internal/phase_prompts/REPLACEMENT_GATE_03_CITATIONS.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_04_GROUPS.md](internal/phase_prompts/REPLACEMENT_GATE_04_GROUPS.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_05_HANDLES.md](internal/phase_prompts/REPLACEMENT_GATE_05_HANDLES.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_06_DUPLICATE_POLICY.md](internal/phase_prompts/REPLACEMENT_GATE_06_DUPLICATE_POLICY.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_07_RECONCILIATION.md](internal/phase_prompts/REPLACEMENT_GATE_07_RECONCILIATION.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_08_PROJECTIONS_PUBLICATION.md](internal/phase_prompts/REPLACEMENT_GATE_08_PROJECTIONS_PUBLICATION.md)
+- [internal/phase_prompts/REPLACEMENT_GATE_09_INTEGRATION.md](internal/phase_prompts/REPLACEMENT_GATE_09_INTEGRATION.md)
 
 ## Active Replacement Architecture
 
@@ -25,6 +35,7 @@ orientation step.
 - [architecture/ARCHIVAL_BOUNDARY.md](architecture/ARCHIVAL_BOUNDARY.md)
 - [architecture/CITE2SITE_REPLACEMENT_IMPLEMENTATION_SPEC.md](architecture/CITE2SITE_REPLACEMENT_IMPLEMENTATION_SPEC.md)
 - [architecture/REPLACEMENT_SCHEMA_INDEX.md](architecture/REPLACEMENT_SCHEMA_INDEX.md)
+- [architecture/INTEGRATION_CONTRACT.md](architecture/INTEGRATION_CONTRACT.md)
 - [internal/adrs/0011-clean-protocol-replacement-and-archival-boundary.md](internal/adrs/0011-clean-protocol-replacement-and-archival-boundary.md)
 
 ## Active Requirements
@@ -39,23 +50,10 @@ implementation is accepted:
 
 ## Historical V0.3/V1 Package
 
-The following material is **Historical**, **Superseded**, and **Unsupported by
-the active runtime**. It is preserved for audit and design history only:
-
-- `architecture/CITE2SITE_PROTOCOL_SPEC_V0_3.md`
-- `architecture/CITE2SITE_IMPLEMENTATION_SPEC_V0_3.md`
-- `architecture/V1_STABLE_CONTRACT.md`
-- `architecture/SCHEMA_INDEX.md`
-- `architecture/schemas/`
-- `architecture/examples/`
-- `internal/COMPATIBILITY_CORPUS.md`
-- old phase prompts, guides, examples, and tests that encode evidence-derived
-  citation IDs, string-handle identity, or the two-ledger v0.3/v1 authority
-  model.
-
-Do not add these files back to the active reading order. Use Git history,
-especially `9b761e2b05298313425e6d5b0c2033c08dfed114`, as the stable archive
-reference when investigating historical behavior.
+Historical material is outside this repository under
+`../Cite2Site-Archival/`. Use that folder or Git history, especially
+`9b761e2b05298313425e6d5b0c2033c08dfed114`, when investigating prior
+behavior. Do not add archived v0.3/v1 files back to the active reading order.
 
 ## Change Control Rule
 

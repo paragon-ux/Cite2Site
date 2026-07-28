@@ -1,0 +1,9 @@
+{
+  "schema_version": "c2s.operation.replacement.v1",
+  "operation_id": "op_01J00000000000000000000001",
+  "idempotency_key": "demo-create-1",
+  "command": "citation.create",
+  "semantic_payload_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "status": "completed",
+  "events": []
+}

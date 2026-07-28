@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-citation-created.schema.json",
+  "title": "Replacement Citation Created Event",
+  "type": "object",
+  "required": ["event_type", "citation_id", "target_fingerprint", "artifact", "locator"],
+  "properties": {
+    "event_type": { "const": "citation.created" },
+    "citation_id": { "type": "string", "minLength": 1 },
+    "target_fingerprint": { "type": "string", "pattern": "^sha256:" },
+    "artifact": { "type": "string", "minLength": 1 },
+    "locator": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

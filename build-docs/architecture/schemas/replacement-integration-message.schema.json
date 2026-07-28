@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-integration-message.schema.json",
+  "title": "Replacement Integration Message",
+  "type": "object",
+  "required": ["schema_version", "action", "repository"],
+  "properties": {
+    "schema_version": { "const": "c2s.integration.replacement.v1" },
+    "action": { "type": "string", "minLength": 1 },
+    "repository": { "type": "string", "minLength": 1 },
+    "idempotency_key": { "type": "string" },
+    "payload": { "type": "object" }
+  },
+  "additionalProperties": false
+}

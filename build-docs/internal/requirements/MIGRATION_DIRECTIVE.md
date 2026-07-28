@@ -295,7 +295,7 @@ Treat this work as a distinct prerequisite gate:
 
 **Replacement Protocol and Archival Separation Gate**
 
-Gate 9 remains blocked until this prerequisite gate has established:
+Gate 9 could not resume until the replacement prerequisite gate established:
 
 * a clean archive boundary;
 * one active replacement RFC;
@@ -344,6 +344,12 @@ Gate 9 may resume only when:
 Rewrite the Gate 9 objective before resuming it.
 
 Do not continue from the interrupted old-model objective.
+
+**Current execution note:** the active repository now uses the replacement
+`R0` through `R9` gate sequence. Once the status matrix marks R1-R8
+replacement foundations present, R9 is actionable under
+`REPLACEMENT_GATE_09_INTEGRATION.md`; it still cannot be marked Done until
+package evidence and manual Chrome validation pass.
 
 ## Validation
 

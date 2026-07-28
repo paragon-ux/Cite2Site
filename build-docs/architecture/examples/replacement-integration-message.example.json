@@ -1,0 +1,13 @@
+{
+  "schema_version": "c2s.integration.replacement.v1",
+  "action": "citation.create",
+  "repository": ".c2s",
+  "idempotency_key": "chrome-selection-1",
+  "payload": {
+    "artifact": "notes.md",
+    "start": 0,
+    "end": 11,
+    "group_id": "grp_01J00000000000000000000000",
+    "handle_name": "ALPHA"
+  }
+}

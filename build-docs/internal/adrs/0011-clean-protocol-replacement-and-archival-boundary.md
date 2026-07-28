@@ -27,7 +27,8 @@ dual reducers.
 
 ## Consequences
 
-- Gate 9 / Phase 7 Part 2 is blocked until replacement foundations exist.
+- The old Gate 9 / Phase 7 Part 2 checkpoint is superseded. Replacement Gate
+  R9 is actionable only against the replacement integration contract.
 - Active docs must be rewritten around groups, handles, tallies, idempotency,
   scoped supersession, and reconciliation.
 - Old tests that assert evidence-derived IDs or string-handle identity cannot
@@ -40,4 +41,6 @@ dual reducers.
 - Status matrix marks replacement implementation as pending or partial until
   tests exist.
 - Archived-format repository fixtures fail closed before writes.
+- Replacement Gate R9 requires package evidence and user manual Chrome
+  validation before it can be marked Done.
 - Reconciliation tests operate only on replacement-protocol repositories.

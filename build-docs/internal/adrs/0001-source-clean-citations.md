@@ -39,7 +39,8 @@ authority lives outside the source artifact in the citation repository.
 
 ## Validation Hooks
 
-- `TR-107` and source-clean test coverage.
-- `cite-selection` and `cite-batch` smoke flows.
+- Source-clean test coverage in replacement citation, projection,
+  reconciliation, and integration gates.
+- Replacement mutation smoke flows with required idempotency keys.
 - Privacy and export tests that confirm projections, not artifacts, carry C2S
   metadata.

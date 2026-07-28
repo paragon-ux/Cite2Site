@@ -1,31 +1,23 @@
 # Replacement Schema Index
 
-**Status:** active schema inventory, schemas pending.
+**Status:** active schema inventory.
 
-The v0.3/v1 schema inventory at `build-docs/architecture/SCHEMA_INDEX.md` is
-historical and unsupported by the active replacement runtime.
+The v0.3/v1 schema inventory is archived outside this repository under
+`Cite2Site-Archival/`. The files listed here are the only active schema family.
 
 ## Required Replacement Schema Families
 
-The replacement protocol requires schemas for:
+| Family | Schema | Example | Gate |
+|---|---|---|---|
+| Project identity | [schemas/replacement-project.schema.json](schemas/replacement-project.schema.json) | [examples/replacement-project.example.json](examples/replacement-project.example.json) | R1 |
+| Operation envelope | [schemas/replacement-operation.schema.json](schemas/replacement-operation.schema.json) | [examples/replacement-operation.example.json](examples/replacement-operation.example.json) | R2 |
+| Citation creation | [schemas/replacement-citation-created.schema.json](schemas/replacement-citation-created.schema.json) | [examples/replacement-citation-created.example.json](examples/replacement-citation-created.example.json) | R3 |
+| Group authority | [schemas/replacement-group.schema.json](schemas/replacement-group.schema.json) | [examples/replacement-group.example.json](examples/replacement-group.example.json) | R4 |
+| Handle authority | [schemas/replacement-handle.schema.json](schemas/replacement-handle.schema.json) | [examples/replacement-handle.example.json](examples/replacement-handle.example.json) | R5 |
+| Scoped supersession | [schemas/replacement-supersession.schema.json](schemas/replacement-supersession.schema.json) | [examples/replacement-supersession.example.json](examples/replacement-supersession.example.json) | R6 |
+| Reconciliation | [schemas/replacement-reconciliation.schema.json](schemas/replacement-reconciliation.schema.json) | [examples/replacement-reconciliation.example.json](examples/replacement-reconciliation.example.json) | R7 |
+| Projections | [schemas/replacement-projection.schema.json](schemas/replacement-projection.schema.json) | [examples/replacement-projection.example.json](examples/replacement-projection.example.json) | R8 |
+| Integration messages | [schemas/replacement-integration-message.schema.json](schemas/replacement-integration-message.schema.json) | [examples/replacement-integration-message.example.json](examples/replacement-integration-message.example.json) | R9 |
 
-- repository/project identity;
-- atomic operation envelope;
-- completed operation record;
-- citation creation with record-instance `citation_id`;
-- target fingerprint;
-- group creation, rename, move, merge, retire, and alias;
-- group membership add, remove, restore, and supersession;
-- handle creation, rename, merge, retire, and alias;
-- handle binding add, remove, restore, and supersession;
-- global citation retraction and restoration;
-- duplicate policy configuration;
-- group rolling-tally projection;
-- handle rolling-tally projection;
-- status and publication projections;
-- reconciliation request, plan, conflict, and result;
-- archived-protocol rejection error.
-
-No replacement schema is accepted until it has a checked JSON schema, example,
-and test evidence. The active implementation must not reuse v0.3/v1 schema IDs
-for replacement objects.
+The active implementation must not reuse v0.3/v1 schema IDs for replacement
+objects.

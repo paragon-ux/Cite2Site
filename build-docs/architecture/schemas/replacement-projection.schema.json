@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cite2site.local/schemas/replacement-projection.schema.json",
+  "title": "Replacement Projection",
+  "type": "object",
+  "required": ["schema_version", "repository_id", "groups", "handles", "citations"],
+  "properties": {
+    "schema_version": { "const": "c2s.projection.replacement.v1" },
+    "repository_id": { "type": "string" },
+    "groups": { "type": "array", "items": { "type": "object" } },
+    "handles": { "type": "array", "items": { "type": "object" } },
+    "citations": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,7 @@
+{
+  "event_type": "group.created",
+  "group_id": "grp_01J00000000000000000000000",
+  "name": "Inbox",
+  "parent_group_id": null,
+  "duplicate_policy": "handle"
+}

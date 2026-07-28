@@ -4,9 +4,9 @@
 
 ## Active Gate
 
-The active gate is **Replacement Protocol and Archival Separation Gate**.
-Gate 9 / Phase 7 Part 2 Chrome-extension work is blocked until this prerequisite
-gate passes.
+The active gate sequence is the replacement `R0` through `R9` sequence. The
+current repository is completing `R0` and then proceeds gate-by-gate through
+the replacement runtime foundations before `R9` integration work.
 
 ## Workflow Principles
 
@@ -48,17 +48,20 @@ After replacement implementation begins, validation must also include:
 
 | Gate | Objective | Required Deliverables | Acceptance Tests | Status Update |
 |---|---|---|---|---|
-| Replacement prerequisite | Establish clean replacement protocol authority and archive boundary. | Active RFC, migration policy, archival boundary, replacement implementation spec, replacement schema index, updated AGENTS/map/status/workflow/plan, interrupted Gate 9 preserved. | Docs link/schema checks; stale active-reference search; archived repository rejection test once runtime work begins. | Mark replacement boundary Partial or Done with evidence. |
-| Foundation 1 | New repository identity and archived-format rejection. | Replacement project schema, init contract, fail-closed archived repo detection. | Archived v0.3/v1 repo rejected before replay or mutation; new replacement repo initializes. | Move runtime rejection from Planned to Done or Partial. |
-| Foundation 2 | Atomic operation envelope and completed-operation replay. | Operation ledger, completed marker, idempotency index. | Duplicate idempotency retry no-op; conflicting idempotency key fails; incomplete operation ignored/rejected. | Update authority rows. |
-| Foundation 3 | Record-instance citations and target fingerprints. | Citation creation with distinct IDs and deterministic fingerprints. | Identical evidence in distinct operations receives distinct citation IDs; retries return original operation result. | Update citation rows. |
-| Foundation 4 | Groups, memberships, handles, and tallies. | Default Inbox group, group memberships, stable handle IDs, group/handle rolling tallies. | Complete tally tests, same-name ambiguity tests, rename preserves IDs. | Update group/handle rows. |
-| Foundation 5 | Scoped duplicate policy and supersession. | `handle`, `group`, and `none` policies; scoped supersession events. | Dominance by canonical citation ID; scoped supersession does not globally retract. | Update duplicate rows. |
-| Foundation 6 | Semantic reconciliation. | Reconcile command/engine for replacement repositories only. | Merge-direction-independent reconciliation, structural conflict tests, source-clean checks. | Update reconciliation rows. |
-| Gate 9 | Chrome extension replacement integration. | Replacement-aware native host and extension protocol. | Manual Chrome tests plus replacement protocol fixture tests. | Resume only after foundations pass. |
+| R0 | External archive and replacement authority spine. | `Cite2Site-Archival/` copy, archived files removed from repo, replacement docs in active slots, gate prompts R0-R9. | Docs link/schema checks; stale active-reference search; archive folder existence check. | Mark archival separation Done only after old files are absent from repo. |
+| R1 | Repository identity and fail-closed archived-format detection. | Replacement `project.json`, `init`, schema validation, archived-format error before writes. | New repo initializes; v0.3/v1 repo rejects before replay or mutation; no archive writes. | Runtime rejection Done. |
+| R2 | Atomic operations and idempotency. | Operation ledger, completed marker, semantic payload hash, idempotency index. | Same-key retry no-op; key conflict fails; incomplete operation rejected or ignored before replay. | Authority rows Done or Partial. |
+| R3 | Record-instance citations and fingerprints. | Citation creation, source observation, deterministic `target_fingerprint`. | Identical evidence in distinct operations receives distinct citation IDs; source bytes unchanged. | Citation rows Done or Partial. |
+| R4 | Groups and memberships. | Default Inbox group, group create/rename/move, memberships, group tallies. | Group IDs stable; same-name groups ambiguous; group tallies complete. | Group rows Done or Partial. |
+| R5 | Handles and bindings. | Group-owned handle IDs, handle create/rename/merge, bindings, handle tallies. | Handle IDs stable; same-name handles ambiguous; handle tallies complete. | Handle rows Done or Partial. |
+| R6 | Scoped duplicate policy and supersession. | `handle`, `group`, `none` policies and scoped supersession events. | Dominance by canonical citation ID; scoped supersession does not globally retract. | Duplicate rows Done or Partial. |
+| R7 | Semantic reconciliation. | Replacement-only reconcile command/engine and structural conflict detection. | Merge-direction-independent reconciliation; invalid/archived histories stop before writes. | Reconciliation rows Done or Partial. |
+| R8 | Projections and publication. | Status, export, site projections, metadata-only default, derived-regeneration rules. | Metadata-only no-leak; deterministic export; source-clean publication. | Publication rows Done or Partial. |
+| R9 | Replacement integration and Chrome extension. | Replacement-aware native-host message contract, extension UI, package build. | Fixture tests, native-host smokes, package build, manual Chrome validation. | Integration rows Done only after manual milestone validation. |
 
 ## Historical Workflows
 
 The old create, handle, lookup, recovery, export, and Gate 0 through v1
-workflows are historical v0.3/v1 material. They may be consulted for audit, but
-must not be used as active implementation contracts.
+workflows are historical v0.3/v1 material stored outside this repository in
+`Cite2Site-Archival/`. They may be consulted for audit, but must not be used
+as active implementation contracts.

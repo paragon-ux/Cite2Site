@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 from .core import C2SError
+from .replacement import assert_replacement_repository
 
 _HOST_NAME = "com.cite2site.cite"
 _EXTENSION_ID_RE = re.compile(r"^[a-p]{32}$")
@@ -66,13 +67,17 @@ def _validate_repo(repo_arg: str | Path | None) -> Path:
     if repo_arg is None:
         repo_arg = str(Path.home() / ".c2s")
     repo_dir = Path(repo_arg).expanduser().resolve()
-    if not (repo_dir / "project.json").is_file():
+    try:
+        assert_replacement_repository(repo_dir)
+    except C2SError as exc:
+        if exc.code != "E_REPO_NOT_INITIALIZED":
+            raise
         raise C2SError(
             "E_REPO_NOT_INITIALIZED",
             "Cite2Site repository is not initialized at the configured path",
             repo=str(repo_dir),
-            hint="Run c2s init from the project root, then reinstall the native host.",
-        )
+            hint="Run c2s init with an idempotency key from the project root, then reinstall the native host.",
+        ) from exc
     return repo_dir
 
 
@@ -141,7 +146,7 @@ def install(extension_id: str, repo_arg: str | Path = ".c2s") -> dict[str, str]:
 
     manifest = {
         "name": _HOST_NAME,
-        "description": "Cite2Site native messaging host",
+        "description": "Cite2Site replacement native messaging host",
         "path": str(executable_path),
         "type": "stdio",
         "allowed_origins": [f"chrome-extension://{extension_id}/"],

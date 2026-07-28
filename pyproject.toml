@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cite2site"
-version = "1.0.6"
-description = "Source-clean citations that don't touch your files. Record evidence outside the file, replay it to check if it still holds."
+version = "2.0.0a1"
+description = "Replacement-protocol source-clean citations with operation replay, groups, handles, scoped duplicates, and deterministic reconciliation."
 requires-python = ">=3.11"
 dependencies = []
 license = "MIT"
