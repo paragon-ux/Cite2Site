@@ -10,10 +10,15 @@
 
   if (citation.ok) {
     el.className = "result ok";
-    el.textContent = "Citation created.";
-    // Show the citation ID truncated
     if (citation.citation_id) {
-      el.innerHTML = `Citation created.<br><code>${citation.citation_id.slice(0, 20)}...</code>`;
+      el.innerHTML = "";
+      el.appendChild(document.createTextNode("Citation created. "));
+      const code = document.createElement("code");
+      code.textContent = citation.citation_id.slice(0, 20) + "...";
+      el.appendChild(document.createElement("br"));
+      el.appendChild(code);
+    } else {
+      el.textContent = "Citation created.";
     }
   } else {
     el.className = "result err";
