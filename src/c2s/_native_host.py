@@ -32,10 +32,11 @@ def _manifest_dir() -> Path:
         return Path.home() / ".config" / "Cite2Site"
 
 
-def _create_wrapper_bat(script: Path) -> Path:
-    """Create a .bat wrapper that launches the native host with python."""
-    bat = script.with_suffix(".bat")
-    bat.write_text(f'@echo off\r\n"{sys.executable}" "{script}"\r\n', encoding="ascii")
+def _create_wrapper_bat(script: Path, dest_dir: Path) -> Path:
+    """Create a .bat wrapper that launches the native host with python.
+    Written to *dest_dir* so the source tree is never modified."""
+    bat = dest_dir / script.with_suffix(".bat").name
+    bat.write_text(f'@echo off\r\n"{sys.executable}" "{script}"\r\n', encoding="utf-8")
     return bat
 
 
@@ -51,7 +52,7 @@ def install() -> None:
     manifest = dict(_MANIFEST_TEMPLATE)
 
     if sys.platform == "win32":
-        wrapper = _create_wrapper_bat(script)
+        wrapper = _create_wrapper_bat(script, manifest_dir)
         manifest["path"] = str(wrapper)
     else:
         manifest["path"] = str(script)
@@ -62,15 +63,22 @@ def install() -> None:
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
     if sys.platform == "win32":
-        import winreg
-        key = winreg.CreateKey(
-            winreg.HKEY_CURRENT_USER,
-            r"Software\Google\Chrome\NativeMessagingHosts\com.cite2site.cite"
-        )
         try:
-            winreg.SetValueEx(key, "", 0, winreg.REG_SZ, str(manifest_path))
-        finally:
-            winreg.CloseKey(key)
+            import winreg
+            key = winreg.CreateKey(
+                winreg.HKEY_CURRENT_USER,
+                r"Software\Google\Chrome\NativeMessagingHosts\com.cite2site.cite"
+            )
+            try:
+                winreg.SetValueEx(key, "", 0, winreg.REG_SZ, str(manifest_path))
+            finally:
+                winreg.CloseKey(key)
+        except Exception as exc:
+            print(f"Note: could not register with Chrome registry ({exc}).", file=sys.stderr)
+            print(f"Manifest written to: {manifest_path}", file=sys.stderr)
+            print("Register it manually at:", file=sys.stderr)
+            print(r"  HKCU\Software\Google\Chrome\NativeMessagingHosts\com.cite2site.cite", file=sys.stderr)
+            return
 
     print(f"Native host installed: {manifest_path}", file=sys.stderr)
     print("", file=sys.stderr)
